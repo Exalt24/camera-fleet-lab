@@ -1,0 +1,60 @@
+== healthy baseline ==
+
+$ docker compose exec edge wg show wg0    # the tunnel from the edge's side
+interface: wg0
+  public key: xgfCNKi56EfUX4AMirciVun1IW2s4SFqRdr2UxEmggQ=
+  private key: (hidden)
+  listening port: 45450
+
+peer: 08NM9phpPECKsD+v/D1WMK0CmrxhcQhaFiufxPCuSyE=
+  endpoint: 172.30.0.10:51820
+  allowed ips: 10.8.0.1/32
+  latest handshake: 28 seconds ago
+  transfer: 528.00 KiB received, 10.08 MiB sent
+  persistent keepalive: every 10 seconds
+
+$ docker compose exec edge iptables -t nat -L PREROUTING -n -v    # what the NAT rule has forwarded so far
+Chain PREROUTING (policy ACCEPT 41 packets, 3156 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+   10   600 DNAT       6    --  wg0    *       0.0.0.0/0            0.0.0.0/0            multiport dports 8554,8889 to:10.20.0.10
+
+$ docker compose exec edge iptables -L FORWARD -n -v    # the firewall: only the forwarded ports are accepted, everything else dropped
+Chain FORWARD (policy DROP 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+13615   10M ACCEPT     0    --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+   42  2520 ACCEPT     6    --  wg0    eth0    0.0.0.0/0            10.20.0.10           multiport dports 8554,8889
+
+== FAULT B: the DNAT rule is gone, the tunnel is healthy ==
+
+$ docker compose exec edge timeout 9 tcpdump -ni wg0 -c 8 'tcp port 8554 or icmp'    # SYNs arrive, nothing answers; pings still do
+tcpdump: verbose output suppressed, use -v[v]... for full protocol decode
+18:58:54.492082 IP 10.8.0.1 > 10.8.0.2: ICMP echo request, id 346, seq 1, length 64
+18:58:54.492144 IP 10.8.0.2 > 10.8.0.1: ICMP echo reply, id 346, seq 1, length 64
+18:58:54.492795 IP 10.8.0.1.57300 > 10.8.0.2.8554: Flags [S], seq 2530819566, win 64320, options [mss 1340,sackOK,TS val 622431378 ecr 0,nop,wscale 10], length 0
+18:58:55.513997 IP 10.8.0.1.57300 > 10.8.0.2.8554: Flags [S], seq 2530819566, win 64320, options [mss 1340,sackOK,TS val 622432400 ecr 0,nop,wscale 10], length 0
+18:58:56.538078 IP 10.8.0.1.57300 > 10.8.0.2.8554: Flags [S], seq 2530819566, win 64320, options [mss 1340,sackOK,TS val 622433424 ecr 0,nop,wscale 10], length 0
+
+5 packets captured
+5 packets received by filter
+0 packets dropped by kernel
+
+$ docker compose exec edge iptables -t nat -L PREROUTING -n -v    # the NAT chain is empty: there is no rule left to translate the tunnel address to the camera
+Chain PREROUTING (policy ACCEPT 49 packets, 3684 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+
+== FAULT A: WireGuard UDP blocked on the site router ==
+
+$ docker compose exec edge timeout 8 tcpdump -ni eth0 -c 6 udp port 51820    # what crosses the edge's WAN interface on the WireGuard port while the block is on
+tcpdump: verbose output suppressed, use -v[v]... for full protocol decode
+
+0 packets captured
+0 packets received by filter
+0 packets dropped by kernel
+
+$ docker compose exec edge iptables -L OUTPUT -n -v    # the DROP rule's packet counter is the evidence that the edge IS trying to send and being stopped
+Chain OUTPUT (policy ACCEPT 6320 packets, 5218K bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    3   432 DROP       17   --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpt:51820
+
+$ docker compose exec edge wg show wg0 latest-handshakes    # recovered: a fresh handshake
+08NM9phpPECKsD+v/D1WMK0CmrxhcQhaFiufxPCuSyE=	1791053966

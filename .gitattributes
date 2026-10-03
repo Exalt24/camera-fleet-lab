@@ -1,0 +1,8 @@
+# Shell scripts and Dockerfiles must keep LF line endings. A Windows checkout with autocrlf rewrites them to CRLF, and a
+# container entrypoint with a CRLF shebang fails with "no such file or directory" (the carriage return becomes part of
+# the interpreter name).
+*.sh text eol=lf
+Dockerfile text eol=lf
+*.yml text eol=lf
+*.mp4 binary
+*.png binary

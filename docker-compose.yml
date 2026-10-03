@@ -1,0 +1,84 @@
+# A small lab of the problem a camera fleet has: a device at a remote site, behind a router, that the platform
+# can only reach through a VPN. Everything runs in Docker on one machine, so the failure modes are real
+# Linux behaviour (kernel WireGuard, iptables NAT, conntrack) but the topology is a model, not a deployment.
+#
+#   hub (platform: FastAPI + WireGuard 10.8.0.1) ---- wan 172.30.0.0/24 ---- edge (site router: WireGuard 10.8.0.2,
+#   NAT + firewall) ---- site 10.20.0.0/24 (internal, no route out) ---- camera (RTSP + WebRTC, 10.20.0.10)
+#   hub ---- db 10.40.0.0/24 ---- mariadb
+#
+# The camera sits on a network the hub is NOT on. The only way to it is the tunnel, through a DNAT rule on the edge.
+services:
+  mariadb:
+    image: mariadb:11
+    environment:
+      MARIADB_ROOT_PASSWORD: lab-only-password
+      MARIADB_DATABASE: fleet
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 3s
+      timeout: 3s
+      retries: 30
+    networks:
+      db:
+
+  camera:
+    image: bluenviron/mediamtx:latest-ffmpeg
+    volumes:
+      - ./camera/mediamtx.yml:/mediamtx.yml:ro
+    networks:
+      site:
+        ipv4_address: 10.20.0.10
+
+  hub:
+    build: ./hub
+    cap_add: [NET_ADMIN]
+    environment:
+      DATABASE_URL: mysql+aiomysql://root:lab-only-password@mariadb:3306/fleet
+      CAMERA_HOST: 10.8.0.2
+      PROBE_INTERVAL_S: "5"
+    volumes:
+      - keys:/keys
+    ports:
+      - "127.0.0.1:8100:8000"
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    networks:
+      wan:
+        ipv4_address: 172.30.0.10
+      db:
+
+  edge:
+    build: ./edge
+    cap_add: [NET_ADMIN]
+    sysctls:
+      net.ipv4.ip_forward: "1"
+    volumes:
+      - keys:/keys
+    depends_on:
+      - hub
+      - camera
+    networks:
+      wan:
+        ipv4_address: 172.30.0.2
+      site:
+        ipv4_address: 10.20.0.2
+
+volumes:
+  keys:
+
+networks:
+  wan:
+    ipam:
+      config:
+        - subnet: 172.30.0.0/24
+  site:
+    internal: true
+    ipam:
+      config:
+        - subnet: 10.20.0.0/24
+  db:
+    internal: true
+    ipam:
+      config:
+        - subnet: 10.40.0.0/24

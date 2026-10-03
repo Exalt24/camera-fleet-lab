@@ -1,0 +1,135 @@
+{
+  "all_passed": true,
+  "checks": [
+    {
+      "check": "monitor reports the camera UP through the tunnel",
+      "ok": true,
+      "detail": "after 0.0s"
+    },
+    {
+      "check": "stream decodes: h264 640x360 over RTSP through the tunnel",
+      "ok": true,
+      "detail": "h264 640x360"
+    },
+    {
+      "check": "a packet crosses the tunnel (ping through WireGuard)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "the handshake age is within WireGuard's session limit (180 s)",
+      "ok": true,
+      "detail": "38.5s"
+    },
+    {
+      "check": "hub cannot reach the camera's own address directly (no route to the site network)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "hub reaches RTSP via the edge's tunnel address (DNAT)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "WebRTC signalling page is served through the tunnel (HTTP 200)",
+      "ok": true,
+      "detail": "200"
+    },
+    {
+      "check": "a non-forwarded port (22) on the edge is silently dropped",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "ICMP across the tunnel is allowed",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "probe history is stored in MariaDB",
+      "ok": true,
+      "detail": "20 rows"
+    },
+    {
+      "check": "the pool is configured and not exhausted",
+      "ok": true,
+      "detail": "{\"size\": 5, \"checked_out\": 0, \"overflow\": -3, \"checked_in\": 2}"
+    },
+    {
+      "check": "fault A is detected as TUNNEL_DOWN (no packet crosses the VPN)",
+      "ok": true,
+      "detail": "after 4.0s"
+    },
+    {
+      "check": "fault A recovers on its own once the VPN can talk again (keepalive re-handshake)",
+      "ok": true,
+      "detail": "after 6.1s"
+    },
+    {
+      "check": "fault B is detected as BLOCKED (the VPN works, the camera port does not)",
+      "ok": true,
+      "detail": "after 8.0s"
+    },
+    {
+      "check": "fault B is told apart from fault A: packets still cross the tunnel",
+      "ok": true,
+      "detail": "state=blocked tunnel_ok=True"
+    },
+    {
+      "check": "fault B recovers once the DNAT rule is restored",
+      "ok": true,
+      "detail": "after 8.1s"
+    }
+  ],
+  "fault_a": {
+    "detected_after_s": 4.0,
+    "recovered_after_s": 6.1,
+    "max_handshake_age_s": 54.5,
+    "first_down_error": "tunnel ping failed: no packet crosses the VPN",
+    "timeline": [
+      {
+        "t": 0.0,
+        "state": "up",
+        "tunnel_ok": true,
+        "tcp_ok": true,
+        "rtsp_ok": true,
+        "handshake_age_s": 46.5,
+        "error": null
+      },
+      {
+        "t": 4.0,
+        "state": "tunnel_down",
+        "tunnel_ok": false,
+        "tcp_ok": false,
+        "rtsp_ok": false,
+        "handshake_age_s": 54.5,
+        "error": "tunnel ping failed: no packet crosses the VPN"
+      }
+    ]
+  },
+  "fault_b": {
+    "detected_after_s": 8.0,
+    "recovered_after_s": 8.1,
+    "timeline": [
+      {
+        "t": 0.0,
+        "state": "up",
+        "tunnel_ok": true,
+        "tcp_ok": true,
+        "rtsp_ok": true,
+        "handshake_age_s": 61.5,
+        "error": null
+      },
+      {
+        "t": 8.0,
+        "state": "blocked",
+        "tunnel_ok": true,
+        "tcp_ok": false,
+        "rtsp_ok": false,
+        "handshake_age_s": 68.5,
+        "error": "tcp connect timed out (packets dropped, not refused)"
+      }
+    ]
+  }
+}

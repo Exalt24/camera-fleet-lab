@@ -1,0 +1,17 @@
+# A stand-in IP camera: MediaMTX serves RTSP and WebRTC, and ffmpeg publishes a synthetic test pattern into it,
+# restarted automatically if it dies, the way a real camera's encoder would be supervised.
+logLevel: info
+rtsp: yes
+rtspAddress: :8554
+webrtc: yes
+webrtcAddress: :8889
+hls: no
+rtmp: no
+srt: no
+api: no
+metrics: no
+
+paths:
+  cam1:
+    runOnInit: ffmpeg -loglevel error -re -f lavfi -i testsrc2=size=640x360:rate=15 -c:v libx264 -preset ultrafast -tune zerolatency -pix_fmt yuv420p -g 30 -f rtsp rtsp://localhost:$RTSP_PORT/$MTX_PATH
+    runOnInitRestart: yes
