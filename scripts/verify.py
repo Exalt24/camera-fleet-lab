@@ -89,7 +89,14 @@ def main():
     check("ICMP across the tunnel is allowed", rc == 0)
 
     print("== persistence and the connection pool ==")
-    hist = api("/history?limit=20") or []
+    # Poll instead of reading once: right after a cold start the monitor may have stored only one or two probes yet, and a
+    # one-shot read made this check flaky on a fresh clone (it passed on the next run with the same code).
+    hist = []
+    for _ in range(30):
+        hist = api("/history?limit=20") or []
+        if len(hist) >= 3:
+            break
+        time.sleep(1)
     check("probe history is stored in MariaDB", len(hist) >= 3, f"{len(hist)} rows")
     pool = api("/pool") or {}
     check("the pool is configured and not exhausted", pool.get("size") == 5 and pool.get("checked_out", 99) <= 1, json.dumps(pool))
