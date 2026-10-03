@@ -39,7 +39,28 @@ first one that fails:
 | `blocked` | packets cross the VPN, the camera port is silent | the NAT rule, the firewall, the camera being off |
 | `tunnel_down` | no packet crosses the VPN at all | WireGuard, keys, endpoint, the 4G link |
 
-![blocked: the VPN works, the port does not](docs/screens/3-blocked.png)
+## Topology
+
+The GIF above shows the monitor reacting. This shows what it is monitoring, which a recording of the dashboard cannot:
+the camera sits on a network the hub is not on, so the only way to it is the tunnel and one DNAT rule.
+
+```mermaid
+flowchart LR
+  subgraph platform["Platform side"]
+    hub["hub<br/>FastAPI monitor + WireGuard 10.8.0.1"]
+    db[("MariaDB<br/>probe history")]
+  end
+  subgraph site["Site (internal network 10.20.0.0/24, no route out)"]
+    edge["edge router<br/>WireGuard 10.8.0.2<br/>default-deny firewall + NAT"]
+    cam["camera 10.20.0.10<br/>RTSP 8554, WebRTC page 8889"]
+  end
+  hub -- "WireGuard UDP 51820 (the edge dials out, keepalive 10 s)" --- edge
+  edge -- "DNAT tcp 8554, 8889 then masquerade" --> cam
+  hub --> db
+```
+
+Probe order on every cycle: ping through the tunnel, then a TCP connect to the camera port, then `ffprobe` over RTSP; the
+first layer that fails is the one reported.
 
 ## Run it
 
@@ -105,7 +126,7 @@ hub/tests/                offline tests for the probe layer
 scripts/verify.py         end-to-end proof, both faults
 scripts/measure_recovery.py, history_transitions.py, capture_debugging.py
 demo/record.mjs           Playwright recording of the dashboard through both faults
-docs/                     last_run.json, debugging_capture.txt, screenshots, demo.gif, demo.mp4
+docs/                     last_run.json, debugging_capture.txt, demo.gif, demo.mp4
 ```
 
 ## Limits
