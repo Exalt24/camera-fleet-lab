@@ -7,7 +7,9 @@ Everything runs in Docker on one machine: kernel WireGuard, `iptables` NAT and f
 FastAPI monitor and MariaDB. The networking is real Linux behaviour; the topology is a **model**, not a deployment (see
 [Limits](#limits)).
 
-![the monitor reporting up](docs/screens/1-up.png)
+![the monitor through a VPN drop and a missing NAT rule, 60 seconds](docs/demo.gif)
+
+*The dashboard through both faults: the VPN drops (`tunnel down`), recovers, then the NAT rule disappears (`blocked`) while the tunnel stays healthy. Full-quality clip: [`docs/demo.mp4`](docs/demo.mp4).*
 
 ## What it demonstrates
 
@@ -103,7 +105,7 @@ hub/tests/                offline tests for the probe layer
 scripts/verify.py         end-to-end proof, both faults
 scripts/measure_recovery.py, history_transitions.py, capture_debugging.py
 demo/record.mjs           Playwright recording of the dashboard through both faults
-docs/                     last_run.json, debugging_capture.txt, screenshots, demo.mp4
+docs/                     last_run.json, debugging_capture.txt, screenshots, demo.gif, demo.mp4
 ```
 
 ## Limits
