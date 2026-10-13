@@ -6,3 +6,9 @@ Dockerfile text eol=lf
 *.yml text eol=lf
 *.mp4 binary
 *.png binary
+# Line endings and binaries, enforced on every machine (autocrlf corrupted PDFs and left shell scripts and Dockerfiles CRLF, 2026-10-13).
+*.bash text eol=lf
+Dockerfile* text eol=lf
+*.gif binary
+/edge/Dockerfile text eol=lf
+/hub/Dockerfile text eol=lf
