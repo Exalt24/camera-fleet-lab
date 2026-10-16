@@ -1,15 +1,17 @@
 # camera-fleet-lab
 
+A runnable Docker model of a remote camera site that is only reachable over a WireGuard VPN, with a monitor that says which layer broke.
+
+![the monitor through a VPN drop and a missing NAT rule, 60 seconds](docs/demo.gif)
+
+*The dashboard through both faults: the VPN drops (`tunnel down`), recovers, then the NAT rule disappears (`blocked`) while the tunnel stays healthy. Full-quality clip: [`docs/demo.mp4`](docs/demo.mp4).*
+
 A small, runnable model of one problem a camera fleet has: **a device at a remote site, behind a router, that the
 platform can only reach through a VPN**, and a monitor that has to tell you *which layer* broke when it goes dark.
 
 Everything runs in Docker on one machine: kernel WireGuard, `iptables` NAT and firewall, an RTSP camera, an async
 FastAPI monitor and MariaDB. The networking is real Linux behaviour; the topology is a **model**, not a deployment (see
 [Limits](#limits)).
-
-![the monitor through a VPN drop and a missing NAT rule, 60 seconds](docs/demo.gif)
-
-*The dashboard through both faults: the VPN drops (`tunnel down`), recovers, then the NAT rule disappears (`blocked`) while the tunnel stays healthy. Full-quality clip: [`docs/demo.mp4`](docs/demo.mp4).*
 
 ## What it demonstrates
 
