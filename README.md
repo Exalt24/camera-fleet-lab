@@ -1,29 +1,14 @@
 # camera-fleet-lab
 
-A runnable Docker model of a remote camera site that is only reachable over a WireGuard VPN, with a monitor that says which layer broke.
+Docker model of a remote camera site behind a WireGuard VPN, with a monitor that says which layer broke.
 
 ![the monitor through a VPN drop and a missing NAT rule, 60 seconds](docs/demo.gif)
 
 *The dashboard through both faults: the VPN drops (`tunnel down`), recovers, then the NAT rule disappears (`blocked`) while the tunnel stays healthy. Full-quality clip: [`docs/demo.mp4`](docs/demo.mp4).*
 
-A small, runnable model of one problem a camera fleet has: **a device at a remote site, behind a router, that the
-platform can only reach through a VPN**, and a monitor that has to tell you *which layer* broke when it goes dark.
+**Proof:** `scripts/verify.py` runs 16 end-to-end checks and injects both faults. In `docs/last_run.json` (one run on one machine) the monitor called the VPN drop `tunnel_down` after 4 s and 13 s in two runs, and the removed NAT rule `blocked` after 8 s in both.
 
-Everything runs in Docker on one machine: kernel WireGuard, `iptables` NAT and firewall, an RTSP camera, an async
-FastAPI monitor and MariaDB. The networking is real Linux behaviour; the topology is a **model**, not a deployment (see
-[Limits](#limits)).
-
-## What it demonstrates
-
-| Area | What is in the lab |
-|---|---|
-| **Linux networking** | A site router container with WireGuard, `ip_forward`, default-deny `iptables`, **DNAT** from the tunnel address to the camera and **MASQUERADE** on the site side, conntrack-aware rules |
-| **VPN** | WireGuard hub (platform) and spoke (site router) with keys generated at start and exchanged over a volume. The site router dials *out* and holds the NAT mapping open with a persistent keepalive, the way a 4G router has to |
-| **Firewall** | The camera sits on an `internal` network the hub is not on. The only path is the tunnel, and only TCP 8554 (RTSP) and 8889 (WebRTC page) are forwarded. Everything else is dropped silently |
-| **Streaming** | A synthetic H.264 camera (ffmpeg into MediaMTX) served over **RTSP**, probed with `ffprobe`, plus the **WebRTC** page reached through the tunnel |
-| **Async Python** | FastAPI. Every probe is async with a hard timeout, subprocesses are killed on timeout, and a test proves the event loop keeps ticking while a probe hangs |
-| **Database and pooling** | **MariaDB** through SQLAlchemy 2.0 async with an explicitly configured pool (`pool_size`, `max_overflow`, `pool_pre_ping`, `pool_recycle`) and a `/pool` endpoint so occupancy is observable |
-| **Debugging with no docs** | [`DEBUGGING.md`](DEBUGGING.md): two injected faults, the commands used to tell them apart, and the wrong assumption I made and measured my way out of |
+Everything runs in Docker on one machine: kernel WireGuard, `iptables` NAT and firewall, an RTSP camera, an async FastAPI monitor and MariaDB. The site router dials out and holds its NAT mapping open with a persistent keepalive, the way a 4G router has to, and the camera sits on an `internal` network the hub is not on, so the only path to it is the tunnel and only TCP 8554 (RTSP) and 8889 (the WebRTC page) are forwarded. The networking is real Linux behaviour; the topology is a model, not a deployment (see [Limits](#limits)). [`DEBUGGING.md`](DEBUGGING.md) has the two injected faults, the commands used to tell them apart, and the wrong assumption I made and measured my way out of.
 
 ## The idea: probe in layers
 
