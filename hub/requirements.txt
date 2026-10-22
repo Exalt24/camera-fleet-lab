@@ -1,6 +1,6 @@
 fastapi==0.143.1
 uvicorn==0.54.0
-sqlalchemy[asyncio]>=2.0.41,<2.1
+sqlalchemy[asyncio]>=2.1.4,<2.2
 aiomysql==0.3.2
 pytest==9.1.1
 pytest-asyncio==1.4.0
