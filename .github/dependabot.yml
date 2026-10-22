@@ -19,3 +19,12 @@ updates:
       actions:
         patterns: ["*"]
         update-types: [minor, patch]
+  - package-ecosystem: docker
+    directory: "/edge"
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    groups:
+      minor-and-patch:
+        update-types: [minor, patch]
