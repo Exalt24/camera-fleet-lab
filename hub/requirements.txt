@@ -1,4 +1,4 @@
-fastapi==0.143.1
+fastapi==0.143.3
 uvicorn==0.54.0
 sqlalchemy[asyncio]>=2.1.4,<2.2
 aiomysql==0.3.2
