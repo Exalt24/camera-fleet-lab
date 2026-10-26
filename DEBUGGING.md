@@ -1,8 +1,8 @@
 # Debugging notes
 
 Two faults injected into the lab, how each one looks from the outside, the commands that separate them, and the one
-wrong assumption I made on the way. All command output below is copied from `docs/debugging_capture.txt`, which
-`scripts/capture_debugging.py` writes from a real run; nothing here is remembered or tidied.
+wrong assumption I made on the way. The tcpdump and iptables output below is copied from `docs/debugging_capture.txt`, which
+`scripts/capture_debugging.py` writes from a real run. The probe history lines and the 13 s and soak figures come from earlier runs I did not save.
 
 The two faults look identical to a person who only has a stream URL: the video stops. They have different causes and
 different fixes, which is why the monitor checks layer by layer (tunnel, then port, then video).

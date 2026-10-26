@@ -6,7 +6,7 @@ Docker model of a remote camera site behind a WireGuard VPN, with a monitor that
 
 *The dashboard through both faults: the VPN drops (`tunnel down`), recovers, then the NAT rule disappears (`blocked`) while the tunnel stays healthy. Full-quality clip: [`docs/demo.mp4`](docs/demo.mp4).*
 
-**Proof:** `scripts/verify.py` runs 16 end-to-end checks and injects both faults. In `docs/last_run.json` (one run on one machine) the monitor called the VPN drop `tunnel_down` after 4 s and 13 s in two runs, and the removed NAT rule `blocked` after 8 s in both.
+**Proof:** `scripts/verify.py` runs 16 end-to-end checks and injects both faults. In `docs/last_run.json` (one run on one machine) the monitor called the VPN drop `tunnel_down` after 4 s and the removed NAT rule `blocked` after 8 s. An earlier run, which I did not save, took 13 s for the VPN drop.
 
 Everything runs in Docker on one machine: kernel WireGuard, `iptables` NAT and firewall, an RTSP camera, an async FastAPI monitor and MariaDB. The site router dials out and holds its NAT mapping open with a persistent keepalive, the way a 4G router has to, and the camera sits on an `internal` network the hub is not on, so the only path to it is the tunnel and only TCP 8554 (RTSP) and 8889 (the WebRTC page) are forwarded. The networking is real Linux behaviour; the topology is a model, not a deployment (see [Limits](#limits)). [`DEBUGGING.md`](DEBUGGING.md) has the two injected faults, the commands used to tell them apart, and the wrong assumption I made and measured my way out of.
 
@@ -56,7 +56,7 @@ Needs Docker with a kernel that has WireGuard (Docker Desktop's WSL2 kernel does
 ```
 docker compose up -d --build
 python scripts/verify.py          # 16 end-to-end checks, injects both faults, exit 0 only if all pass
-open http://127.0.0.1:8100/       # the live dashboard
+# then open http://127.0.0.1:8100/ in a browser for the live dashboard
 python scripts/measure_recovery.py 40     # block the VPN for 40 s and time the recovery
 cd hub && pip install -r requirements.txt && pytest      # offline unit tests, no Docker needed
 ```
@@ -65,15 +65,15 @@ Short captioned screen recording of both faults: [`docs/demo.mp4`](docs/demo.mp4
 
 ## Measured results
 
-From `docs/last_run.json` (one run on one machine, so read them as orders of magnitude, not benchmarks):
+The first five rows are from `docs/last_run.json` (one run on one machine, so read them as orders of magnitude, not benchmarks). The last two come from `scripts/measure_recovery.py` and `scripts/soak_summary.py`, which print to the terminal; I did not save their output.
 
 | Check | Result |
 |---|---|
 | Camera reachable only through the tunnel (no direct route from the hub) | pass |
 | Stream decodes through the tunnel | h264 640x360 |
 | Non-forwarded port on the site router | silently dropped |
-| **Fault A**: WireGuard UDP blocked | detected as `tunnel_down` after **4 s and 13 s** in two runs (it depends where in the 5 s probe cycle the block lands, and whether the first symptom is a stalled stream that reads `degraded` for one cycle), recovered by itself **6 to 7 s** after unblocking |
-| **Fault B**: DNAT rule removed (tunnel healthy) | detected as `blocked` after **8 s** in both runs, recovered **8 s** after the rule was restored |
+| **Fault A**: WireGuard UDP blocked | detected as `tunnel_down` after **4 s** in the saved run (an earlier, unsaved run took 13 s: it depends where in the 5 s probe cycle the block lands, and whether the first symptom is a stalled stream that reads `degraded` for one cycle), recovered by itself **6.1 s** after unblocking |
+| **Fault B**: DNAT rule removed (tunnel healthy) | detected as `blocked` after **8 s**, recovered **8.1 s** after the rule was restored |
 | A 40 s VPN block, then unblocked | fresh handshake on both ends within **about 5 s** |
 | No-fault soak, about 5.5 minutes (`scripts/soak_summary.py`) | 43 probes, every one `up`; the handshake age climbed to 118 s and reset twice (two WireGuard rekeys). The first version's 30 s threshold would have called most of this "down" |
 
@@ -81,7 +81,7 @@ From `docs/last_run.json` (one run on one machine, so read them as orders of mag
 
 ## What I got wrong (and how the lab showed me)
 
-These are real, and each one is now pinned by a test or a check.
+These are real. Items 1, 5 and 6 are pinned by a test or a check; items 2 to 4 were found and fixed but have no regression test.
 
 1. **I assumed persistent keepalive refreshes the WireGuard handshake. It doesn't.** My first version called the tunnel
    "stale" when the last handshake was older than 30 s. The probe history showed `state=down` with
@@ -95,8 +95,8 @@ These are real, and each one is now pinned by a test or a check.
 3. **`asyncmy` has no Python 3.13 wheel and its compile fails**, so the image would not build. Switched to the pure-Python
    `aiomysql`.
 4. **SQLAlchemy's pool pre-ping crashed on startup** with that driver pair (`ping() missing 1 required positional argument`).
-   Fixed by moving to a newer SQLAlchemy 2.0.
-5. **The first end-to-end run failed 4 of 15 checks.** Two were my test or image bugs (the hub image had no `ping`, the
+   Fixed by moving to a newer SQLAlchemy (the hub pins 2.1 now).
+5. **The first end-to-end run failed 4 of 15 checks** (an observation from that day, no output saved). Two were my test or image bugs (the hub image had no `ping`, the
    WebRTC page answers `302` before `200`) and two came from the wrong model in item 1 (the recovery check and the
    "tunnel still fresh" check).
 6. **A closed-port unit test passed on Linux and failed on Windows**, because Windows keeps retrying SYNs to a closed local
