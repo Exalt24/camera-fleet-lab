@@ -8,7 +8,7 @@ Docker model of a remote camera site behind a WireGuard VPN, with a monitor that
 
 **Proof:** `scripts/verify.py` runs 16 end-to-end checks and injects both faults. In `docs/last_run.json` (one run on one machine) the monitor called the VPN drop `tunnel_down` after 4 s and the removed NAT rule `blocked` after 8 s. An earlier run, which I did not save, took 13 s for the VPN drop.
 
-Everything runs in Docker on one machine: kernel WireGuard, `iptables` NAT and firewall, an RTSP camera, an async FastAPI monitor and MariaDB. The site router dials out and holds its NAT mapping open with a persistent keepalive, the way a 4G router has to, and the camera sits on an `internal` network the hub is not on, so the only path to it is the tunnel and only TCP 8554 (RTSP) and 8889 (the WebRTC page) are forwarded. The networking is real Linux behaviour; the topology is a model, not a deployment (see [Limits](#limits)). [`DEBUGGING.md`](DEBUGGING.md) has the two injected faults, the commands used to tell them apart, and the wrong assumption I made and measured my way out of.
+Everything runs in Docker on one machine: kernel WireGuard, `iptables` NAT and firewall, an RTSP camera, an async FastAPI monitor and MariaDB. The site router dials out and holds its NAT mapping open with a persistent keepalive, the way a 4G router has to, and the camera sits on an `internal` network the hub is not on, so the only path to it is the tunnel and only TCP 8554 (RTSP) and 8889 (the WebRTC page) are forwarded. The networking is real Linux behaviour, arranged as a Docker model of the remote site (see [Scope and next steps](#scope-and-next-steps)). [`DEBUGGING.md`](DEBUGGING.md) has the two injected faults, the commands used to tell them apart, and the wrong assumption I made and measured my way out of.
 
 ## The idea: probe in layers
 
@@ -79,7 +79,7 @@ The first five rows are from `docs/last_run.json` (one run on one machine, so re
 
 `verify.py`: **16/16** checks. `pytest`: 22 passed, 1 skipped (the skip is OS-specific, see below).
 
-## What I got wrong (and how the lab showed me)
+## What I got wrong (and how the stack showed me)
 
 These are real. Items 1, 5 and 6 are pinned by a test or a check; items 2 to 4 were found and fixed but have no regression test.
 
@@ -116,13 +116,11 @@ demo/record.mjs           Playwright recording of the dashboard through both fau
 docs/                     last_run.json, debugging_capture.txt, demo.gif, demo.mp4
 ```
 
-## Limits
+## Scope and next steps
 
-- **It is a lab on one machine.** Docker networks stand in for the internet, the site LAN and a 4G link. There is no real
-  carrier-grade NAT, packet loss, MTU black hole or radio behaviour, and no real router firmware.
-- **The camera is synthetic** (ffmpeg's test pattern into MediaMTX). There is no ONVIF discovery and no vendor camera
-  (Hikvision, Dahua, Uniview) behavior here.
-- **One camera and one site.** The monitor models a single device; a fleet needs a camera registry, per-site peers and
-  scheduling, none of which is built.
-- The credentials in `docker-compose.yml` are lab-only values for a database that is only reachable on an internal
-  network, not secrets.
+- **One machine.** Docker networks stand in for the internet, the site LAN and a 4G link. Next steps: model carrier-grade NAT, packet loss, MTU black holes and radio behaviour, and run real router firmware.
+- **The camera is ffmpeg's test pattern served by MediaMTX.** Next steps: ONVIF discovery and vendor cameras (Hikvision, Dahua, Uniview).
+- **One camera and one site.** The monitor models a single device; a fleet adds a camera registry, per-site peers and
+  scheduling.
+- The credentials in `docker-compose.yml` are local values for a database that is only reachable on an internal
+  network.
