@@ -6,9 +6,15 @@ Docker model of a remote camera site behind a WireGuard VPN, with a monitor that
 
 *The dashboard through both faults: the VPN drops (`tunnel down`), recovers, then the NAT rule disappears (`blocked`) while the tunnel stays healthy. Full-quality clip: [`docs/demo.mp4`](docs/demo.mp4).*
 
-**Proof:** `scripts/verify.py` runs 16 end-to-end checks and injects both faults. In `docs/last_run.json` (one run on one machine) the monitor called the VPN drop `tunnel_down` after 4 s and the removed NAT rule `blocked` after 8 s. An earlier run, which I did not save, took 13 s for the VPN drop.
+**Proof:** `scripts/verify.py` runs 16 end-to-end checks and injects both faults. In `docs/last_run.json` (one run on one machine) the monitor called the VPN drop `tunnel_down` after 4 s. It called the removed NAT rule `blocked` after 8 s. An earlier run, which I did not save, took 13 s for the VPN drop.
 
-Everything runs in Docker on one machine: kernel WireGuard, `iptables` NAT and firewall, an RTSP camera, an async FastAPI monitor and MariaDB. The site router dials out and holds its NAT mapping open with a persistent keepalive, the way a 4G router has to, and the camera sits on an `internal` network the hub is not on, so the only path to it is the tunnel and only TCP 8554 (RTSP) and 8889 (the WebRTC page) are forwarded. The networking is real Linux behaviour, arranged as a Docker model of the remote site (see [Scope and next steps](#scope-and-next-steps)). [`DEBUGGING.md`](DEBUGGING.md) has the two injected faults, the commands used to tell them apart, and the wrong assumption I made and measured my way out of.
+Everything runs in Docker on one machine: kernel WireGuard, `iptables` NAT and firewall, an RTSP camera, an async FastAPI monitor and MariaDB.
+
+The site router dials out and holds its NAT mapping open with a persistent keepalive, the way a 4G router has to. The camera sits on an `internal` network the hub is not on. The only path to it is the tunnel, and only TCP 8554 (RTSP) and 8889 (the WebRTC page) are forwarded.
+
+The networking is real Linux behaviour, arranged as a Docker model of the remote site (see [Scope and next steps](#scope-and-next-steps)).
+
+[`DEBUGGING.md`](DEBUGGING.md) has the two injected faults and the commands used to tell them apart. It also covers the wrong assumption I made and measured my way out of.
 
 ## The idea: probe in layers
 
@@ -16,7 +22,7 @@ Everything runs in Docker on one machine: kernel WireGuard, `iptables` NAT and f
 tunnel  ->  port (NAT)  ->  video
 ```
 
-Each layer fails for a different reason and needs a different fix, so the monitor checks them in order and reports the
+Each layer fails for a different reason and needs a different fix. The monitor checks them in order and reports the
 first one that fails:
 
 | State | Meaning | Where to look |
@@ -28,8 +34,8 @@ first one that fails:
 
 ## Topology
 
-The GIF above shows the monitor reacting. This shows what it is monitoring, which a recording of the dashboard cannot:
-the camera sits on a network the hub is not on, so the only way to it is the tunnel and one DNAT rule.
+The GIF above shows the monitor reacting. This shows what it is monitoring, which a recording of the dashboard cannot.
+The camera sits on a network the hub is not on. The only way to it is the tunnel and one DNAT rule.
 
 ```mermaid
 flowchart LR
@@ -46,8 +52,8 @@ flowchart LR
   hub --> db
 ```
 
-Probe order on every cycle: ping through the tunnel, then a TCP connect to the camera port, then `ffprobe` over RTSP; the
-first layer that fails is the one reported.
+Probe order on every cycle: ping through the tunnel, then a TCP connect to the camera port, then `ffprobe` over RTSP.
+The first layer that fails is the one reported.
 
 ## Run it
 
@@ -65,7 +71,7 @@ Short captioned screen recording of both faults: [`docs/demo.mp4`](docs/demo.mp4
 
 ## Measured results
 
-The first five rows are from `docs/last_run.json` (one run on one machine, so read them as orders of magnitude, not benchmarks). The last two come from `scripts/measure_recovery.py` and `scripts/soak_summary.py`, which print to the terminal; I did not save their output.
+The first five rows are from `docs/last_run.json`. It is one run on one machine, so read them as orders of magnitude, not benchmarks. The last two come from `scripts/measure_recovery.py` and `scripts/soak_summary.py`. Those print to the terminal, and I did not save their output.
 
 | Check | Result |
 |---|---|
@@ -81,26 +87,26 @@ The first five rows are from `docs/last_run.json` (one run on one machine, so re
 
 ## What I got wrong (and how the stack showed me)
 
-These are real. Items 1, 5 and 6 are pinned by a test or a check; items 2 to 4 were found and fixed but have no regression test.
+These are real. Items 1, 5 and 6 are pinned by a test or a check. Items 2 to 4 were found and fixed but have no regression test.
 
 1. **I assumed persistent keepalive refreshes the WireGuard handshake. It doesn't.** My first version called the tunnel
    "stale" when the last handshake was older than 30 s. The probe history showed `state=down` with
-   `tcp=True rtsp=True`, a working camera reported dead, flapping every couple of minutes. Persistent keepalive only holds
-   the NAT mapping open; WireGuard re-handshakes about every 120 s and a session lives up to 180 s, so a *healthy*
+   `tcp=True rtsp=True`. A working camera was reported dead, flapping every couple of minutes. Persistent keepalive only holds
+   the NAT mapping open. WireGuard re-handshakes about every 120 s and a session lives up to 180 s. So a *healthy*
    tunnel's handshake age cycles from 0 to roughly 3 minutes. The monitor now decides whether the tunnel works by sending
-   a packet through it (a ping), and reports the handshake age as information only. Regression test:
+   a packet through it (a ping). It reports the handshake age as information only. Regression test:
    `test_a_healthy_tunnel_with_an_old_handshake_is_still_up`.
 2. **My monitor logged nothing.** uvicorn only configures its own loggers, so the app logger's `INFO` lines were silently
-   dropped. I only noticed because I went to read them. Fixed with an explicit `logging.basicConfig`.
-3. **`asyncmy` has no Python 3.13 wheel and its compile fails**, so the image would not build. Switched to the pure-Python
+   dropped. I only noticed because I went to read them. An explicit `logging.basicConfig` fixed it.
+3. **`asyncmy` has no Python 3.13 wheel and its compile fails**, so the image would not build. I switched to the pure-Python
    `aiomysql`.
 4. **SQLAlchemy's pool pre-ping crashed on startup** with that driver pair (`ping() missing 1 required positional argument`).
-   Fixed by moving to a newer SQLAlchemy (the hub pins 2.1 now).
-5. **The first end-to-end run failed 4 of 15 checks** (an observation from that day, no output saved). Two were my test or image bugs (the hub image had no `ping`, the
-   WebRTC page answers `302` before `200`) and two came from the wrong model in item 1 (the recovery check and the
+   Moving to a newer SQLAlchemy fixed it (the hub pins 2.1 now).
+5. **The first end-to-end run failed 4 of 15 checks** (an observation from that day, no output saved). Two were my test or image bugs: the hub image had no `ping`, and the
+   WebRTC page answers `302` before `200`. The other two came from the wrong model in item 1 (the recovery check and the
    "tunnel still fresh" check).
-6. **A closed-port unit test passed on Linux and failed on Windows**, because Windows keeps retrying SYNs to a closed local
-   port for about 2 s so it looks like a timeout. The test is skipped on Windows with the reason written next to it.
+6. **A closed-port unit test passed on Linux and failed on Windows.** Windows keeps retrying SYNs to a closed local
+   port for about 2 s, so it looks like a timeout. The test is skipped on Windows with the reason written next to it.
 
 ## Layout
 
@@ -118,9 +124,9 @@ docs/                     last_run.json, debugging_capture.txt, demo.gif, demo.m
 
 ## Scope and next steps
 
-- **One machine.** Docker networks stand in for the internet, the site LAN and a 4G link. Next steps: model carrier-grade NAT, packet loss, MTU black holes and radio behaviour, and run real router firmware.
+- **One machine.** Docker networks stand in for the internet, the site LAN and a 4G link. Next steps: model carrier-grade NAT, packet loss, MTU black holes and radio behaviour. Then run real router firmware.
 - **The camera is ffmpeg's test pattern served by MediaMTX.** Next steps: ONVIF discovery and vendor cameras (Hikvision, Dahua, Uniview).
-- **One camera and one site.** The monitor models a single device; a fleet adds a camera registry, per-site peers and
+- **One camera and one site.** The monitor models a single device. A fleet adds a camera registry, per-site peers and
   scheduling.
-- The credentials in `docker-compose.yml` are local values for a database that is only reachable on an internal
+- The credentials in `docker-compose.yml` are local values. The database is only reachable on an internal
   network.
