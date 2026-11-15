@@ -1,0 +1,259 @@
+[
+  {
+    "file": "planted/blocked_alone.log",
+    "expected": [
+      "100101"
+    ],
+    "fired": [
+      "100101"
+    ],
+    "alerts": [
+      {
+        "rule": "100101",
+        "level": "7",
+        "mitre": [],
+        "description": "Camera site blocked: packets cross the VPN but the camera port is silent."
+      }
+    ]
+  },
+  {
+    "file": "planted/tunnel_flapping.log",
+    "expected": [
+      "100102",
+      "100102",
+      "100103"
+    ],
+    "fired": [
+      "100102",
+      "100102",
+      "100103"
+    ],
+    "alerts": [
+      {
+        "rule": "100102",
+        "level": "8",
+        "mitre": [],
+        "description": "Camera site unreachable: no packet crosses the VPN."
+      },
+      {
+        "rule": "100102",
+        "level": "8",
+        "mitre": [],
+        "description": "Camera site unreachable: no packet crosses the VPN."
+      },
+      {
+        "rule": "100103",
+        "level": "10",
+        "mitre": [],
+        "description": "Camera site tunnel flapping: three tunnel_down transitions inside five minutes."
+      }
+    ]
+  },
+  {
+    "file": "planted/port_sweep_then_outage.log",
+    "expected": [
+      "100210",
+      "100220"
+    ],
+    "fired": [
+      "100210",
+      "100220"
+    ],
+    "alerts": [
+      {
+        "rule": "100200",
+        "level": "3",
+        "mitre": [],
+        "description": "Edge firewall dropped a packet."
+      },
+      {
+        "rule": "100200",
+        "level": "3",
+        "mitre": [],
+        "description": "Edge firewall dropped a packet."
+      },
+      {
+        "rule": "100200",
+        "level": "3",
+        "mitre": [],
+        "description": "Edge firewall dropped a packet."
+      },
+      {
+        "rule": "100200",
+        "level": "3",
+        "mitre": [],
+        "description": "Edge firewall dropped a packet."
+      },
+      {
+        "rule": "100200",
+        "level": "3",
+        "mitre": [],
+        "description": "Edge firewall dropped a packet."
+      },
+      {
+        "rule": "100200",
+        "level": "3",
+        "mitre": [],
+        "description": "Edge firewall dropped a packet."
+      },
+      {
+        "rule": "100200",
+        "level": "3",
+        "mitre": [],
+        "description": "Edge firewall dropped a packet."
+      },
+      {
+        "rule": "100210",
+        "level": "10",
+        "mitre": [
+          "T1046"
+        ],
+        "description": "Port sweep: one address hit eight different closed ports on the site router inside 30 seconds."
+      },
+      {
+        "rule": "100200",
+        "level": "3",
+        "mitre": [],
+        "description": "Edge firewall dropped a packet."
+      },
+      {
+        "rule": "100200",
+        "level": "3",
+        "mitre": [],
+        "description": "Edge firewall dropped a packet."
+      },
+      {
+        "rule": "100220",
+        "level": "12",
+        "mitre": [
+          "T1046"
+        ],
+        "description": "Port sweep followed by an outage: the camera site went blocked or tunnel_down within five minutes of a sweep."
+      }
+    ]
+  },
+  {
+    "file": "planted/ssh_brute_force_success.log",
+    "expected": [
+      "100300"
+    ],
+    "fired": [
+      "100300"
+    ],
+    "alerts": [
+      {
+        "rule": "100300",
+        "level": "13",
+        "mitre": [
+          "T1110",
+          "T1078"
+        ],
+        "description": "Brute force that worked: a successful ssh login from an address after repeated failures."
+      }
+    ]
+  },
+  {
+    "file": "planted/sweep_then_ssh_login.log",
+    "expected": [
+      "100210",
+      "100301"
+    ],
+    "fired": [
+      "100210",
+      "100301"
+    ],
+    "alerts": [
+      {
+        "rule": "100200",
+        "level": "3",
+        "mitre": [],
+        "description": "Edge firewall dropped a packet."
+      },
+      {
+        "rule": "100200",
+        "level": "3",
+        "mitre": [],
+        "description": "Edge firewall dropped a packet."
+      },
+      {
+        "rule": "100200",
+        "level": "3",
+        "mitre": [],
+        "description": "Edge firewall dropped a packet."
+      },
+      {
+        "rule": "100200",
+        "level": "3",
+        "mitre": [],
+        "description": "Edge firewall dropped a packet."
+      },
+      {
+        "rule": "100200",
+        "level": "3",
+        "mitre": [],
+        "description": "Edge firewall dropped a packet."
+      },
+      {
+        "rule": "100200",
+        "level": "3",
+        "mitre": [],
+        "description": "Edge firewall dropped a packet."
+      },
+      {
+        "rule": "100200",
+        "level": "3",
+        "mitre": [],
+        "description": "Edge firewall dropped a packet."
+      },
+      {
+        "rule": "100210",
+        "level": "10",
+        "mitre": [
+          "T1046"
+        ],
+        "description": "Port sweep: one address hit eight different closed ports on the site router inside 30 seconds."
+      },
+      {
+        "rule": "100200",
+        "level": "3",
+        "mitre": [],
+        "description": "Edge firewall dropped a packet."
+      },
+      {
+        "rule": "100200",
+        "level": "3",
+        "mitre": [],
+        "description": "Edge firewall dropped a packet."
+      },
+      {
+        "rule": "100301",
+        "level": "13",
+        "mitre": [
+          "T1046",
+          "T1078"
+        ],
+        "description": "Port sweep then ssh login: an address that swept the site router's ports logged in over ssh."
+      }
+    ]
+  },
+  {
+    "file": "benign/quiet_run.log",
+    "expected": [],
+    "fired": [],
+    "stock_rules_fired": [
+      "100200",
+      "5715",
+      "5760"
+    ]
+  },
+  {
+    "file": "benign/near_misses.log",
+    "expected": [],
+    "fired": [],
+    "stock_rules_fired": [
+      "100200",
+      "5715",
+      "5760"
+    ]
+  }
+]

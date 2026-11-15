@@ -1,0 +1,83 @@
+security/junos/edge-router-clean.set: no findings
+security/junos/fault-bgp-and-policy.set: 8 finding(s)
+  [HIGH    ] JR008 line 43: BGP group transit neighbor 203.0.113.1 has no authentication key (nothing stops a spoofed TCP session reset or a forged peer).
+             statement: set protocols bgp group transit neighbor 203.0.113.1
+             fix: set protocols bgp group transit neighbor 203.0.113.1 authentication-key "<secret>"
+  [HIGH    ] JR009 line 43: BGP group transit neighbor 203.0.113.1 has no prefix-limit (a leak or a full table from this peer is accepted without bound).
+             statement: set protocols bgp group transit neighbor 203.0.113.1
+             fix: set protocols bgp group transit family inet unicast prefix-limit maximum 1000 teardown 80
+  [HIGH    ] JR010 line 43: BGP group transit neighbor 203.0.113.1 has no import policy (every route the peer sends is accepted).
+             statement: set protocols bgp group transit neighbor 203.0.113.1
+             fix: set protocols bgp group transit import <policy-statement that ends with then reject>
+  [HIGH    ] JR011 line 43: BGP group transit neighbor 203.0.113.1 has no export policy (every active BGP route is advertised to the peer).
+             statement: set protocols bgp group transit neighbor 203.0.113.1
+             fix: set protocols bgp group transit export <policy-statement that advertises only your own prefixes>
+  [HIGH    ] JR012 line 51: term accept-everything in policy-statement customer-in accepts every route (then accept with no from clause).
+             statement: set policy-options policy-statement customer-in term accept-everything then accept
+             fix: add a from clause (route-filter, prefix-list, community), and end the policy with then reject
+  [HIGH    ] JR013 line 55: term trigger in policy-statement rtbh-in sends routes to a discard next hop without matching a community, so any peer that sends a route can black-hole traffic.
+             statement: set policy-options policy-statement rtbh-in term trigger then next-hop 192.0.2.101
+             fix: add from community <blackhole-community> to the term and accept the community only from peers allowed to trigger it
+  [MEDIUM  ] JR012 line 55: term trigger in policy-statement rtbh-in accepts every route (then accept with no from clause).
+             statement: set policy-options policy-statement rtbh-in term trigger then next-hop 192.0.2.101
+             fix: add a from clause (route-filter, prefix-list, community), and end the policy with then reject
+  [MEDIUM  ] JR013 line 57: static discard route 192.0.2.101/32 looks like a black hole trigger and carries no community.
+             statement: set routing-options static route 192.0.2.101/32 discard
+             fix: set routing-options static route 192.0.2.101/32 community <blackhole-community>
+security/junos/fault-filter-logic.set: 4 finding(s)
+  [HIGH    ] JR007 line 28: term drop-site-guest in filter transit-in is shadowed: term allow-corp already accepts all of its traffic, so the discard here never happens.
+             statement: set firewall family inet filter transit-in term drop-site-guest from source-address 10.20.5.0/24
+             fix: move drop-site-guest before allow-corp (insert firewall family inet filter transit-in term drop-site-guest before term allow-corp) or delete it
+  [HIGH    ] JR002 line 32: term allow-any in filter transit-in accepts any source to any destination.
+             statement: set firewall family inet filter transit-in term allow-any then accept
+             fix: match only the traffic the term is for: add from source-address or source-prefix-list, protocol and destination-port, or remove the term
+  [HIGH    ] JR007 line 33: term block-telnet in filter transit-in is shadowed: term allow-any already accepts all of its traffic, so the discard here never happens.
+             statement: set firewall family inet filter transit-in term block-telnet from protocol tcp
+             fix: move block-telnet before allow-any (insert firewall family inet filter transit-in term block-telnet before term allow-any) or delete it
+  [MEDIUM  ] JR001 line 36: filter transit-in (inet) has no final discard term; its last term is 'block-telnet'. Junos drops what no term matches, but silently: nothing is counted or logged.
+             statement: set firewall family inet filter transit-in term block-telnet then discard
+             fix: add a last term with no from clause: set firewall family inet filter transit-in term discard-rest then count discard-rest then log then discard
+security/junos/fault-logging-and-services.set: 6 finding(s)
+  [HIGH    ] JR003 line 5: management services are enabled and no firewall filter is applied to lo0 input, so ssh, telnet or netconf answers on every interface from any address.
+             statement: set system services ssh root-login deny
+             fix: apply a filter that accepts management ports only from trusted prefixes and discards the rest: set interfaces lo0 unit 0 family inet filter input protect-RE
+  [HIGH    ] JR006 line 7: SNMP community 'private' is a default name.
+             statement: set snmp community private authorization read-write
+             fix: use a long random community or SNMPv3, and restrict it with clients <prefix> restrict
+  [MEDIUM  ] JR015 whole configuration: no NTP server is configured, so timestamps in logs and alerts can drift from other systems.
+             fix: set system ntp server <address>
+  [MEDIUM  ] JR016 whole configuration: no remote syslog host is configured, so logs stay on the device.
+             fix: set system syslog host <collector> any notice
+  [MEDIUM  ] JR004 line 6: the ftp service is enabled: clear text file transfer to the device.
+             statement: set system services ftp
+             fix: delete system services ftp and use scp or sftp over ssh
+  [LOW     ] JR014 line 13: term discard-rest in filter edge-in discards traffic with no count and no log, so what it drops is invisible.
+             statement: set firewall family inet filter edge-in term discard-rest then discard
+             fix: set firewall family inet filter edge-in term discard-rest then count discard-rest-drops then log
+security/junos/fault-management-plane.set: 9 finding(s)
+  [CRITICAL] JR003 line 9: term allow-mgmt in filter mgmt-in accepts ssh, telnet from any source address (0.0.0.0/0).
+             statement: set firewall family inet filter mgmt-in term allow-mgmt from protocol tcp
+             fix: limit the term with from source-prefix-list <management-hosts>, or remove it
+  [HIGH    ] JR005 line 4: root authenticates with a password and no ssh public key is configured for root.
+             statement: set system root-authentication encrypted-password "$6$sampleSalt$sampleHashValueNotARealPasswordHash"
+             fix: set system root-authentication ssh-ed25519 "<public key>" and keep the password for the console only
+  [HIGH    ] JR005 line 5: ssh root-login is allowed.
+             statement: set system services ssh root-login allow
+             fix: set system services ssh root-login deny and log in as a named user
+  [HIGH    ] JR004 line 6: telnet is enabled: passwords and sessions cross the network in clear text.
+             statement: set system services telnet
+             fix: delete system services telnet and use ssh
+  [HIGH    ] JR004 line 7: J-Web is reachable over http (no encryption).
+             statement: set system services web-management http
+             fix: delete system services web-management http and use https with a certificate
+  [HIGH    ] JR006 line 8: SNMP community 'public' is a default name.
+             statement: set snmp community public authorization read-only
+             fix: use a long random community or SNMPv3, and restrict it with clients <prefix> restrict
+  [MEDIUM  ] JR015 whole configuration: no NTP server is configured, so timestamps in logs and alerts can drift from other systems.
+             fix: set system ntp server <address>
+  [MEDIUM  ] JR016 whole configuration: no remote syslog host is configured, so logs stay on the device.
+             fix: set system syslog host <collector> any notice
+  [MEDIUM  ] JR001 line 14: filter mgmt-in (inet) has no final discard term; its last term is 'allow-icmp'. Junos drops what no term matches, but silently: nothing is counted or logged.
+             statement: set firewall family inet filter mgmt-in term allow-icmp then accept
+             fix: add a last term with no from clause: set firewall family inet filter mgmt-in term discard-rest then count discard-rest then log then discard
+security/junos/site-gateway-clean.set: no findings

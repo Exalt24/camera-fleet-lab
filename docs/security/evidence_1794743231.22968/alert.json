@@ -1,0 +1,65 @@
+{
+  "agent": {
+    "id": "000",
+    "name": "wazuh"
+  },
+  "data": {
+    "dstuser": "deploy",
+    "srcip": "203.0.113.50",
+    "srcport": "47998"
+  },
+  "decoder": {
+    "name": "sshd",
+    "parent": "sshd"
+  },
+  "full_log": "Nov 15 11:47:24 edge sshd[4683]: Accepted password for deploy from 203.0.113.50 port 47998 ssh2\r",
+  "id": "1794743231.22968",
+  "location": "/feed/ssh_auth.log",
+  "manager": {
+    "name": "wazuh"
+  },
+  "predecoder": {
+    "hostname": "edge",
+    "program_name": "sshd",
+    "timestamp": "Nov 15 11:47:24"
+  },
+  "rule": {
+    "description": "Brute force that worked: a successful ssh login from an address after repeated failures.",
+    "firedtimes": 1,
+    "groups": [
+      "camera_fleet",
+      "nist_csf_detect",
+      "authentication_success"
+    ],
+    "hipaa": [
+      "164.312.b",
+      "164.308.a.5"
+    ],
+    "id": "100300",
+    "info": "NIST CSF 2.0 DETECT DE.AE-02 (potentially adverse events analyzed)",
+    "level": 13,
+    "mail": true,
+    "mitre": {
+      "id": [
+        "T1110",
+        "T1078"
+      ],
+      "tactic": [
+        "Credential Access",
+        "Defense Evasion",
+        "Persistence",
+        "Privilege Escalation",
+        "Initial Access"
+      ],
+      "technique": [
+        "Brute Force",
+        "Valid Accounts"
+      ]
+    },
+    "tsc": [
+      "CC6.1",
+      "CC7.3"
+    ]
+  },
+  "timestamp": "2026-11-15T11:47:11.858+0000"
+}

@@ -1,0 +1,52 @@
+{
+  "alert_id": "1794743231.22968",
+  "mode": "apply",
+  "outcome": "done",
+  "playbook": "brute-force-success",
+  "rule_id": "100300",
+  "steps": [
+    {
+      "attempts": 1,
+      "outcome": "ok",
+      "result": {
+        "address_class": "private",
+        "alerts_from_this_source_in_run": 0,
+        "csf": "NIST CSF 2.0 DETECT DE.AE-02 (potentially adverse events analyzed)",
+        "level": 13,
+        "mitre": [
+          "T1110",
+          "T1078"
+        ],
+        "rule_id": "100300",
+        "srcip": "203.0.113.50",
+        "valid_ip": true
+      },
+      "step": "enrich"
+    },
+    {
+      "attempts": 1,
+      "outcome": "ok",
+      "result": {
+        "posted": "http://127.0.0.1:8765/notify",
+        "status": 200
+      },
+      "step": "notify-oncall"
+    },
+    {
+      "attempts": 1,
+      "outcome": "ok",
+      "result": {
+        "ran": "docker compose -p cfl-sec exec -T edge iptables -I INPUT 1 -s 203.0.113.50 -j DROP"
+      },
+      "step": "block-source"
+    },
+    {
+      "attempts": 1,
+      "outcome": "ok",
+      "result": {
+        "wrote": "tickets/1794743231.22968.json"
+      },
+      "step": "open-ticket"
+    }
+  ]
+}

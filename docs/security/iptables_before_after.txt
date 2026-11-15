@@ -1,0 +1,15 @@
+BEFORE (edge INPUT chain)
+-P INPUT DROP
+-A INPUT -i lo -j ACCEPT
+-A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+-A INPUT -i wg0 -p icmp -j ACCEPT
+-A INPUT -j NFLOG --nflog-prefix fw-drop-INPUT --nflog-group 7
+
+AFTER respond.py --apply
+-P INPUT DROP
+-A INPUT -s 203.0.113.77/32 -j DROP
+-A INPUT -s 203.0.113.50/32 -j DROP
+-A INPUT -i lo -j ACCEPT
+-A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+-A INPUT -i wg0 -p icmp -j ACCEPT
+-A INPUT -j NFLOG --nflog-prefix fw-drop-INPUT --nflog-group 7

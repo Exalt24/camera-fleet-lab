@@ -1,0 +1,296 @@
+{
+  "all_passed": true,
+  "checks": [
+    {
+      "check": "wazuh is running",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "fw-sensor is running",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "fleet-exporter is running",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "edge is running",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "hub is running",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "wazuh-analysisd and wazuh-logcollector are running",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "the monitor reports the camera up through the tunnel",
+      "ok": true,
+      "detail": "after 0.0s"
+    },
+    {
+      "check": "planted planted/blocked_alone.log fires ['100101']",
+      "ok": true,
+      "detail": "got ['100101']"
+    },
+    {
+      "check": "planted planted/tunnel_flapping.log fires ['100102', '100102', '100103']",
+      "ok": true,
+      "detail": "got ['100102', '100102', '100103']"
+    },
+    {
+      "check": "planted planted/port_sweep_then_outage.log fires ['100210', '100220']",
+      "ok": true,
+      "detail": "got ['100210', '100220']"
+    },
+    {
+      "check": "planted planted/ssh_brute_force_success.log fires ['100300']",
+      "ok": true,
+      "detail": "got ['100300']"
+    },
+    {
+      "check": "planted planted/sweep_then_ssh_login.log fires ['100210', '100301']",
+      "ok": true,
+      "detail": "got ['100210', '100301']"
+    },
+    {
+      "check": "benign benign/quiet_run.log fires none of the lab's rules",
+      "ok": true,
+      "detail": "got [], 8 lines, stock rules that fired: ['100200', '5715', '5760']"
+    },
+    {
+      "check": "benign benign/near_misses.log fires none of the lab's rules",
+      "ok": true,
+      "detail": "got [], 34 lines, stock rules that fired: ['100200', '5715', '5760']"
+    },
+    {
+      "check": "a quiet period: simulated ordinary logins",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "the quiet period raised no rule of the lab's",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "check": "the monitor reports blocked",
+      "ok": true,
+      "detail": "after 4.6s"
+    },
+    {
+      "check": "rule 100101 (site blocked) fired on the real transition",
+      "ok": true,
+      "detail": "2.9s after the transition"
+    },
+    {
+      "check": "the monitor recovers once the rule is restored",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "the monitor reported tunnel_down three times",
+      "ok": true,
+      "detail": "[6.1, 6.7, 6.7]"
+    },
+    {
+      "check": "rule 100103 (flapping tunnel) fired",
+      "ok": true,
+      "detail": "0.2s after the third drop"
+    },
+    {
+      "check": "rule 100102 (tunnel down) fired for the first two drops; the flapping rule takes the third",
+      "ok": true,
+      "detail": "2 alerts of 100102"
+    },
+    {
+      "check": "the edge firewall's real drops reached the log",
+      "ok": true,
+      "detail": "16 drop lines from 10.8.0.1"
+    },
+    {
+      "check": "rule 100210 (port sweep) fired on the measured sweep",
+      "ok": true,
+      "detail": "sweep took 14.9s, alert 0.3s after it"
+    },
+    {
+      "check": "the monitor reports blocked",
+      "ok": true,
+      "detail": "after 7.7s"
+    },
+    {
+      "check": "rule 100220 (sweep, then an outage) fired on the real sequence",
+      "ok": true,
+      "detail": "3.0s after the transition"
+    },
+    {
+      "check": "the monitor recovers once the rule is restored",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "simulated brute force then success written",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "rule 100300 (brute force that worked) fired on the simulated log",
+      "ok": true,
+      "detail": "3.3s"
+    },
+    {
+      "check": "simulated sweep then login written",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "rule 100301 (sweep then ssh login) fired on the simulated logs",
+      "ok": true,
+      "detail": "1.7s"
+    },
+    {
+      "check": "rule 100210 also fired on the simulated sweep",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "every one of the 7 alerting rules produced a real alert in alerts.json",
+      "ok": true,
+      "detail": "{'100101': 1, '100102': 2, '100103': 1, '100210': 2, '100220': 1, '100300': 1, '100301': 1}"
+    },
+    {
+      "check": "alerts of the attacker-behaviour rules carry a MITRE ATT&CK id",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "alerts carry their source file (measured versus simulated) in the location field",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "dry run handles every alert",
+      "ok": true,
+      "detail": "mode=dry-run alerts=9 unreadable_lines=0 done=9"
+    },
+    {
+      "check": "dry run changed nothing: iptables identical, no tickets, no webhook posts",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "dry run recorded the iptables command it would run",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "--apply handles every alert",
+      "ok": true,
+      "detail": "mode=apply alerts=9 unreadable_lines=0 done=9"
+    },
+    {
+      "check": "the webhook stand-in received one notification per alert (its first answer was a 500, so one was retried)",
+      "ok": true,
+      "detail": "9 received"
+    },
+    {
+      "check": "the 500 reached the audit trail and the retry then succeeded",
+      "ok": true,
+      "detail": "1 failed_retryable line(s)"
+    },
+    {
+      "check": "iptables in the edge container now drops the brute force address",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "iptables drops the sweep-and-login address",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "the hub's own tunnel address (protected) was not blocked",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "the monitor is still up after the blocks",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "a ticket exists for every alert",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "a second --apply run is all duplicates and acts on nothing",
+      "ok": true,
+      "detail": "mode=apply alerts=9 unreadable_lines=0 duplicate_ignored=9"
+    },
+    {
+      "check": "the audit trail's hash chain verifies",
+      "ok": true,
+      "detail": "108 audit lines, chain intact"
+    },
+    {
+      "check": "every incident has an evidence bundle whose sha256 manifest verifies",
+      "ok": true,
+      "detail": "9 bundles"
+    },
+    {
+      "check": "the brute force bundle holds the raw failed-login lines around the alert",
+      "ok": true,
+      "detail": "15 failed-password lines"
+    },
+    {
+      "check": "the iptables blocks are removed again",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "summary": {
+    "logtest": {
+      "alerting_rules": 7,
+      "fired_correctly": 7,
+      "benign_files": 2,
+      "benign_clean": 2
+    },
+    "measured_blocked_alone": {
+      "blocked_after_s": 4.6,
+      "alert_100101_after_s": 2.9
+    },
+    "measured_sweep": {
+      "ports_probed": 12,
+      "probe_seconds": 14.9,
+      "alert_seconds_after": 0.3,
+      "drop_lines": "16"
+    },
+    "measured_outage": {
+      "blocked_after_s": 7.7,
+      "alert_100220_after_s": 3.0
+    },
+    "alerts": {
+      "lab_alerts": 9,
+      "by_rule": {
+        "100101": 1,
+        "100102": 2,
+        "100103": 1,
+        "100210": 2,
+        "100220": 1,
+        "100300": 1,
+        "100301": 1
+      },
+      "measured": 6,
+      "simulated": 3
+    }
+  }
+}
