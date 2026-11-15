@@ -64,8 +64,44 @@ services:
       site:
         ipv4_address: 10.20.0.2
 
+  # --- security layer (docker compose --profile security up -d) -----------------------------------------------------
+  # Off by default, so `docker compose up` and scripts/verify.py behave exactly as before. See security/README.md.
+  wazuh:
+    profiles: ["security"]
+    image: wazuh/wazuh-manager:4.14.10
+    hostname: wazuh
+    volumes:
+      - secfeed:/feed
+      - ./security/wazuh/ossec.conf:/wazuh-config-mount/etc/ossec.conf:ro
+      - ./security/wazuh/camera_fleet_rules.xml:/wazuh-config-mount/etc/rules/camera_fleet_rules.xml:ro
+      - ./security/wazuh/camera_fleet_decoders.xml:/wazuh-config-mount/etc/decoders/camera_fleet_decoders.xml:ro
+
+  fw-sensor:
+    profiles: ["security"]
+    build: ./security/sensors/fw-sensor
+    network_mode: "service:edge"          # shares the site router's network namespace, so edge/ is not modified
+    cap_add: [NET_ADMIN]
+    volumes:
+      - secfeed:/feed
+    depends_on:
+      - edge
+
+  fleet-exporter:
+    profiles: ["security"]
+    build: ./security/sensors/fleet-exporter
+    environment:
+      HUB_URL: http://hub:8000
+    volumes:
+      - secfeed:/feed
+    depends_on:
+      - hub
+    networks:
+      wan:
+        ipv4_address: 172.30.0.20          # fixed, so it can never take the edge's 172.30.0.2 at start
+
 volumes:
   keys:
+  secfeed:
 
 networks:
   wan:

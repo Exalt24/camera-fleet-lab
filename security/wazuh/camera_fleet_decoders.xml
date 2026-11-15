@@ -1,0 +1,16 @@
+<!--
+  Decoders for the camera lab's own log sources. The monitor's JSON lines need no decoder of their own: Wazuh's stock "json"
+  decoder turns each key into a data.* field. The sshd log is decoded by the stock sshd decoders (srcip, dstuser).
+
+  Edge firewall line, written by security/sensors/fw-sensor/fw_sensor.sh:
+  Nov 15 12:00:01 edge fw-sensor: action=DROP chain=INPUT in=wg0 src=10.8.0.1 dst=10.8.0.2 proto=TCP sport=41234 dport=22 flags=SYN
+-->
+<decoder name="fw-sensor">
+  <program_name>^fw-sensor</program_name>
+</decoder>
+
+<decoder name="fw-sensor-drop">
+  <parent>fw-sensor</parent>
+  <regex>action=(\w+) chain=(\w+) in=(\S+) src=(\S+) dst=(\S+) proto=(\w+) sport=(\d+) dport=(\d+)</regex>
+  <order>action,chain,interface,srcip,dstip,protocol,srcport,dstport</order>
+</decoder>

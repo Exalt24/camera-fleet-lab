@@ -1,0 +1,84 @@
+<!--
+  Detection rules for the camera lab. Every rule has an ID in the 100000 range, a description, a MITRE ATT&CK technique where one
+  honestly applies, and a NIST CSF 2.0 function and subcategory in an <info> line. security/COMPLIANCE-MAP.md maps each rule to
+  NIST CSF, HIPAA and SOC 2. Rules that carry no <mitre> block describe an outage or an operations event, not attacker behaviour.
+-->
+<group name="camera_fleet,">
+
+  <!-- Source 1: the monitor's state transitions (JSON) -->
+  <rule id="100100" level="0">
+    <decoded_as>json</decoded_as>
+    <field name="source">^fleet-monitor$</field>
+    <field name="event">^state_transition$</field>
+    <description>Camera fleet monitor: state transition.</description>
+  </rule>
+
+  <rule id="100101" level="7">
+    <if_sid>100100</if_sid>
+    <field name="state">^blocked$</field>
+    <description>Camera site blocked: packets cross the VPN but the camera port is silent.</description>
+    <info type="text">NIST CSF 2.0 DETECT DE.CM-01 (networks monitored for adverse events)</info>
+    <group>nist_csf_detect,hipaa_164.312.b,tsc_CC7.2,</group>
+  </rule>
+
+  <rule id="100102" level="8">
+    <if_sid>100100</if_sid>
+    <field name="state">^tunnel_down$</field>
+    <description>Camera site unreachable: no packet crosses the VPN.</description>
+    <info type="text">NIST CSF 2.0 DETECT DE.CM-01 (networks monitored for adverse events)</info>
+    <group>nist_csf_detect,hipaa_164.312.b,tsc_CC7.2,</group>
+  </rule>
+
+  <rule id="100103" level="10" frequency="3" timeframe="300" ignore="120">
+    <if_matched_sid>100102</if_matched_sid>
+    <description>Camera site tunnel flapping: three tunnel_down transitions inside five minutes.</description>
+    <info type="text">NIST CSF 2.0 DETECT DE.AE-02 (potentially adverse events analyzed)</info>
+    <group>nist_csf_detect,hipaa_164.312.b,tsc_CC7.3,</group>
+  </rule>
+
+  <!-- Source 2: the edge router's firewall drops -->
+  <rule id="100200" level="0">
+    <decoded_as>fw-sensor-drop</decoded_as>
+    <action>^DROP$</action>
+    <description>Edge firewall dropped a packet.</description>
+  </rule>
+
+  <rule id="100210" level="10" frequency="8" timeframe="30" ignore="60">
+    <if_matched_sid>100200</if_matched_sid>
+    <same_srcip />
+    <different_dstport />
+    <description>Port sweep: one address hit eight different closed ports on the site router inside 30 seconds.</description>
+    <mitre>
+      <id>T1046</id>
+    </mitre>
+    <info type="text">NIST CSF 2.0 DETECT DE.CM-01 (networks monitored for adverse events)</info>
+    <group>nist_csf_detect,hipaa_164.312.b,tsc_CC7.2,</group>
+  </rule>
+
+  <!-- Correlation across sources 1 and 2 -->
+  <rule id="100220" level="12" frequency="2" timeframe="300" ignore="120">
+    <if_sid>100101,100102</if_sid>
+    <if_matched_sid>100210</if_matched_sid>
+    <description>Port sweep followed by an outage: the camera site went blocked or tunnel_down within five minutes of a sweep.</description>
+    <mitre>
+      <id>T1046</id>
+    </mitre>
+    <info type="text">NIST CSF 2.0 DETECT DE.AE-02 (potentially adverse events analyzed)</info>
+    <group>nist_csf_detect,hipaa_164.308.a.6,tsc_CC7.3,</group>
+  </rule>
+
+  <!-- Source 3: sshd authentication log (simulated) -->
+  <rule id="100300" level="12" frequency="6" timeframe="300" ignore="120">
+    <if_sid>5715</if_sid>
+    <if_matched_group>authentication_failed</if_matched_group>
+    <same_srcip />
+    <description>Brute force that worked: a successful ssh login from an address after repeated failures.</description>
+    <mitre>
+      <id>T1110</id>
+      <id>T1078</id>
+    </mitre>
+    <info type="text">NIST CSF 2.0 DETECT DE.AE-02 (potentially adverse events analyzed)</info>
+    <group>nist_csf_detect,authentication_success,hipaa_164.312.b,tsc_CC6.1,tsc_CC7.3,</group>
+  </rule>
+
+</group>
