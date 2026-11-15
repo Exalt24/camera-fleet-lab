@@ -1,0 +1,119 @@
+{
+  "realm": "camera-fleet",
+  "displayName": "Camera fleet lab",
+  "enabled": true,
+  "sslRequired": "external",
+  "registrationAllowed": false,
+  "resetPasswordAllowed": false,
+  "editUsernameAllowed": false,
+  "loginWithEmailAllowed": true,
+  "duplicateEmailsAllowed": false,
+  "accessTokenLifespan": 60,
+  "ssoSessionIdleTimeout": 1800,
+  "ssoSessionMaxLifespan": 36000,
+  "bruteForceProtected": true,
+  "permanentLockout": false,
+  "failureFactor": 5,
+  "maxFailureWaitSeconds": 900,
+  "minimumQuickLoginWaitSeconds": 60,
+  "waitIncrementSeconds": 300,
+  "quickLoginCheckMilliSeconds": 1000,
+  "maxDeltaTimeSeconds": 43200,
+  "otpPolicyType": "totp",
+  "otpPolicyAlgorithm": "HmacSHA1",
+  "otpPolicyDigits": 6,
+  "otpPolicyPeriod": 30,
+  "otpPolicyLookAheadWindow": 1,
+  "roles": {
+    "realm": [
+      { "name": "fleet-viewer", "description": "Read access to the monitor dashboard" },
+      {
+        "name": "fleet-admin",
+        "description": "Everything a viewer has, plus the admin routes",
+        "composite": true,
+        "composites": { "realm": ["fleet-viewer"] }
+      }
+    ]
+  },
+  "requiredActions": [
+    { "alias": "CONFIGURE_TOTP", "name": "Configure OTP", "providerId": "CONFIGURE_TOTP", "enabled": true, "defaultAction": true, "priority": 10 }
+  ],
+  "clients": [
+    {
+      "clientId": "camera-fleet-dashboard",
+      "name": "Camera fleet dashboard (behind oauth2-proxy)",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "secret": "${CFL_DASHBOARD_CLIENT_SECRET}",
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false,
+      "redirectUris": ["http://127.0.0.1:4180/oauth2/callback"],
+      "webOrigins": [],
+      "attributes": { "pkce.code.challenge.method": "S256" },
+      "protocolMappers": [
+        {
+          "name": "aud-camera-fleet-dashboard",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "config": {
+            "included.client.audience": "camera-fleet-dashboard",
+            "id.token.claim": "true",
+            "access.token.claim": "true"
+          }
+        }
+      ]
+    },
+    {
+      "clientId": "cfl-check",
+      "name": "Used only by security/iam/check_iam.py: password plus OTP in one request, to test token lifespan and lockout",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": true,
+      "standardFlowEnabled": false,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": false,
+      "redirectUris": [],
+      "webOrigins": [],
+      "protocolMappers": [
+        {
+          "name": "aud-camera-fleet-dashboard",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "config": {
+            "included.client.audience": "camera-fleet-dashboard",
+            "id.token.claim": "false",
+            "access.token.claim": "true"
+          }
+        }
+      ]
+    }
+  ],
+  "users": [
+    {
+      "username": "viewer.sample",
+      "email": "viewer.sample@example.test",
+      "emailVerified": true,
+      "firstName": "Sample",
+      "lastName": "Viewer",
+      "enabled": true,
+      "requiredActions": ["CONFIGURE_TOTP"],
+      "credentials": [{ "type": "password", "value": "ViewerSample-2026", "temporary": false }],
+      "realmRoles": ["fleet-viewer"]
+    },
+    {
+      "username": "admin.sample",
+      "email": "admin.sample@example.test",
+      "emailVerified": true,
+      "firstName": "Sample",
+      "lastName": "Admin",
+      "enabled": true,
+      "requiredActions": ["CONFIGURE_TOTP"],
+      "credentials": [{ "type": "password", "value": "AdminSample-2026", "temporary": false }],
+      "realmRoles": ["fleet-admin"]
+    }
+  ]
+}

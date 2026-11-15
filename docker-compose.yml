@@ -36,6 +36,7 @@ services:
       DATABASE_URL: mysql+aiomysql://root:lab-only-password@mariadb:3306/fleet
       CAMERA_HOST: 10.8.0.2
       PROBE_INTERVAL_S: "5"
+      TRUSTED_PROXY_IP: 172.30.0.30        # the SSO proxy below; its role headers are believed from this address only
     volumes:
       - keys:/keys
     ports:
@@ -102,6 +103,66 @@ services:
       wan:
         ipv4_address: 172.30.0.20          # fixed, so it can never take the edge's 172.30.0.2 at start
 
+  # --- IAM layer (docker compose --profile iam up -d) ----------------------------------------------------------------
+  # Off by default. Keycloak and oauth2-proxy put the monitor dashboard behind single sign on with a TOTP code. Run
+  # security/iam/setup.sh first: it writes the gitignored security/iam/.env that holds the generated secrets.
+  keycloak:
+    profiles: ["iam"]
+    image: quay.io/keycloak/keycloak:26.8.2
+    command: ["start-dev", "--import-realm"]          # dev mode, inside Docker only
+    env_file:
+      - path: security/iam/.env
+        required: false
+    environment:
+      KC_HOSTNAME: http://localhost:8180               # the issuer in every token, whichever address asked for it
+      KC_HOSTNAME_BACKCHANNEL_DYNAMIC: "true"          # oauth2-proxy reaches it as keycloak:8080 inside the network
+    volumes:
+      - ./security/iam/realm-camera-fleet.json:/opt/keycloak/data/import/realm-camera-fleet.json:ro
+    ports:
+      - "127.0.0.1:8180:8080"
+    networks:
+      iam:
+
+  oauth2-proxy:
+    profiles: ["iam"]
+    image: quay.io/oauth2-proxy/oauth2-proxy:v7.15.6
+    command:
+      - --provider=keycloak-oidc
+      - --client-id=camera-fleet-dashboard
+      - --code-challenge-method=S256
+      - --oidc-issuer-url=http://localhost:8180/realms/camera-fleet
+      - --skip-oidc-discovery=true
+      - --login-url=http://localhost:8180/realms/camera-fleet/protocol/openid-connect/auth
+      - --redeem-url=http://keycloak:8080/realms/camera-fleet/protocol/openid-connect/token
+      - --oidc-jwks-url=http://keycloak:8080/realms/camera-fleet/protocol/openid-connect/certs
+      - --redirect-url=http://127.0.0.1:4180/oauth2/callback
+      - --allowed-role=fleet-viewer
+      - --allowed-role=fleet-admin
+      - --email-domain=*
+      - --upstream=http://hub:8000
+      - --http-address=0.0.0.0:4180
+      - --cookie-secure=false                          # plain http on loopback
+      - --cookie-expire=30m
+      - --cookie-refresh=45s                           # shorter than the 60 s token, so an expired session is renewed or ended
+      - --skip-jwt-bearer-tokens=true
+      - --oidc-extra-audience=camera-fleet-dashboard
+      - --skip-provider-button=true                    # an unauthenticated request is redirected straight to the Keycloak login
+      - --pass-user-headers=true
+      - --set-xauthrequest=true
+      - --reverse-proxy=false
+    env_file:
+      - path: security/iam/.env
+        required: false
+    ports:
+      - "127.0.0.1:4180:4180"
+    depends_on:
+      - keycloak
+      - hub
+    networks:
+      iam:
+      wan:
+        ipv4_address: 172.30.0.30
+
 volumes:
   keys:
   secfeed:
@@ -121,3 +182,7 @@ networks:
     ipam:
       config:
         - subnet: 10.40.0.0/24
+  iam:
+    ipam:
+      config:
+        - subnet: 10.50.0.0/24
