@@ -1,0 +1,3287 @@
+{
+ "resultsPerPage": 14,
+ "startIndex": 0,
+ "totalResults": 14,
+ "format": "NVD_CVE",
+ "version": "2.0",
+ "timestamp": "2026-11-15T12:56:38.370",
+ "vulnerabilities": [
+  {
+   "cve": {
+    "id": "CVE-2026-107814",
+    "sourceIdentifier": "security-advisories@github.com",
+    "published": "2026-10-09T16:17:26.150",
+    "lastModified": "2026-10-14T14:12:32.080",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "MariaDB server is a community developed fork of MySQL server. From 10.6.1 until 10.6.28, 10.11.19, 11.4.13, 11.8.9, 12.3.3, and 13.0.2, MariaDB RPM packages created the dedicated mysql service account with the database data directory as its home directory. A database user with the FILE privilege could write startup dot-files such as .bash_profile into $HOME, and those files could execute when an administrator opened a login shell for the mysql account. Debian packages are not affected because they use /nonexistent as the account home. This issue is fixed in versions 10.6.28, 10.11.19, 11.4.13, 11.8.9, 12.3.3, and 13.0.2."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security-advisories@github.com",
+      "affectedData": [
+       {
+        "vendor": "MariaDB",
+        "product": "server",
+        "versions": [
+         {
+          "version": ">= 10.6.1, < 10.6.28",
+          "status": "affected"
+         },
+         {
+          "version": ">= 10.11.1, < 10.11.19",
+          "status": "affected"
+         },
+         {
+          "version": ">= 11.4.1, < 11.4.13",
+          "status": "affected"
+         },
+         {
+          "version": ">= 11.8.1, < 11.8.9",
+          "status": "affected"
+         },
+         {
+          "version": ">= 12.3.1, < 12.3.3",
+          "status": "affected"
+         },
+         {
+          "version": ">= 13.0.1, < 13.0.2",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security-advisories@github.com",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:H/UI:R/S:C/C:H/I:H/A:H",
+        "baseScore": 8.4,
+        "baseSeverity": "HIGH",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "HIGH",
+        "userInteraction": "REQUIRED",
+        "scope": "CHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "HIGH",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 1.7,
+       "impactScore": 6.0
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-10-09T16:16:12.667573Z",
+        "id": "CVE-2026-107814",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "total"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security-advisories@github.com",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-732"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "10.6.1",
+          "versionEndExcluding": "10.6.28",
+          "matchCriteriaId": "6A6667AA-6A82-49E2-894B-318569872468"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "10.11.1",
+          "versionEndExcluding": "10.11.19",
+          "matchCriteriaId": "C18A44B6-CEEF-47D7-9D60-04E6EBAFC785"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "11.4.1",
+          "versionEndExcluding": "11.4.13",
+          "matchCriteriaId": "47070DA5-F754-4FE1-957A-375C39D9029E"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "11.8.1",
+          "versionEndExcluding": "11.8.9",
+          "matchCriteriaId": "39AD11EC-57BE-4D2B-9A7C-E667E23A6940"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "12.3.1",
+          "versionEndExcluding": "12.3.3",
+          "matchCriteriaId": "E6988F1C-2D11-431B-BBE4-3AA8483627C8"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "13.0.1",
+          "versionEndExcluding": "13.0.2",
+          "matchCriteriaId": "B427DCA2-1080-4276-9C4C-D90BA53DDDBF"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://github.com/MariaDB/server/commit/d842d6e994a8b0d67c280bf785a11357d6b316a2",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Patch"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-10.11.19",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-10.6.28",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-11.4.13",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-11.8.9",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-12.3.3",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-13.0.2",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/security/advisories/GHSA-m5gf-432r-g5jw",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-107815",
+    "sourceIdentifier": "security-advisories@github.com",
+    "published": "2026-10-09T17:16:45.970",
+    "lastModified": "2026-10-14T14:12:37.777",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "MariaDB server is a community developed fork of MySQL server. From 10.6.1 until 10.6.28, 10.11.19, 11.4.13, 11.8.9, 12.3.3, and 13.0.2, the CONNECT engine's DOS table type used an incorrect boundary check that permitted a one-byte null write beyond a stack buffer at an attacker-controlled offset. An authenticated user able to use the CONNECT engine could cause a crash and potentially remote code execution. This issue is fixed in versions 10.6.28, 10.11.19, 11.4.13, 11.8.9, 12.3.3, and 13.0.2."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security-advisories@github.com",
+      "affectedData": [
+       {
+        "vendor": "MariaDB",
+        "product": "server",
+        "versions": [
+         {
+          "version": ">= 10.6.1, < 10.6.28",
+          "status": "affected"
+         },
+         {
+          "version": ">= 10.11.1, < 10.11.19",
+          "status": "affected"
+         },
+         {
+          "version": ">= 11.4.1, < 11.4.13",
+          "status": "affected"
+         },
+         {
+          "version": ">= 11.8.1, < 11.8.9",
+          "status": "affected"
+         },
+         {
+          "version": ">= 12.3.1, < 12.3.3",
+          "status": "affected"
+         },
+         {
+          "version": ">= 13.0.1, < 13.0.2",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security-advisories@github.com",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:C/C:H/I:H/A:H",
+        "baseScore": 8.5,
+        "baseSeverity": "HIGH",
+        "attackVector": "NETWORK",
+        "attackComplexity": "HIGH",
+        "privilegesRequired": "LOW",
+        "userInteraction": "NONE",
+        "scope": "CHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "HIGH",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 1.8,
+       "impactScore": 6.0
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-10-13T17:01:21.434545Z",
+        "id": "CVE-2026-107815",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "total"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security-advisories@github.com",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-787"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "10.6.1",
+          "versionEndExcluding": "10.6.28",
+          "matchCriteriaId": "6A6667AA-6A82-49E2-894B-318569872468"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "10.11.1",
+          "versionEndExcluding": "10.11.19",
+          "matchCriteriaId": "C18A44B6-CEEF-47D7-9D60-04E6EBAFC785"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "11.4.1",
+          "versionEndExcluding": "11.4.13",
+          "matchCriteriaId": "47070DA5-F754-4FE1-957A-375C39D9029E"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "11.8.1",
+          "versionEndExcluding": "11.8.9",
+          "matchCriteriaId": "39AD11EC-57BE-4D2B-9A7C-E667E23A6940"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "12.3.1",
+          "versionEndExcluding": "12.3.3",
+          "matchCriteriaId": "E6988F1C-2D11-431B-BBE4-3AA8483627C8"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "13.0.1",
+          "versionEndExcluding": "13.0.2",
+          "matchCriteriaId": "B427DCA2-1080-4276-9C4C-D90BA53DDDBF"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://github.com/MariaDB/server/commit/b369925f6855d3e1f0ebcf453492724b99fda6f8",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Patch"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-10.11.19",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-10.6.28",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-11.4.13",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-11.8.9",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-12.3.3",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-13.0.2",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/security/advisories/GHSA-4wgx-ffg9-jrwq",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     },
+     {
+      "url": "https://jira.mariadb.org/browse/MDEV-40637",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Issue Tracking"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-107816",
+    "sourceIdentifier": "security-advisories@github.com",
+    "published": "2026-10-09T18:17:03.060",
+    "lastModified": "2026-10-14T14:12:42.630",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "MariaDB server is a community developed fork of MySQL server. From 10.6.1 until 10.6.28, 10.11.19, 11.4.13, 11.8.9, 12.3.3, and 13.0.2, the qc_info plugin could be confused by a query containing embedded null bytes. Reading information_schema.query_cache_info after such a query was cached could access data beyond the end of a heap-allocated buffer, potentially disclosing adjacent memory or crashing the server. This issue is fixed in versions 10.6.28, 10.11.19, 11.4.13, 11.8.9, 12.3.3, and 13.0.2."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security-advisories@github.com",
+      "affectedData": [
+       {
+        "vendor": "MariaDB",
+        "product": "server",
+        "versions": [
+         {
+          "version": ">= 10.6.1, < 10.6.28",
+          "status": "affected"
+         },
+         {
+          "version": ">= 10.11.1, < 10.11.19",
+          "status": "affected"
+         },
+         {
+          "version": ">= 11.4.1, < 11.4.13",
+          "status": "affected"
+         },
+         {
+          "version": ">= 11.8.1, < 11.8.9",
+          "status": "affected"
+         },
+         {
+          "version": ">= 12.3.1, < 12.3.3",
+          "status": "affected"
+         },
+         {
+          "version": ">= 13.0.1, < 13.0.2",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security-advisories@github.com",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:N/A:L",
+        "baseScore": 6.4,
+        "baseSeverity": "MEDIUM",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "LOW",
+        "userInteraction": "NONE",
+        "scope": "CHANGED",
+        "confidentialityImpact": "LOW",
+        "integrityImpact": "NONE",
+        "availabilityImpact": "LOW"
+       },
+       "exploitabilityScore": 3.1,
+       "impactScore": 2.7
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-10-13T20:13:34.743204Z",
+        "id": "CVE-2026-107816",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "partial"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security-advisories@github.com",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-125"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "10.6.1",
+          "versionEndExcluding": "10.6.28",
+          "matchCriteriaId": "6A6667AA-6A82-49E2-894B-318569872468"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "10.11.1",
+          "versionEndExcluding": "10.11.19",
+          "matchCriteriaId": "C18A44B6-CEEF-47D7-9D60-04E6EBAFC785"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "11.4.1",
+          "versionEndExcluding": "11.4.13",
+          "matchCriteriaId": "47070DA5-F754-4FE1-957A-375C39D9029E"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "11.8.1",
+          "versionEndExcluding": "11.8.9",
+          "matchCriteriaId": "39AD11EC-57BE-4D2B-9A7C-E667E23A6940"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "12.3.1",
+          "versionEndExcluding": "12.3.3",
+          "matchCriteriaId": "E6988F1C-2D11-431B-BBE4-3AA8483627C8"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "13.0.1",
+          "versionEndExcluding": "13.0.2",
+          "matchCriteriaId": "B427DCA2-1080-4276-9C4C-D90BA53DDDBF"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://github.com/MariaDB/server/commit/0931994096b84ecc9ffc8eb3517c7e09e6e8631e",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Patch"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-10.11.19",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-10.6.28",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-11.4.13",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-11.8.9",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-12.3.3",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-13.0.2",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/security/advisories/GHSA-wfqg-88r5-55f6",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     },
+     {
+      "url": "https://jira.mariadb.org/browse/MDEV-40670",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Issue Tracking"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-107817",
+    "sourceIdentifier": "security-advisories@github.com",
+    "published": "2026-10-09T18:17:03.220",
+    "lastModified": "2026-10-14T14:12:48.963",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "MariaDB server is a community developed fork of MySQL server. From 10.6.1 until 10.6.28, 10.11.19, 11.4.13, 11.8.9, 12.3.3, and 13.0.2, the mysql_json plugin assumed that imported MySQL tables contained valid MySQL binary JSON data. A specially prepared MySQL table containing invalid JSON data could cause out-of-bounds reads, information disclosure, or a server crash. This issue is fixed in versions 10.6.28, 10.11.19, 11.4.13, 11.8.9, 12.3.3, and 13.0.2."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security-advisories@github.com",
+      "affectedData": [
+       {
+        "vendor": "MariaDB",
+        "product": "server",
+        "versions": [
+         {
+          "version": ">= 10.6.1, < 10.6.28",
+          "status": "affected"
+         },
+         {
+          "version": ">= 10.11.1, < 10.11.19",
+          "status": "affected"
+         },
+         {
+          "version": ">= 11.4.1, < 11.4.13",
+          "status": "affected"
+         },
+         {
+          "version": ">= 11.8.1, < 11.8.9",
+          "status": "affected"
+         },
+         {
+          "version": ">= 12.3.1, < 12.3.3",
+          "status": "affected"
+         },
+         {
+          "version": ">= 13.0.1, < 13.0.2",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security-advisories@github.com",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:L/I:N/A:L",
+        "baseScore": 4.4,
+        "baseSeverity": "MEDIUM",
+        "attackVector": "LOCAL",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "NONE",
+        "userInteraction": "REQUIRED",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "LOW",
+        "integrityImpact": "NONE",
+        "availabilityImpact": "LOW"
+       },
+       "exploitabilityScore": 1.8,
+       "impactScore": 2.5
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-10-13T17:03:46.950457Z",
+        "id": "CVE-2026-107817",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "partial"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security-advisories@github.com",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-125"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "10.6.1",
+          "versionEndExcluding": "10.6.28",
+          "matchCriteriaId": "6A6667AA-6A82-49E2-894B-318569872468"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "10.11.1",
+          "versionEndExcluding": "10.11.19",
+          "matchCriteriaId": "C18A44B6-CEEF-47D7-9D60-04E6EBAFC785"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "11.4.1",
+          "versionEndExcluding": "11.4.13",
+          "matchCriteriaId": "47070DA5-F754-4FE1-957A-375C39D9029E"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "11.8.1",
+          "versionEndExcluding": "11.8.9",
+          "matchCriteriaId": "39AD11EC-57BE-4D2B-9A7C-E667E23A6940"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "12.3.1",
+          "versionEndExcluding": "12.3.3",
+          "matchCriteriaId": "E6988F1C-2D11-431B-BBE4-3AA8483627C8"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "13.0.1",
+          "versionEndExcluding": "13.0.2",
+          "matchCriteriaId": "B427DCA2-1080-4276-9C4C-D90BA53DDDBF"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://github.com/MariaDB/server/commit/851f52470d470a96a66e0b7e5599f3b6c2e45907",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Patch"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-10.11.19",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-10.6.28",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-11.4.13",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-11.8.9",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-12.3.3",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-13.0.2",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/security/advisories/GHSA-89ph-64cf-gqcc",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     },
+     {
+      "url": "https://jira.mariadb.org/browse/MDEV-40678",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Issue Tracking"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-107818",
+    "sourceIdentifier": "security-advisories@github.com",
+    "published": "2026-10-09T18:17:03.373",
+    "lastModified": "2026-10-14T14:12:57.550",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "MariaDB server is a community developed fork of MySQL server. From 10.6.1 until 10.6.28, 10.11.19, 11.4.13, 11.8.9, 12.3.3, and 13.0.2, the mariadb.service unit used /run/mysqld/wsrep-new-cluster during the next service restart. A database user with FILE privilege and a secure-file-priv configuration permitting writes to /run/mysqld could create that file and inject attacker-controlled environment values into the restarted service. This issue is fixed in versions 10.6.28, 10.11.19, 11.4.13, 11.8.9, 12.3.3, and 13.0.2."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security-advisories@github.com",
+      "affectedData": [
+       {
+        "vendor": "MariaDB",
+        "product": "server",
+        "versions": [
+         {
+          "version": ">= 10.6.1, < 10.6.28",
+          "status": "affected"
+         },
+         {
+          "version": ">= 10.11.1, < 10.11.19",
+          "status": "affected"
+         },
+         {
+          "version": ">= 11.4.1, < 11.4.13",
+          "status": "affected"
+         },
+         {
+          "version": ">= 11.8.1, < 11.8.9",
+          "status": "affected"
+         },
+         {
+          "version": ">= 12.3.1, < 12.3.3",
+          "status": "affected"
+         },
+         {
+          "version": ">= 13.0.1, < 13.0.2",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security-advisories@github.com",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:H/UI:R/S:C/C:H/I:H/A:H",
+        "baseScore": 8.4,
+        "baseSeverity": "HIGH",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "HIGH",
+        "userInteraction": "REQUIRED",
+        "scope": "CHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "HIGH",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 1.7,
+       "impactScore": 6.0
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-10-14T02:02:24.799855Z",
+        "id": "CVE-2026-107818",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "total"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security-advisories@github.com",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-15"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "10.6.1",
+          "versionEndExcluding": "10.6.28",
+          "matchCriteriaId": "6A6667AA-6A82-49E2-894B-318569872468"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "10.11.1",
+          "versionEndExcluding": "10.11.19",
+          "matchCriteriaId": "C18A44B6-CEEF-47D7-9D60-04E6EBAFC785"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "11.4.1",
+          "versionEndExcluding": "11.4.13",
+          "matchCriteriaId": "47070DA5-F754-4FE1-957A-375C39D9029E"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "11.8.1",
+          "versionEndExcluding": "11.8.9",
+          "matchCriteriaId": "39AD11EC-57BE-4D2B-9A7C-E667E23A6940"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "12.3.1",
+          "versionEndExcluding": "12.3.3",
+          "matchCriteriaId": "E6988F1C-2D11-431B-BBE4-3AA8483627C8"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "13.0.1",
+          "versionEndExcluding": "13.0.2",
+          "matchCriteriaId": "B427DCA2-1080-4276-9C4C-D90BA53DDDBF"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://github.com/MariaDB/server/commit/e3d62d4e78fd4941cef3f5053e6a50d0b32d740e",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Patch"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-10.11.19",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-10.6.28",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-11.4.13",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-11.8.9",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-12.3.3",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-13.0.2",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/security/advisories/GHSA-mhvc-vqcq-7vq5",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     },
+     {
+      "url": "https://jira.mariadb.org/browse/MDEV-40629",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Issue Tracking"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-107821",
+    "sourceIdentifier": "security-advisories@github.com",
+    "published": "2026-10-09T18:17:03.860",
+    "lastModified": "2026-10-14T14:13:07.733",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "MariaDB server is a community developed fork of MySQL server. From 10.6.1 until 10.6.28, 10.11.19, 11.4.13, 11.8.9, 12.3.3, and 13.0.2, MariaDB insufficiently validated counts, offsets, lengths, and field boundaries in FRM metadata while opening binary FRM files. An attacker able to place a crafted FRM file in the data directory could trigger out-of-bounds reads or writes, crash the server, or potentially execute code. This issue is fixed in versions 10.6.28, 10.11.19, 11.4.13, 11.8.9, 12.3.3, and 13.0.2."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security-advisories@github.com",
+      "affectedData": [
+       {
+        "vendor": "MariaDB",
+        "product": "server",
+        "versions": [
+         {
+          "version": ">= 10.6.1, < 10.6.28",
+          "status": "affected"
+         },
+         {
+          "version": ">= 10.11.1, < 10.11.19",
+          "status": "affected"
+         },
+         {
+          "version": ">= 11.4.1, < 11.4.13",
+          "status": "affected"
+         },
+         {
+          "version": ">= 11.8.1, < 11.8.9",
+          "status": "affected"
+         },
+         {
+          "version": ">= 12.3.1, < 12.3.3",
+          "status": "affected"
+         },
+         {
+          "version": ">= 13.0.1, < 13.0.2",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security-advisories@github.com",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:H/PR:H/UI:N/S:C/C:H/I:H/A:H",
+        "baseScore": 8.0,
+        "baseSeverity": "HIGH",
+        "attackVector": "NETWORK",
+        "attackComplexity": "HIGH",
+        "privilegesRequired": "HIGH",
+        "userInteraction": "NONE",
+        "scope": "CHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "HIGH",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 1.3,
+       "impactScore": 6.0
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-10-09T17:42:08.587821Z",
+        "id": "CVE-2026-107821",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "total"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security-advisories@github.com",
+      "type": "Primary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-1285"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "10.6.1",
+          "versionEndExcluding": "10.6.28",
+          "matchCriteriaId": "6A6667AA-6A82-49E2-894B-318569872468"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "10.11.1",
+          "versionEndExcluding": "10.11.19",
+          "matchCriteriaId": "C18A44B6-CEEF-47D7-9D60-04E6EBAFC785"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "11.4.1",
+          "versionEndExcluding": "11.4.13",
+          "matchCriteriaId": "47070DA5-F754-4FE1-957A-375C39D9029E"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "11.8.1",
+          "versionEndExcluding": "11.8.9",
+          "matchCriteriaId": "39AD11EC-57BE-4D2B-9A7C-E667E23A6940"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "12.3.1",
+          "versionEndExcluding": "12.3.3",
+          "matchCriteriaId": "E6988F1C-2D11-431B-BBE4-3AA8483627C8"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "13.0.1",
+          "versionEndExcluding": "13.0.2",
+          "matchCriteriaId": "B427DCA2-1080-4276-9C4C-D90BA53DDDBF"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://github.com/MariaDB/server/commit/3b1c2e58abab5571bec4ff52773ddc75b1738da9",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Patch"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-10.11.19",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-10.6.28",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-11.4.13",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-11.8.9",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-12.3.3",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-13.0.2",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/security/advisories/GHSA-c4gx-34mg-95q5",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     },
+     {
+      "url": "https://jira.mariadb.org/browse/MDEV-40571",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Issue Tracking"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-107822",
+    "sourceIdentifier": "security-advisories@github.com",
+    "published": "2026-10-09T18:17:04.030",
+    "lastModified": "2026-10-14T14:13:22.743",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "MariaDB server is a community developed fork of MySQL server. From 10.6.1 until 10.6.28, 10.11.19, 11.4.13, 11.8.9, 12.3.3, and 13.0.2, MariaDB's ACL cache could generate the same database-privilege cache key for role and localhost user names that matched because both used an empty IP component. An attacker with CREATE USER could create the colliding principal and, when the original principal's database privileges were cached, exercise privileges assigned to the other account. This issue is fixed in versions 10.6.28, 10.11.19, 11.4.13, 11.8.9, 12.3.3, and 13.0.2."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security-advisories@github.com",
+      "affectedData": [
+       {
+        "vendor": "MariaDB",
+        "product": "server",
+        "versions": [
+         {
+          "version": ">= 10.6.1, < 10.6.28",
+          "status": "affected"
+         },
+         {
+          "version": ">= 10.11.1, < 10.11.19",
+          "status": "affected"
+         },
+         {
+          "version": ">= 11.4.1, < 11.4.13",
+          "status": "affected"
+         },
+         {
+          "version": ">= 11.8.1, < 11.8.9",
+          "status": "affected"
+         },
+         {
+          "version": ">= 12.3.1, < 12.3.3",
+          "status": "affected"
+         },
+         {
+          "version": ">= 13.0.1, < 13.0.2",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security-advisories@github.com",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:H/PR:H/UI:R/S:U/C:H/I:H/A:H",
+        "baseScore": 6.4,
+        "baseSeverity": "MEDIUM",
+        "attackVector": "NETWORK",
+        "attackComplexity": "HIGH",
+        "privilegesRequired": "HIGH",
+        "userInteraction": "REQUIRED",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "HIGH",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 0.5,
+       "impactScore": 5.9
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-10-13T20:14:30.442609Z",
+        "id": "CVE-2026-107822",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "total"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security-advisories@github.com",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-706"
+       },
+       {
+        "lang": "en",
+        "value": "CWE-863"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "10.6.1",
+          "versionEndExcluding": "10.6.28",
+          "matchCriteriaId": "6A6667AA-6A82-49E2-894B-318569872468"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "10.11.1",
+          "versionEndExcluding": "10.11.19",
+          "matchCriteriaId": "C18A44B6-CEEF-47D7-9D60-04E6EBAFC785"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "11.4.1",
+          "versionEndExcluding": "11.4.13",
+          "matchCriteriaId": "47070DA5-F754-4FE1-957A-375C39D9029E"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "11.8.1",
+          "versionEndExcluding": "11.8.9",
+          "matchCriteriaId": "39AD11EC-57BE-4D2B-9A7C-E667E23A6940"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "12.3.1",
+          "versionEndExcluding": "12.3.3",
+          "matchCriteriaId": "E6988F1C-2D11-431B-BBE4-3AA8483627C8"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "13.0.1",
+          "versionEndExcluding": "13.0.2",
+          "matchCriteriaId": "B427DCA2-1080-4276-9C4C-D90BA53DDDBF"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://github.com/MariaDB/server/commit/67ea07dd3400004e4f7ae01bf977f4344bbe064b",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Patch"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-10.11.19",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-10.6.28",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-11.4.13",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-11.8.9",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-12.3.3",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-13.0.2",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/security/advisories/GHSA-2m85-2x26-36rf",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     },
+     {
+      "url": "https://jira.mariadb.org/browse/MDEV-40541",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Issue Tracking"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-107823",
+    "sourceIdentifier": "security-advisories@github.com",
+    "published": "2026-10-09T18:17:04.190",
+    "lastModified": "2026-10-14T14:13:32.633",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "MariaDB server is a community developed fork of MySQL server. From 10.6.1 until 10.6.28, 10.11.19, 11.4.13, 11.8.9, 12.3.3, and 13.0.2, the MariaDB view FRM parser did not safely encode embedded newline characters in a username. An account with CREATE USER and CREATE VIEW WITH GRANT OPTION could create a crafted username containing additional view metadata, causing the parser to interpret part of the username as security metadata and potentially escalating database privileges. This issue is fixed in versions 10.6.28, 10.11.19, 11.4.13, 11.8.9, 12.3.3, and 13.0.2."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security-advisories@github.com",
+      "affectedData": [
+       {
+        "vendor": "MariaDB",
+        "product": "server",
+        "versions": [
+         {
+          "version": ">= 10.6.1, < 10.6.28",
+          "status": "affected"
+         },
+         {
+          "version": ">= 10.11.1, < 10.11.19",
+          "status": "affected"
+         },
+         {
+          "version": ">= 11.4.1, < 11.4.13",
+          "status": "affected"
+         },
+         {
+          "version": ">= 11.8.1, < 11.8.9",
+          "status": "affected"
+         },
+         {
+          "version": ">= 12.3.1, < 12.3.3",
+          "status": "affected"
+         },
+         {
+          "version": ">= 13.0.1, < 13.0.2",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security-advisories@github.com",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H",
+        "baseScore": 7.2,
+        "baseSeverity": "HIGH",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "HIGH",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "HIGH",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 1.2,
+       "impactScore": 5.9
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-10-13T17:04:40.331253Z",
+        "id": "CVE-2026-107823",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "total"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security-advisories@github.com",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-116"
+       },
+       {
+        "lang": "en",
+        "value": "CWE-144"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "10.6.1",
+          "versionEndExcluding": "10.6.28",
+          "matchCriteriaId": "6A6667AA-6A82-49E2-894B-318569872468"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "10.11.1",
+          "versionEndExcluding": "10.11.19",
+          "matchCriteriaId": "C18A44B6-CEEF-47D7-9D60-04E6EBAFC785"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "11.4.1",
+          "versionEndExcluding": "11.4.13",
+          "matchCriteriaId": "47070DA5-F754-4FE1-957A-375C39D9029E"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "11.8.1",
+          "versionEndExcluding": "11.8.9",
+          "matchCriteriaId": "39AD11EC-57BE-4D2B-9A7C-E667E23A6940"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "12.3.1",
+          "versionEndExcluding": "12.3.3",
+          "matchCriteriaId": "E6988F1C-2D11-431B-BBE4-3AA8483627C8"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "13.0.1",
+          "versionEndExcluding": "13.0.2",
+          "matchCriteriaId": "B427DCA2-1080-4276-9C4C-D90BA53DDDBF"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://github.com/MariaDB/server/commit/8a642bc8103aadc6b2087d781ba8e1595616a2c4",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Patch"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-10.11.19",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-10.6.28",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-11.4.13",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-11.8.9",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-12.3.3",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-13.0.2",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/security/advisories/GHSA-g2q2-3936-cp37",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     },
+     {
+      "url": "https://jira.mariadb.org/browse/MDEV-40484",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Issue Tracking"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-85745",
+    "sourceIdentifier": "security-advisories@github.com",
+    "published": "2026-10-16T17:17:51.020",
+    "lastModified": "2026-10-20T15:33:09.520",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "MariaDB server is a community developed fork of MySQL server. From 10.6.1 until 10.6.28, 10.11.19, 11.4.13, 11.8.9, 12.3.3, and 13.0.2, ST_Area reads beyond the allocated buffer when processing invalid WKB for a MultiPolygon because the multi-polygon parser advances past a nested geometry header without first verifying enough input remains. A low-privileged remote attacker can supply malformed spatial data to disclose memory useful for bypassing ASLR as part of a multi-vulnerability chain. This issue is fixed in versions 10.6.28, 10.11.19, 11.4.13, 11.8.9, 12.3.3, and 13.0.2."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security-advisories@github.com",
+      "affectedData": [
+       {
+        "vendor": "MariaDB",
+        "product": "server",
+        "versions": [
+         {
+          "version": ">= 10.6.1, < 10.6.28",
+          "status": "affected"
+         },
+         {
+          "version": ">= 10.11.1, < 10.11.19",
+          "status": "affected"
+         },
+         {
+          "version": ">= 11.4.1, < 11.4.13",
+          "status": "affected"
+         },
+         {
+          "version": ">= 11.8.1, < 11.8.9",
+          "status": "affected"
+         },
+         {
+          "version": ">= 12.3.1, < 12.3.3",
+          "status": "affected"
+         },
+         {
+          "version": ">= 13.0.1, < 13.0.2",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security-advisories@github.com",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:N/A:N",
+        "baseScore": 4.3,
+        "baseSeverity": "MEDIUM",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "LOW",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "LOW",
+        "integrityImpact": "NONE",
+        "availabilityImpact": "NONE"
+       },
+       "exploitabilityScore": 2.8,
+       "impactScore": 1.4
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-10-19T12:38:54.237600Z",
+        "id": "CVE-2026-85745",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "partial"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security-advisories@github.com",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-126"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "10.6.1",
+          "versionEndExcluding": "10.6.28",
+          "matchCriteriaId": "6A6667AA-6A82-49E2-894B-318569872468"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "10.11.1",
+          "versionEndExcluding": "10.11.19",
+          "matchCriteriaId": "C18A44B6-CEEF-47D7-9D60-04E6EBAFC785"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "11.4.1",
+          "versionEndExcluding": "11.4.13",
+          "matchCriteriaId": "47070DA5-F754-4FE1-957A-375C39D9029E"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "11.8.1",
+          "versionEndExcluding": "11.8.9",
+          "matchCriteriaId": "39AD11EC-57BE-4D2B-9A7C-E667E23A6940"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "12.3.1",
+          "versionEndExcluding": "12.3.3",
+          "matchCriteriaId": "E6988F1C-2D11-431B-BBE4-3AA8483627C8"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:13.0.1:*:*:*:*:*:*:*",
+          "matchCriteriaId": "E46FBE57-06D5-489E-9ECE-333F5F9AFD06"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://github.com/MariaDB/server/commit/2bf355e361db85153fdfba7b8a0f0d114d6a26ce",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Patch"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-10.11.19",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-10.6.28",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-11.4.13",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-11.8.9",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-12.3.3",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-13.0.2",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/security/advisories/GHSA-p7v9-24h4-mch8",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     },
+     {
+      "url": "https://jira.mariadb.org/browse/MDEV-40328",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Issue Tracking"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-85746",
+    "sourceIdentifier": "security-advisories@github.com",
+    "published": "2026-10-16T17:17:51.167",
+    "lastModified": "2026-10-20T15:33:00.870",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "MariaDB server is a community developed fork of MySQL server. From 10.6.1 until 10.6.28, 10.11.19, 11.4.13, 11.8.9, 12.3.3, and 13.0.2, ST_AsText can write beyond an allocated output buffer when converting deeply nested GeometryCollections because recursive WKT serialization does not account for bytes consumed or reserve sufficient space. A low-privileged remote attacker can submit a specially crafted GIS object to corrupt memory and potentially achieve code execution when combined with another vulnerability. This issue is fixed in versions 10.6.28, 10.11.19, 11.4.13, 11.8.9, 12.3.3, and 13.0.2."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security-advisories@github.com",
+      "affectedData": [
+       {
+        "vendor": "MariaDB",
+        "product": "server",
+        "versions": [
+         {
+          "version": ">= 10.6.1, < 10.6.28",
+          "status": "affected"
+         },
+         {
+          "version": ">= 10.11.1, < 10.11.19",
+          "status": "affected"
+         },
+         {
+          "version": ">= 11.4.1, < 11.4.13",
+          "status": "affected"
+         },
+         {
+          "version": ">= 11.8.1, < 11.8.9",
+          "status": "affected"
+         },
+         {
+          "version": ">= 12.3.1, < 12.3.3",
+          "status": "affected"
+         },
+         {
+          "version": ">= 13.0.1, < 13.0.2",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security-advisories@github.com",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
+        "baseScore": 9.9,
+        "baseSeverity": "CRITICAL",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "LOW",
+        "userInteraction": "NONE",
+        "scope": "CHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "HIGH",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 3.1,
+       "impactScore": 6.0
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-10-16T16:49:55.618818Z",
+        "id": "CVE-2026-85746",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "total"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security-advisories@github.com",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-787"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "10.6.1",
+          "versionEndExcluding": "10.6.28",
+          "matchCriteriaId": "6A6667AA-6A82-49E2-894B-318569872468"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "10.11.1",
+          "versionEndExcluding": "10.11.19",
+          "matchCriteriaId": "C18A44B6-CEEF-47D7-9D60-04E6EBAFC785"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "11.4.1",
+          "versionEndExcluding": "11.4.13",
+          "matchCriteriaId": "47070DA5-F754-4FE1-957A-375C39D9029E"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "11.8.1",
+          "versionEndExcluding": "11.8.9",
+          "matchCriteriaId": "39AD11EC-57BE-4D2B-9A7C-E667E23A6940"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "12.3.1",
+          "versionEndExcluding": "12.3.3",
+          "matchCriteriaId": "E6988F1C-2D11-431B-BBE4-3AA8483627C8"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:13.0.1:*:*:*:*:*:*:*",
+          "matchCriteriaId": "E46FBE57-06D5-489E-9ECE-333F5F9AFD06"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://github.com/MariaDB/server/commit/5c04ca5524385356ff7cf84974a7d491974c1f85",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Patch"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-10.11.19",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-10.6.28",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-11.4.13",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-11.8.9",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-12.3.3",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-13.0.2",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/security/advisories/GHSA-8fvj-c57c-pggx",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     },
+     {
+      "url": "https://jira.mariadb.org/browse/MDEV-40329",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Issue Tracking"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-85985",
+    "sourceIdentifier": "security-advisories@github.com",
+    "published": "2026-10-16T17:17:51.620",
+    "lastModified": "2026-10-20T15:32:46.490",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "MariaDB server is a community developed fork of MySQL server. From 10.6.1 until 10.6.28, 10.11.19, 11.4.13, 11.8.9, 12.3.3, and 13.0.2, the CONNECT engine plugin file-access UDFs json_file(), bson_file(), jfile_make(), bfile_make(), and jbin_file() are affected because each does not enforce FILE privilege or the secure_file_priv setting. A low-privileged attacker can trigger the issue by calling a CONNECT file-access UDF with a filesystem path, then invoke a CONNECT file-access UDF to access a filesystem path and read or write files that the database account is not authorized to access, subject to operating-system permissions. This issue is fixed in versions 10.6.28, 10.11.19, 11.4.13, 11.8.9, 12.3.3, and 13.0.2."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security-advisories@github.com",
+      "affectedData": [
+       {
+        "vendor": "MariaDB",
+        "product": "server",
+        "versions": [
+         {
+          "version": ">= 10.6.1, < 10.6.28",
+          "status": "affected"
+         },
+         {
+          "version": ">= 10.11.1, < 10.11.19",
+          "status": "affected"
+         },
+         {
+          "version": ">= 11.4.1, < 11.4.13",
+          "status": "affected"
+         },
+         {
+          "version": ">= 11.8.1, < 11.8.9",
+          "status": "affected"
+         },
+         {
+          "version": ">= 12.3.1, < 12.3.3",
+          "status": "affected"
+         },
+         {
+          "version": ">= 13.0.1, < 13.0.2",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security-advisories@github.com",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:N",
+        "baseScore": 5.4,
+        "baseSeverity": "MEDIUM",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "LOW",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "LOW",
+        "integrityImpact": "LOW",
+        "availabilityImpact": "NONE"
+       },
+       "exploitabilityScore": 2.8,
+       "impactScore": 2.5
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-10-16T16:49:34.979927Z",
+        "id": "CVE-2026-85985",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "partial"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security-advisories@github.com",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-862"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "10.6.1",
+          "versionEndExcluding": "10.6.28",
+          "matchCriteriaId": "6A6667AA-6A82-49E2-894B-318569872468"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "10.11.1",
+          "versionEndExcluding": "10.11.19",
+          "matchCriteriaId": "C18A44B6-CEEF-47D7-9D60-04E6EBAFC785"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "11.4.1",
+          "versionEndExcluding": "11.4.13",
+          "matchCriteriaId": "47070DA5-F754-4FE1-957A-375C39D9029E"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "11.8.1",
+          "versionEndExcluding": "11.8.9",
+          "matchCriteriaId": "39AD11EC-57BE-4D2B-9A7C-E667E23A6940"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "12.3.1",
+          "versionEndExcluding": "12.3.3",
+          "matchCriteriaId": "E6988F1C-2D11-431B-BBE4-3AA8483627C8"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:13.0.1:*:*:*:*:*:*:*",
+          "matchCriteriaId": "E46FBE57-06D5-489E-9ECE-333F5F9AFD06"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://github.com/MariaDB/server/commit/4f66ca1b69daf1b7e6a562ca8e86d77a6a70abfe",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Patch"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-10.11.19",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-10.6.28",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-11.4.13",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-11.8.9",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-12.3.3",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-13.0.2",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/security/advisories/GHSA-2245-9hm3-wxf6",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     },
+     {
+      "url": "https://jira.mariadb.org/browse/MDEV-40323",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Issue Tracking"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-86047",
+    "sourceIdentifier": "security-advisories@github.com",
+    "published": "2026-10-16T17:17:52.063",
+    "lastModified": "2026-10-20T15:32:39.523",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "MariaDB server is a community developed fork of MySQL server. From 10.6.1 until 10.6.28, 10.11.19, 11.4.13, 11.8.9, 12.3.3, and 13.0.2, SHOW CREATE SERVER, SHOW CREATE USER, and mariadb-dump are affected because each does not consistently quote identifiers and values when serializing SQL. A low-privileged attacker can trigger the issue when an attacker-created object with crafted identifiers or values is included in SHOW output or a dump, then create an object with crafted identifiers or values so generated SQL contains injected statements and execute attacker-injected SQL when the poisoned output is applied. This issue is fixed in versions 10.6.28, 10.11.19, 11.4.13, 11.8.9, 12.3.3, and 13.0.2."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security-advisories@github.com",
+      "affectedData": [
+       {
+        "vendor": "MariaDB",
+        "product": "server",
+        "versions": [
+         {
+          "version": ">= 10.6.1, < 10.6.28",
+          "status": "affected"
+         },
+         {
+          "version": ">= 10.11.1, < 10.11.19",
+          "status": "affected"
+         },
+         {
+          "version": ">= 11.4.1, < 11.4.13",
+          "status": "affected"
+         },
+         {
+          "version": ">= 11.8.1, < 11.8.9",
+          "status": "affected"
+         },
+         {
+          "version": ">= 12.3.1, < 12.3.3",
+          "status": "affected"
+         },
+         {
+          "version": ">= 13.0.1, < 13.0.2",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security-advisories@github.com",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:H/PR:L/UI:R/S:C/C:N/I:H/A:H",
+        "baseScore": 7.7,
+        "baseSeverity": "HIGH",
+        "attackVector": "NETWORK",
+        "attackComplexity": "HIGH",
+        "privilegesRequired": "LOW",
+        "userInteraction": "REQUIRED",
+        "scope": "CHANGED",
+        "confidentialityImpact": "NONE",
+        "integrityImpact": "HIGH",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 1.3,
+       "impactScore": 5.8
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-10-19T12:41:30.519558Z",
+        "id": "CVE-2026-86047",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "total"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security-advisories@github.com",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-89"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "10.6.1",
+          "versionEndExcluding": "10.6.28",
+          "matchCriteriaId": "6A6667AA-6A82-49E2-894B-318569872468"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "10.11.1",
+          "versionEndExcluding": "10.11.19",
+          "matchCriteriaId": "C18A44B6-CEEF-47D7-9D60-04E6EBAFC785"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "11.4.1",
+          "versionEndExcluding": "11.4.13",
+          "matchCriteriaId": "47070DA5-F754-4FE1-957A-375C39D9029E"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "11.8.1",
+          "versionEndExcluding": "11.8.9",
+          "matchCriteriaId": "39AD11EC-57BE-4D2B-9A7C-E667E23A6940"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "12.3.1",
+          "versionEndExcluding": "12.3.3",
+          "matchCriteriaId": "E6988F1C-2D11-431B-BBE4-3AA8483627C8"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:13.0.1:*:*:*:*:*:*:*",
+          "matchCriteriaId": "E46FBE57-06D5-489E-9ECE-333F5F9AFD06"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://github.com/MariaDB/server/commit/2b28d1c424104429eeed43115ee6d8a803671d52",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Patch"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/commit/3646569225758c8225e7342783d775ef7c7570e5",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Patch"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/commit/5acb43522863c9bd6b91f354104ea247bf513e9a",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Patch"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/commit/9d4ffe23b25808f7858b2dc48106fbd60cf0e513",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Patch"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/commit/d5d741a3076f911b468518d6b06a917593498c5b",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Patch"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-10.11.19",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-10.6.28",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-11.4.13",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-11.8.9",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-12.3.3",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-13.0.2",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/security/advisories/GHSA-wxr3-wm3p-7w6p",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     },
+     {
+      "url": "https://jira.mariadb.org/browse/MDEV-39776",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Issue Tracking"
+      ]
+     },
+     {
+      "url": "https://jira.mariadb.org/browse/MDEV-39818",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Issue Tracking"
+      ]
+     },
+     {
+      "url": "https://jira.mariadb.org/browse/MDEV-40308",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Issue Tracking"
+      ]
+     },
+     {
+      "url": "https://jira.mariadb.org/browse/MDEV-40311",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Issue Tracking"
+      ]
+     },
+     {
+      "url": "https://jira.mariadb.org/browse/MDEV-40312",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Issue Tracking"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-92262",
+    "sourceIdentifier": "security-advisories@github.com",
+    "published": "2026-10-16T17:17:52.710",
+    "lastModified": "2026-10-21T03:17:20.003",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "MariaDB server is a community developed fork of MySQL server. From 10.6.1 until 10.6.28, 10.11.19, 11.4.13, 11.8.9, 12.3.3, and 13.0.2, the #mysql50# bypass prefix is affected because it allows the #mysql50# prefix to bypass normal table-name filesystem encoding. An attacker can trigger the issue with a table name using the #mysql50# prefix, then use a #mysql50# table name to access files under their legacy unencoded name and cause crashes, data corruption, data exfiltration, or remote code execution. This issue is fixed in versions 10.6.28, 10.11.19, 11.4.13, 11.8.9, 12.3.3, and 13.0.2."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security-advisories@github.com",
+      "affectedData": [
+       {
+        "vendor": "MariaDB",
+        "product": "server",
+        "versions": [
+         {
+          "version": ">= 10.6.1, < 10.6.28",
+          "status": "affected"
+         },
+         {
+          "version": ">= 10.11.1, < 10.11.19",
+          "status": "affected"
+         },
+         {
+          "version": ">= 11.4.1, < 11.4.13",
+          "status": "affected"
+         },
+         {
+          "version": ">= 11.8.1, < 11.8.9",
+          "status": "affected"
+         },
+         {
+          "version": ">= 12.3.1, < 12.3.3",
+          "status": "affected"
+         },
+         {
+          "version": ">= 13.0.1, < 13.0.2",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security-advisories@github.com",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
+        "baseScore": 9.9,
+        "baseSeverity": "CRITICAL",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "LOW",
+        "userInteraction": "NONE",
+        "scope": "CHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "HIGH",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 3.1,
+       "impactScore": 6.0
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-10-21T02:27:59.402947Z",
+        "id": "CVE-2026-92262",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "total"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security-advisories@github.com",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-706"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "10.6.1",
+          "versionEndExcluding": "10.6.28",
+          "matchCriteriaId": "6A6667AA-6A82-49E2-894B-318569872468"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "10.11.1",
+          "versionEndExcluding": "10.11.19",
+          "matchCriteriaId": "C18A44B6-CEEF-47D7-9D60-04E6EBAFC785"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "11.4.1",
+          "versionEndExcluding": "11.4.13",
+          "matchCriteriaId": "47070DA5-F754-4FE1-957A-375C39D9029E"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "11.8.1",
+          "versionEndExcluding": "11.8.9",
+          "matchCriteriaId": "39AD11EC-57BE-4D2B-9A7C-E667E23A6940"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "12.3.1",
+          "versionEndExcluding": "12.3.3",
+          "matchCriteriaId": "E6988F1C-2D11-431B-BBE4-3AA8483627C8"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:13.0.1:*:*:*:*:*:*:*",
+          "matchCriteriaId": "E46FBE57-06D5-489E-9ECE-333F5F9AFD06"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://github.com/MariaDB/server/commit/574ba66b2d6c5d71db83d416677876e9b592858e",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Patch"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/commit/f277eefa424850a8cba5c2371406047f6395e8bb",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Patch"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-10.11.19",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-10.6.28",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-11.4.13",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-11.8.9",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-12.3.3",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-13.0.2",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/security/advisories/GHSA-65jj-h265-3m7h",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     },
+     {
+      "url": "https://jira.mariadb.org/browse/MDEV-40362",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Issue Tracking"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-97380",
+    "sourceIdentifier": "security-advisories@github.com",
+    "published": "2026-10-16T17:18:02.013",
+    "lastModified": "2026-10-28T19:19:37.820",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "MariaDB server is a community developed fork of MySQL server. From 10.6.1 until 10.6.28, 10.11.19, 11.4.13, 11.8.9, 12.3.3, and 13.0.2, the GRANT PROXY statement treats an IDENTIFIED clause with an empty password as though authentication were not specified, causing it to check the wrong grantor privileges. A low-privileged attacker who can name another account can exploit this authorization error to set that account's password. This issue is fixed in versions 10.6.28, 10.11.19, 11.4.13, 11.8.9, 12.3.3, and 13.0.2."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security-advisories@github.com",
+      "affectedData": [
+       {
+        "vendor": "MariaDB",
+        "product": "server",
+        "versions": [
+         {
+          "version": ">= 10.6.1, < 10.6.28",
+          "status": "affected"
+         },
+         {
+          "version": ">= 10.11.1, < 10.11.19",
+          "status": "affected"
+         },
+         {
+          "version": ">= 11.4.1, < 11.4.13",
+          "status": "affected"
+         },
+         {
+          "version": ">= 11.8.1, < 11.8.9",
+          "status": "affected"
+         },
+         {
+          "version": ">= 12.3.1, < 12.3.3",
+          "status": "affected"
+         },
+         {
+          "version": ">= 13.0.1, < 13.0.2",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security-advisories@github.com",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+        "baseScore": 8.8,
+        "baseSeverity": "HIGH",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "LOW",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "HIGH",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 2.8,
+       "impactScore": 5.9
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-10-28T18:06:48.259649Z",
+        "id": "CVE-2026-97380",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "total"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security-advisories@github.com",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-620"
+       },
+       {
+        "lang": "en",
+        "value": "CWE-863"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "10.6.1",
+          "versionEndExcluding": "10.6.28",
+          "matchCriteriaId": "6A6667AA-6A82-49E2-894B-318569872468"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "10.11.1",
+          "versionEndExcluding": "10.11.19",
+          "matchCriteriaId": "C18A44B6-CEEF-47D7-9D60-04E6EBAFC785"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "11.4.1",
+          "versionEndExcluding": "11.4.13",
+          "matchCriteriaId": "47070DA5-F754-4FE1-957A-375C39D9029E"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "11.8.1",
+          "versionEndExcluding": "11.8.9",
+          "matchCriteriaId": "39AD11EC-57BE-4D2B-9A7C-E667E23A6940"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "12.3.1",
+          "versionEndExcluding": "12.3.3",
+          "matchCriteriaId": "E6988F1C-2D11-431B-BBE4-3AA8483627C8"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:mariadb:mariadb:13.0.1:*:*:*:*:*:*:*",
+          "matchCriteriaId": "E46FBE57-06D5-489E-9ECE-333F5F9AFD06"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://github.com/MariaDB/server/commit/dbd60d0ad8daa2d01050346aa50b7b102490e456",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Patch"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-10.11.19",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-10.6.28",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-11.4.13",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-11.8.9",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-12.3.3",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/releases/tag/mariadb-13.0.2",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Release Notes"
+      ]
+     },
+     {
+      "url": "https://github.com/MariaDB/server/security/advisories/GHSA-625w-4hgq-qwmr",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     },
+     {
+      "url": "https://jira.mariadb.org/browse/MDEV-40470",
+      "source": "security-advisories@github.com",
+      "tags": [
+       "Issue Tracking"
+      ]
+     }
+    ]
+   }
+  }
+ ],
+ "_cpe_dictionary_entries": 541
+}

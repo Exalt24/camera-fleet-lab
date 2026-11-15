@@ -1,0 +1,10 @@
+{
+ "resultsPerPage": 0,
+ "startIndex": 0,
+ "totalResults": 0,
+ "format": "NVD_CVE",
+ "version": "2.0",
+ "timestamp": "2026-11-15T12:56:10.178",
+ "vulnerabilities": [],
+ "_cpe_dictionary_entries": 201
+}

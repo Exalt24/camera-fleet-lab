@@ -1,0 +1,3 @@
+{
+ "_lookup_failed": "the NVD dictionary has no CPE product aiomysql_project:aiomysql, so a CVE search by CPE cannot assess it; its own project advisories would have to be read"
+}

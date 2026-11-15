@@ -1,0 +1,31 @@
+resolved 10 versions from the running cfl-iam containers
+inventory: 15 components
+  NVD  aiomysql 0.3.2: LOOKUP FAILED: the NVD dictionary has no CPE product aiomysql_project:aiomysql, so a CVE search by CPE cannot assess it; its own project advisories would have to be read
+  NVD  Alpine Linux 3.20.10: 1 CVEs
+  NVD  FastAPI 0.162.0: 0 CVEs
+  NVD  FFmpeg 7.1.5: 41 CVEs
+  NVD  iptables 1.8.10: 0 CVEs
+  NVD  iptables 1.8.11: 0 CVEs
+  NVD  Keycloak 26.8.2: 0 CVEs
+  NVD  MariaDB 11.8.9: 14 CVEs
+  NVD  MediaMTX 1.21.3: LOOKUP FAILED: the NVD dictionary has no CPE product bluenviron:mediamtx, so a CVE search by CPE cannot assess it; its own project advisories would have to be read
+  NVD  oauth2-proxy 7.15.6: 0 CVEs
+  NVD  Python 3.13.18: 3 CVEs
+  NVD  SQLAlchemy 2.1.8: 0 CVEs
+  NVD  Uvicorn 0.54.0: 0 CVEs
+  NVD  Wazuh manager 4.14.10: 0 CVEs
+  NVD  WireGuard tools 1.0.20210914: LOOKUP FAILED: the NVD dictionary has no CPE product wireguard:wireguard-tools, so a CVE search by CPE cannot assess it; its own project advisories would have to be read
+  KEV  1781 catalogue entries
+  EPSS 59 scores for 59 CVEs
+42 findings; 0 known exploited; 3 of 15 components UNKNOWN (lookup failed)
+  #1   CVE-2026-66040  FFmpeg 7.1.5  cvss=8.8 epss=0.00776 kev=no  reachable
+  #2   CVE-2026-64834  FFmpeg 7.1.5  cvss=7.5 epss=0.00727 kev=no  reachable
+  #3   CVE-2026-64830  FFmpeg 7.1.5  cvss=8.8 epss=0.00646 kev=no  reachable
+  #4   CVE-2026-3087  Python 3.13.18  cvss=7.5 epss=0.00551 kev=no  reachable
+  #5   CVE-2026-30754  FFmpeg 7.1.5  cvss=8.8 epss=0.00524 kev=no  reachable
+  #6   CVE-2026-64835  FFmpeg 7.1.5  cvss=8.8 epss=0.00496 kev=no  reachable
+  #7   CVE-2026-66041  FFmpeg 7.1.5  cvss=7.8 epss=0.00487 kev=no  reachable
+  #8   CVE-2026-107695  FFmpeg 7.1.5  cvss=6.5 epss=0.00467 kev=no  reachable
+  #9   CVE-2025-25469  FFmpeg 7.1.5  cvss=8.8 epss=0.00463 kev=no  reachable
+  #10  CVE-2026-30999  FFmpeg 7.1.5  cvss=7.5 epss=0.0046 kev=no  reachable
+wrote C:\Projects\Professional\Projects\Apps\camera-fleet-lab\docs\security\vuln\cve_triage.md and C:\Projects\Professional\Projects\Apps\camera-fleet-lab\docs\security\vuln\cve_triage.json

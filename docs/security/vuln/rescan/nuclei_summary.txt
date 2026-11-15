@@ -1,0 +1,7 @@
+scan: nuclei (projectdiscovery/nuclei:v3.11.1) 2026-11-15T13:17:10Z
+version output: [INF] Nuclei Engine Version: v3.11.1
+project: cfl-iam
+target: http://172.30.0.10:8000
+target: http://10.50.0.3:4180
+target: http://10.50.0.2:8080
+findings: 3 (JSON lines in nuclei_results.jsonl)

@@ -1,0 +1,12 @@
+{
+ "python:python:3.13-slim": "3.13.18",
+ "image:mariadb:11": "11.8.9",
+ "image:bluenviron/mediamtx:latest-ffmpeg": "1.21.3",
+ "alpine:alpine:3.20": "3.20.10",
+ "pkg:hub:wireguard-tools": "1.0.20210914-3",
+ "pkg:hub:iptables": "1.8.11-2",
+ "pkg:hub:ffmpeg": "7:7.1.5-0+deb13u1",
+ "pkg:edge:iptables": "1.8.10",
+ "pkg:edge:wireguard-tools": "1.0.20210914",
+ "pip:hub:sqlalchemy": "2.1.8"
+}

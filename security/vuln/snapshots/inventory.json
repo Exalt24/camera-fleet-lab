@@ -1,0 +1,214 @@
+[
+ {
+  "name": "aiomysql",
+  "version": "0.3.2",
+  "vendor": "aiomysql_project",
+  "product": "aiomysql",
+  "services": [
+   "hub"
+  ],
+  "source": "hub/requirements.txt pin aiomysql==0.3.2",
+  "part": "a",
+  "note": "",
+  "cpe": "cpe:2.3:a:aiomysql_project:aiomysql:0.3.2:*:*:*:*:*:*:*",
+  "slug": "aiomysql-0-3-2"
+ },
+ {
+  "name": "Alpine Linux",
+  "version": "3.20.10",
+  "vendor": "alpinelinux",
+  "product": "alpine_linux",
+  "services": [
+   "edge"
+  ],
+  "source": "edge/Dockerfile FROM alpine:3.20",
+  "part": "o",
+  "note": "",
+  "cpe": "cpe:2.3:o:alpinelinux:alpine_linux:3.20.10:*:*:*:*:*:*:*",
+  "slug": "alpine-linux-3-20-10"
+ },
+ {
+  "name": "FastAPI",
+  "version": "0.162.0",
+  "vendor": "tiangolo",
+  "product": "fastapi",
+  "services": [
+   "hub"
+  ],
+  "source": "hub/requirements.txt pin fastapi==0.162.0",
+  "part": "a",
+  "note": "",
+  "cpe": "cpe:2.3:a:tiangolo:fastapi:0.162.0:*:*:*:*:*:*:*",
+  "slug": "fastapi-0-162-0"
+ },
+ {
+  "name": "FFmpeg",
+  "version": "7.1.5",
+  "vendor": "ffmpeg",
+  "product": "ffmpeg",
+  "services": [
+   "hub"
+  ],
+  "source": "hub/Dockerfile installs ffmpeg; version read from the built image",
+  "part": "a",
+  "note": "",
+  "cpe": "cpe:2.3:a:ffmpeg:ffmpeg:7.1.5:*:*:*:*:*:*:*",
+  "slug": "ffmpeg-7-1-5"
+ },
+ {
+  "name": "iptables",
+  "version": "1.8.10",
+  "vendor": "netfilter",
+  "product": "iptables",
+  "services": [
+   "edge"
+  ],
+  "source": "edge/Dockerfile installs iptables; version read from the built image",
+  "part": "a",
+  "note": "",
+  "cpe": "cpe:2.3:a:netfilter:iptables:1.8.10:*:*:*:*:*:*:*",
+  "slug": "iptables-1-8-10"
+ },
+ {
+  "name": "iptables",
+  "version": "1.8.11",
+  "vendor": "netfilter",
+  "product": "iptables",
+  "services": [
+   "hub"
+  ],
+  "source": "hub/Dockerfile installs iptables; version read from the built image",
+  "part": "a",
+  "note": "",
+  "cpe": "cpe:2.3:a:netfilter:iptables:1.8.11:*:*:*:*:*:*:*",
+  "slug": "iptables-1-8-11"
+ },
+ {
+  "name": "Keycloak",
+  "version": "26.8.2",
+  "vendor": "redhat",
+  "product": "keycloak",
+  "services": [
+   "keycloak"
+  ],
+  "source": "docker-compose.yml image tag quay.io/keycloak/keycloak:26.8.2",
+  "part": "a",
+  "note": "",
+  "cpe": "cpe:2.3:a:redhat:keycloak:26.8.2:*:*:*:*:*:*:*",
+  "slug": "keycloak-26-8-2"
+ },
+ {
+  "name": "MariaDB",
+  "version": "11.8.9",
+  "vendor": "mariadb",
+  "product": "mariadb",
+  "services": [
+   "mariadb"
+  ],
+  "source": "docker-compose.yml image mariadb:11 (floating tag), version read from the pulled image",
+  "part": "a",
+  "note": "the tag `11` floats; the version is whatever the image held on the day it was resolved",
+  "cpe": "cpe:2.3:a:mariadb:mariadb:11.8.9:*:*:*:*:*:*:*",
+  "slug": "mariadb-11-8-9"
+ },
+ {
+  "name": "MediaMTX",
+  "version": "1.21.3",
+  "vendor": "bluenviron",
+  "product": "mediamtx",
+  "services": [
+   "camera"
+  ],
+  "source": "docker-compose.yml image bluenviron/mediamtx:latest-ffmpeg (floating tag), version read from the pulled image",
+  "part": "a",
+  "note": "the tag `latest-ffmpeg` floats; the version is whatever the image held on the day it was resolved",
+  "cpe": "cpe:2.3:a:bluenviron:mediamtx:1.21.3:*:*:*:*:*:*:*",
+  "slug": "mediamtx-1-21-3"
+ },
+ {
+  "name": "oauth2-proxy",
+  "version": "7.15.6",
+  "vendor": "oauth2_proxy_project",
+  "product": "oauth2_proxy",
+  "services": [
+   "oauth2-proxy"
+  ],
+  "source": "docker-compose.yml image tag quay.io/oauth2-proxy/oauth2-proxy:v7.15.6",
+  "part": "a",
+  "note": "",
+  "cpe": "cpe:2.3:a:oauth2_proxy_project:oauth2_proxy:7.15.6:*:*:*:*:*:*:*",
+  "slug": "oauth2-proxy-7-15-6"
+ },
+ {
+  "name": "Python",
+  "version": "3.13.18",
+  "vendor": "python",
+  "product": "python",
+  "services": [
+   "fleet-exporter",
+   "hub"
+  ],
+  "source": "hub/Dockerfile FROM python:3.13-slim (floating tag), version read from the image",
+  "part": "a",
+  "note": "",
+  "cpe": "cpe:2.3:a:python:python:3.13.18:*:*:*:*:*:*:*",
+  "slug": "python-3-13-18"
+ },
+ {
+  "name": "SQLAlchemy",
+  "version": "2.1.8",
+  "vendor": "sqlalchemy",
+  "product": "sqlalchemy",
+  "services": [
+   "hub"
+  ],
+  "source": "hub/requirements.txt range, version read from the built image",
+  "part": "a",
+  "note": "",
+  "cpe": "cpe:2.3:a:sqlalchemy:sqlalchemy:2.1.8:*:*:*:*:*:*:*",
+  "slug": "sqlalchemy-2-1-8"
+ },
+ {
+  "name": "Uvicorn",
+  "version": "0.54.0",
+  "vendor": "encode",
+  "product": "uvicorn",
+  "services": [
+   "hub"
+  ],
+  "source": "hub/requirements.txt pin uvicorn==0.54.0",
+  "part": "a",
+  "note": "",
+  "cpe": "cpe:2.3:a:encode:uvicorn:0.54.0:*:*:*:*:*:*:*",
+  "slug": "uvicorn-0-54-0"
+ },
+ {
+  "name": "Wazuh manager",
+  "version": "4.14.10",
+  "vendor": "wazuh",
+  "product": "wazuh",
+  "services": [
+   "wazuh"
+  ],
+  "source": "docker-compose.yml image tag wazuh/wazuh-manager:4.14.10",
+  "part": "a",
+  "note": "",
+  "cpe": "cpe:2.3:a:wazuh:wazuh:4.14.10:*:*:*:*:*:*:*",
+  "slug": "wazuh-manager-4-14-10"
+ },
+ {
+  "name": "WireGuard tools",
+  "version": "1.0.20210914",
+  "vendor": "wireguard",
+  "product": "wireguard-tools",
+  "services": [
+   "edge",
+   "hub"
+  ],
+  "source": "hub/Dockerfile installs wireguard-tools; version read from the built image",
+  "part": "a",
+  "note": "",
+  "cpe": "cpe:2.3:a:wireguard:wireguard-tools:1.0.20210914:*:*:*:*:*:*:*",
+  "slug": "wireguard-tools-1-0-20210914"
+ }
+]

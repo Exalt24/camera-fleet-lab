@@ -1,0 +1,1308 @@
+{
+ "meta": {
+  "when": "2026-11-15 13:00 UTC",
+  "mode": "offline, from saved responses",
+  "snapshot_note": "The saved responses were fetched 2026-11-15T12:59:01Z."
+ },
+ "rule": "kev > epss > cvss > reachable > id",
+ "components": [
+  {
+   "name": "aiomysql",
+   "version": "0.3.2",
+   "vendor": "aiomysql_project",
+   "product": "aiomysql",
+   "services": [
+    "hub"
+   ],
+   "source": "hub/requirements.txt pin aiomysql==0.3.2",
+   "part": "a",
+   "note": "",
+   "cpe": "cpe:2.3:a:aiomysql_project:aiomysql:0.3.2:*:*:*:*:*:*:*",
+   "lookup": "failed",
+   "lookup_detail": "the NVD dictionary has no CPE product aiomysql_project:aiomysql, so a CVE search by CPE cannot assess it; its own project advisories would have to be read",
+   "cve_count": null,
+   "excluded": [],
+   "exposure": "reachable",
+   "exposure_detail": "service hub: publishes 127.0.0.1:8100:8000"
+  },
+  {
+   "name": "Alpine Linux",
+   "version": "3.20.10",
+   "vendor": "alpinelinux",
+   "product": "alpine_linux",
+   "services": [
+    "edge"
+   ],
+   "source": "edge/Dockerfile FROM alpine:3.20",
+   "part": "o",
+   "note": "",
+   "cpe": "cpe:2.3:o:alpinelinux:alpine_linux:3.20.10:*:*:*:*:*:*:*",
+   "lookup": "ok",
+   "lookup_detail": "",
+   "cve_count": 0,
+   "excluded": [
+    {
+     "id": "CVE-2026-123158",
+     "reason": "platform",
+     "cvss": 8.1,
+     "kev": true,
+     "summary": "sshd in OpenSSH before 10.6p2 on Linux, when musl libc is used without PAM, lacks a workaround for a password authentication bypass (related to misinterpretation of whether a string is intended to be "
+    }
+   ],
+   "exposure": "internal",
+   "exposure_detail": "services edge: no published port"
+  },
+  {
+   "name": "FastAPI",
+   "version": "0.162.0",
+   "vendor": "tiangolo",
+   "product": "fastapi",
+   "services": [
+    "hub"
+   ],
+   "source": "hub/requirements.txt pin fastapi==0.162.0",
+   "part": "a",
+   "note": "",
+   "cpe": "cpe:2.3:a:tiangolo:fastapi:0.162.0:*:*:*:*:*:*:*",
+   "lookup": "ok",
+   "lookup_detail": "",
+   "cve_count": 0,
+   "excluded": [],
+   "exposure": "reachable",
+   "exposure_detail": "service hub: publishes 127.0.0.1:8100:8000"
+  },
+  {
+   "name": "FFmpeg",
+   "version": "7.1.5",
+   "vendor": "ffmpeg",
+   "product": "ffmpeg",
+   "services": [
+    "hub"
+   ],
+   "source": "hub/Dockerfile installs ffmpeg; version read from the built image",
+   "part": "a",
+   "note": "",
+   "cpe": "cpe:2.3:a:ffmpeg:ffmpeg:7.1.5:*:*:*:*:*:*:*",
+   "lookup": "ok",
+   "lookup_detail": "",
+   "cve_count": 41,
+   "excluded": [],
+   "exposure": "reachable",
+   "exposure_detail": "service hub: publishes 127.0.0.1:8100:8000"
+  },
+  {
+   "name": "iptables",
+   "version": "1.8.10",
+   "vendor": "netfilter",
+   "product": "iptables",
+   "services": [
+    "edge"
+   ],
+   "source": "edge/Dockerfile installs iptables; version read from the built image",
+   "part": "a",
+   "note": "",
+   "cpe": "cpe:2.3:a:netfilter:iptables:1.8.10:*:*:*:*:*:*:*",
+   "lookup": "ok",
+   "lookup_detail": "",
+   "cve_count": 0,
+   "excluded": [],
+   "exposure": "internal",
+   "exposure_detail": "services edge: no published port"
+  },
+  {
+   "name": "iptables",
+   "version": "1.8.11",
+   "vendor": "netfilter",
+   "product": "iptables",
+   "services": [
+    "hub"
+   ],
+   "source": "hub/Dockerfile installs iptables; version read from the built image",
+   "part": "a",
+   "note": "",
+   "cpe": "cpe:2.3:a:netfilter:iptables:1.8.11:*:*:*:*:*:*:*",
+   "lookup": "ok",
+   "lookup_detail": "",
+   "cve_count": 0,
+   "excluded": [],
+   "exposure": "reachable",
+   "exposure_detail": "service hub: publishes 127.0.0.1:8100:8000"
+  },
+  {
+   "name": "Keycloak",
+   "version": "26.8.2",
+   "vendor": "redhat",
+   "product": "keycloak",
+   "services": [
+    "keycloak"
+   ],
+   "source": "docker-compose.yml image tag quay.io/keycloak/keycloak:26.8.2",
+   "part": "a",
+   "note": "",
+   "cpe": "cpe:2.3:a:redhat:keycloak:26.8.2:*:*:*:*:*:*:*",
+   "lookup": "ok",
+   "lookup_detail": "",
+   "cve_count": 0,
+   "excluded": [],
+   "exposure": "reachable",
+   "exposure_detail": "service keycloak: publishes 127.0.0.1:8180:8080"
+  },
+  {
+   "name": "MariaDB",
+   "version": "11.8.9",
+   "vendor": "mariadb",
+   "product": "mariadb",
+   "services": [
+    "mariadb"
+   ],
+   "source": "docker-compose.yml image mariadb:11 (floating tag), version read from the pulled image",
+   "part": "a",
+   "note": "the tag `11` floats; the version is whatever the image held on the day it was resolved",
+   "cpe": "cpe:2.3:a:mariadb:mariadb:11.8.9:*:*:*:*:*:*:*",
+   "lookup": "ok",
+   "lookup_detail": "",
+   "cve_count": 0,
+   "excluded": [
+    {
+     "id": "CVE-2026-107814",
+     "reason": "outside-range",
+     "cvss": 8.4,
+     "kev": false,
+     "summary": "MariaDB server is a community developed fork of MySQL server. From 10.6.1 until 10.6.28, 10.11.19, 11.4.13, 11.8.9, 12.3.3, and 13.0.2, MariaDB RPM packages created the dedicated mysql service account"
+    },
+    {
+     "id": "CVE-2026-107815",
+     "reason": "outside-range",
+     "cvss": 8.5,
+     "kev": false,
+     "summary": "MariaDB server is a community developed fork of MySQL server. From 10.6.1 until 10.6.28, 10.11.19, 11.4.13, 11.8.9, 12.3.3, and 13.0.2, the CONNECT engine's DOS table type used an incorrect boundary c"
+    },
+    {
+     "id": "CVE-2026-107816",
+     "reason": "outside-range",
+     "cvss": 6.4,
+     "kev": false,
+     "summary": "MariaDB server is a community developed fork of MySQL server. From 10.6.1 until 10.6.28, 10.11.19, 11.4.13, 11.8.9, 12.3.3, and 13.0.2, the qc_info plugin could be confused by a query containing embed"
+    },
+    {
+     "id": "CVE-2026-107817",
+     "reason": "outside-range",
+     "cvss": 4.4,
+     "kev": false,
+     "summary": "MariaDB server is a community developed fork of MySQL server. From 10.6.1 until 10.6.28, 10.11.19, 11.4.13, 11.8.9, 12.3.3, and 13.0.2, the mysql_json plugin assumed that imported MySQL tables contain"
+    },
+    {
+     "id": "CVE-2026-107818",
+     "reason": "outside-range",
+     "cvss": 8.4,
+     "kev": false,
+     "summary": "MariaDB server is a community developed fork of MySQL server. From 10.6.1 until 10.6.28, 10.11.19, 11.4.13, 11.8.9, 12.3.3, and 13.0.2, the mariadb.service unit used /run/mysqld/wsrep-new-cluster duri"
+    },
+    {
+     "id": "CVE-2026-107821",
+     "reason": "outside-range",
+     "cvss": 8.0,
+     "kev": false,
+     "summary": "MariaDB server is a community developed fork of MySQL server. From 10.6.1 until 10.6.28, 10.11.19, 11.4.13, 11.8.9, 12.3.3, and 13.0.2, MariaDB insufficiently validated counts, offsets, lengths, and f"
+    },
+    {
+     "id": "CVE-2026-107822",
+     "reason": "outside-range",
+     "cvss": 6.4,
+     "kev": false,
+     "summary": "MariaDB server is a community developed fork of MySQL server. From 10.6.1 until 10.6.28, 10.11.19, 11.4.13, 11.8.9, 12.3.3, and 13.0.2, MariaDB's ACL cache could generate the same database-privilege c"
+    },
+    {
+     "id": "CVE-2026-107823",
+     "reason": "outside-range",
+     "cvss": 7.2,
+     "kev": false,
+     "summary": "MariaDB server is a community developed fork of MySQL server. From 10.6.1 until 10.6.28, 10.11.19, 11.4.13, 11.8.9, 12.3.3, and 13.0.2, the MariaDB view FRM parser did not safely encode embedded newli"
+    },
+    {
+     "id": "CVE-2026-85745",
+     "reason": "outside-range",
+     "cvss": 4.3,
+     "kev": false,
+     "summary": "MariaDB server is a community developed fork of MySQL server. From 10.6.1 until 10.6.28, 10.11.19, 11.4.13, 11.8.9, 12.3.3, and 13.0.2, ST_Area reads beyond the allocated buffer when processing invali"
+    },
+    {
+     "id": "CVE-2026-85746",
+     "reason": "outside-range",
+     "cvss": 9.9,
+     "kev": false,
+     "summary": "MariaDB server is a community developed fork of MySQL server. From 10.6.1 until 10.6.28, 10.11.19, 11.4.13, 11.8.9, 12.3.3, and 13.0.2, ST_AsText can write beyond an allocated output buffer when conve"
+    },
+    {
+     "id": "CVE-2026-85985",
+     "reason": "outside-range",
+     "cvss": 5.4,
+     "kev": false,
+     "summary": "MariaDB server is a community developed fork of MySQL server. From 10.6.1 until 10.6.28, 10.11.19, 11.4.13, 11.8.9, 12.3.3, and 13.0.2, the CONNECT engine plugin file-access UDFs json_file(), bson_fil"
+    },
+    {
+     "id": "CVE-2026-86047",
+     "reason": "outside-range",
+     "cvss": 7.7,
+     "kev": false,
+     "summary": "MariaDB server is a community developed fork of MySQL server. From 10.6.1 until 10.6.28, 10.11.19, 11.4.13, 11.8.9, 12.3.3, and 13.0.2, SHOW CREATE SERVER, SHOW CREATE USER, and mariadb-dump are affec"
+    },
+    {
+     "id": "CVE-2026-92262",
+     "reason": "outside-range",
+     "cvss": 9.9,
+     "kev": false,
+     "summary": "MariaDB server is a community developed fork of MySQL server. From 10.6.1 until 10.6.28, 10.11.19, 11.4.13, 11.8.9, 12.3.3, and 13.0.2, the #mysql50# bypass prefix is affected because it allows the #m"
+    },
+    {
+     "id": "CVE-2026-97380",
+     "reason": "outside-range",
+     "cvss": 8.8,
+     "kev": false,
+     "summary": "MariaDB server is a community developed fork of MySQL server. From 10.6.1 until 10.6.28, 10.11.19, 11.4.13, 11.8.9, 12.3.3, and 13.0.2, the GRANT PROXY statement treats an IDENTIFIED clause with an em"
+    }
+   ],
+   "exposure": "internal",
+   "exposure_detail": "services mariadb: no published port"
+  },
+  {
+   "name": "MediaMTX",
+   "version": "1.21.3",
+   "vendor": "bluenviron",
+   "product": "mediamtx",
+   "services": [
+    "camera"
+   ],
+   "source": "docker-compose.yml image bluenviron/mediamtx:latest-ffmpeg (floating tag), version read from the pulled image",
+   "part": "a",
+   "note": "the tag `latest-ffmpeg` floats; the version is whatever the image held on the day it was resolved",
+   "cpe": "cpe:2.3:a:bluenviron:mediamtx:1.21.3:*:*:*:*:*:*:*",
+   "lookup": "failed",
+   "lookup_detail": "the NVD dictionary has no CPE product bluenviron:mediamtx, so a CVE search by CPE cannot assess it; its own project advisories would have to be read",
+   "cve_count": null,
+   "excluded": [],
+   "exposure": "internal",
+   "exposure_detail": "services camera: no published port"
+  },
+  {
+   "name": "oauth2-proxy",
+   "version": "7.15.6",
+   "vendor": "oauth2_proxy_project",
+   "product": "oauth2_proxy",
+   "services": [
+    "oauth2-proxy"
+   ],
+   "source": "docker-compose.yml image tag quay.io/oauth2-proxy/oauth2-proxy:v7.15.6",
+   "part": "a",
+   "note": "",
+   "cpe": "cpe:2.3:a:oauth2_proxy_project:oauth2_proxy:7.15.6:*:*:*:*:*:*:*",
+   "lookup": "ok",
+   "lookup_detail": "",
+   "cve_count": 0,
+   "excluded": [],
+   "exposure": "reachable",
+   "exposure_detail": "service oauth2-proxy: publishes 127.0.0.1:4180:4180"
+  },
+  {
+   "name": "Python",
+   "version": "3.13.18",
+   "vendor": "python",
+   "product": "python",
+   "services": [
+    "fleet-exporter",
+    "hub"
+   ],
+   "source": "hub/Dockerfile FROM python:3.13-slim (floating tag), version read from the image",
+   "part": "a",
+   "note": "",
+   "cpe": "cpe:2.3:a:python:python:3.13.18:*:*:*:*:*:*:*",
+   "lookup": "ok",
+   "lookup_detail": "",
+   "cve_count": 1,
+   "excluded": [
+    {
+     "id": "CVE-2020-29396",
+     "reason": "platform",
+     "cvss": 8.8,
+     "kev": false,
+     "summary": "A sandboxing issue in Odoo Community 11.0 through 13.0 and Odoo Enterprise 11.0 through 13.0, when running with Python 3.6 or later, allows remote authenticated users to execute arbitrary code, leadin"
+    },
+    {
+     "id": "CVE-2021-32052",
+     "reason": "platform",
+     "cvss": 6.1,
+     "kev": false,
+     "summary": "In Django 2.2 before 2.2.22, 3.1 before 3.1.10, and 3.2 before 3.2.2 (with Python 3.9.5+), URLValidator does not prohibit newlines and tabs (unless the URLField form field is used). If an application "
+    }
+   ],
+   "exposure": "reachable",
+   "exposure_detail": "service hub: publishes 127.0.0.1:8100:8000"
+  },
+  {
+   "name": "SQLAlchemy",
+   "version": "2.1.8",
+   "vendor": "sqlalchemy",
+   "product": "sqlalchemy",
+   "services": [
+    "hub"
+   ],
+   "source": "hub/requirements.txt range, version read from the built image",
+   "part": "a",
+   "note": "",
+   "cpe": "cpe:2.3:a:sqlalchemy:sqlalchemy:2.1.8:*:*:*:*:*:*:*",
+   "lookup": "ok",
+   "lookup_detail": "",
+   "cve_count": 0,
+   "excluded": [],
+   "exposure": "reachable",
+   "exposure_detail": "service hub: publishes 127.0.0.1:8100:8000"
+  },
+  {
+   "name": "Uvicorn",
+   "version": "0.54.0",
+   "vendor": "encode",
+   "product": "uvicorn",
+   "services": [
+    "hub"
+   ],
+   "source": "hub/requirements.txt pin uvicorn==0.54.0",
+   "part": "a",
+   "note": "",
+   "cpe": "cpe:2.3:a:encode:uvicorn:0.54.0:*:*:*:*:*:*:*",
+   "lookup": "ok",
+   "lookup_detail": "",
+   "cve_count": 0,
+   "excluded": [],
+   "exposure": "reachable",
+   "exposure_detail": "service hub: publishes 127.0.0.1:8100:8000"
+  },
+  {
+   "name": "Wazuh manager",
+   "version": "4.14.10",
+   "vendor": "wazuh",
+   "product": "wazuh",
+   "services": [
+    "wazuh"
+   ],
+   "source": "docker-compose.yml image tag wazuh/wazuh-manager:4.14.10",
+   "part": "a",
+   "note": "",
+   "cpe": "cpe:2.3:a:wazuh:wazuh:4.14.10:*:*:*:*:*:*:*",
+   "lookup": "ok",
+   "lookup_detail": "",
+   "cve_count": 0,
+   "excluded": [],
+   "exposure": "internal",
+   "exposure_detail": "services wazuh: no published port"
+  },
+  {
+   "name": "WireGuard tools",
+   "version": "1.0.20210914",
+   "vendor": "wireguard",
+   "product": "wireguard-tools",
+   "services": [
+    "edge",
+    "hub"
+   ],
+   "source": "hub/Dockerfile installs wireguard-tools; version read from the built image",
+   "part": "a",
+   "note": "",
+   "cpe": "cpe:2.3:a:wireguard:wireguard-tools:1.0.20210914:*:*:*:*:*:*:*",
+   "lookup": "failed",
+   "lookup_detail": "the NVD dictionary has no CPE product wireguard:wireguard-tools, so a CVE search by CPE cannot assess it; its own project advisories would have to be read",
+   "cve_count": null,
+   "excluded": [],
+   "exposure": "reachable",
+   "exposure_detail": "service hub: publishes 127.0.0.1:8100:8000"
+  }
+ ],
+ "notes": {
+  "kev": "",
+  "epss": ""
+ },
+ "findings": [
+  {
+   "id": "CVE-2026-66040",
+   "component": "FFmpeg",
+   "version": "7.1.5",
+   "services": [
+    "hub"
+   ],
+   "cvss": 8.8,
+   "cvss_version": "3.1",
+   "severity": "HIGH",
+   "epss": 0.00776,
+   "epss_percentile": 0.56374,
+   "kev": "no",
+   "exposure": "reachable",
+   "fixed_in": null,
+   "remediation": "no fixed version is named in the NVD data for FFmpeg 7.1.5; read the vendor advisory, then upgrade or mitigate",
+   "summary": "FFmpeg through 8.1.2, fixed in commit b506faf, contains a heap out-of-bounds write vulnerability in the native PNG and APNG encoders that allows remote attackers to corrupt heap memory by supplying a crafted PNG image with a malicious eXIf chunk. Attackers can craft an eXIf chunk where multiple IFD entries reference the same large value payload, causing canonical serialization to expand the output far beyond the undersized allocation estimated by add_exif_profile_size(), resulting in png_write_chunk() writing tens of thousands of bytes past the buffer boundary, leading to deterministic heap corruption, process crash, and potentially arbitrary code execution.",
+   "published": "2026-07-24",
+   "kev_detail": null,
+   "rank": 1
+  },
+  {
+   "id": "CVE-2026-64834",
+   "component": "FFmpeg",
+   "version": "7.1.5",
+   "services": [
+    "hub"
+   ],
+   "cvss": 7.5,
+   "cvss_version": "3.1",
+   "severity": "HIGH",
+   "epss": 0.00727,
+   "epss_percentile": 0.54733,
+   "kev": "no",
+   "exposure": "reachable",
+   "fixed_in": null,
+   "remediation": "no fixed version is named in the NVD data for FFmpeg 7.1.5; read the vendor advisory, then upgrade or mitigate",
+   "summary": "FFmpeg versions 0.6.3 through 8.1.2 contain an infinite loop vulnerability in the RTP/ASF demuxer within libavformat/rtpdec_asf.c that allows remote attackers to cause denial of service by sending a crafted RTP/ASF stream. The rtp_asf_fix_header function fails to validate a minimum chunksize when iterating over ASF objects, causing the loop pointer to never advance when a chunksize is smaller than the 24-byte minimum ASF object header size, resulting in CPU exhaustion that denies service to legitimate users.",
+   "published": "2026-07-22",
+   "kev_detail": null,
+   "rank": 2
+  },
+  {
+   "id": "CVE-2026-64830",
+   "component": "FFmpeg",
+   "version": "7.1.5",
+   "services": [
+    "hub"
+   ],
+   "cvss": 8.8,
+   "cvss_version": "3.1",
+   "severity": "HIGH",
+   "epss": 0.00646,
+   "epss_percentile": 0.51562,
+   "kev": "no",
+   "exposure": "reachable",
+   "fixed_in": null,
+   "remediation": "no fixed version is named in the NVD data for FFmpeg 7.1.5; read the vendor advisory, then upgrade or mitigate",
+   "summary": "FFmpeg versions 2.1 through 8.1.2 contains a heap buffer overflow vulnerability in the VobSub subtitle demuxer that allows attackers to corrupt adjacent heap memory by supplying a malicious .sub/.idx subtitle file declaring more distinct stream IDs than the fixed-size array bounds in libavformat/mpeg.c. Attackers can craft a subtitle file with excessive distinct stream IDs to trigger unbounded writes beyond the vobsub->q[] array boundary via ff_subtitles_queue_insert(), potentially achieving arbitrary code execution in any application using FFmpeg's VobSub demuxer.",
+   "published": "2026-07-22",
+   "kev_detail": null,
+   "rank": 3
+  },
+  {
+   "id": "CVE-2026-3087",
+   "component": "Python",
+   "version": "3.13.18",
+   "services": [
+    "fleet-exporter",
+    "hub"
+   ],
+   "cvss": 7.5,
+   "cvss_version": "3.1",
+   "severity": "HIGH",
+   "epss": 0.00551,
+   "epss_percentile": 0.46666,
+   "kev": "no",
+   "exposure": "reachable",
+   "fixed_in": null,
+   "remediation": "no fixed version is named in the NVD data for Python 3.13.18; read the vendor advisory, then upgrade or mitigate",
+   "summary": "If `shutil.unpack_archive()` is given a ZIP archive with an absolute Windows path containing a drive (`C:\\\\...`) then the archive will be extracted outside the target directory which is different than other operating systems. Only Windows is affected by this vulnerability.",
+   "published": "2026-04-27",
+   "kev_detail": null,
+   "rank": 4
+  },
+  {
+   "id": "CVE-2026-30754",
+   "component": "FFmpeg",
+   "version": "7.1.5",
+   "services": [
+    "hub"
+   ],
+   "cvss": 8.8,
+   "cvss_version": "3.1",
+   "severity": "HIGH",
+   "epss": 0.00524,
+   "epss_percentile": 0.4502,
+   "kev": "no",
+   "exposure": "reachable",
+   "fixed_in": "8.1",
+   "remediation": "upgrade FFmpeg from 7.1.5 to 8.1 or later",
+   "summary": "A memory corruption vulnerability exists in FFmpeg before 8.1. The RTP encoding process. In the nal_send function in libavformat/rtpenc_h264_hevc.c, a negative size parameter (size=-3) is passed to memcpy when transmitting H.264/HEVC streams via RTP using a crafted input file. This was detected using AddressSanitizer.",
+   "published": "2026-09-08",
+   "kev_detail": null,
+   "rank": 5
+  },
+  {
+   "id": "CVE-2026-64835",
+   "component": "FFmpeg",
+   "version": "7.1.5",
+   "services": [
+    "hub"
+   ],
+   "cvss": 8.8,
+   "cvss_version": "3.1",
+   "severity": "HIGH",
+   "epss": 0.00496,
+   "epss_percentile": 0.43123,
+   "kev": "no",
+   "exposure": "reachable",
+   "fixed_in": null,
+   "remediation": "no fixed version is named in the NVD data for FFmpeg 7.1.5; read the vendor advisory, then upgrade or mitigate",
+   "summary": "FFmpeg versions 4.4 through 8.1.2 contain an out-of-bounds memory access vulnerability in the ADX audio decoder within libavcodec/adxdec.c that allows attackers to trigger both out-of-bounds reads and writes by supplying a crafted ADX or AAX audio file with a mid-stream channel layout change. When AV_PKT_DATA_NEW_EXTRADATA side data is received mid-stream, the adx_decode_frame function re-parses the stream header but fails to update the internal channel state, causing subsequent decoding operations to access the prev[] state array using a stale channel count.",
+   "published": "2026-07-22",
+   "kev_detail": null,
+   "rank": 6
+  },
+  {
+   "id": "CVE-2026-66041",
+   "component": "FFmpeg",
+   "version": "7.1.5",
+   "services": [
+    "hub"
+   ],
+   "cvss": 7.8,
+   "cvss_version": "3.1",
+   "severity": "HIGH",
+   "epss": 0.00487,
+   "epss_percentile": 0.42556,
+   "kev": "no",
+   "exposure": "reachable",
+   "fixed_in": null,
+   "remediation": "no fixed version is named in the NVD data for FFmpeg 7.1.5; read the vendor advisory, then upgrade or mitigate",
+   "summary": "FFmpeg 7.0 through 8.1.2, fixed in commit 4da9812, contains a heap out-of-bounds write vulnerability in the vf_quirc filter that allows an attacker to corrupt heap memory by supplying a crafted PGS/SUP subtitle file with mismatched frame dimensions. Attackers can provide a subtitle file whose second presentation has larger dimensions than its first, causing av_image_copy_plane() to copy data exceeding the initial allocation size into the undersized libquirc grayscale image buffer, resulting in heap corruption and process crash with potential for code execution.",
+   "published": "2026-07-24",
+   "kev_detail": null,
+   "rank": 7
+  },
+  {
+   "id": "CVE-2026-107695",
+   "component": "FFmpeg",
+   "version": "7.1.5",
+   "services": [
+    "hub"
+   ],
+   "cvss": 6.5,
+   "cvss_version": "3.1",
+   "severity": "MEDIUM",
+   "epss": 0.00467,
+   "epss_percentile": 0.40967,
+   "kev": "no",
+   "exposure": "reachable",
+   "fixed_in": "8.1.3",
+   "remediation": "upgrade FFmpeg from 7.1.5 to 8.1.3 or later",
+   "summary": "FFmpeg before 8.1.3 contains an infinite loop vulnerability in the HLS demuxer that allows remote attackers to cause denial of service because parse_playlist() accepts Master Playlist tags inside Media Playlists. Attackers can trick victims into opening a crafted self-referencing playlist that endlessly adds variants in hls_read_header(), causing unbounded CPU and I/O consumption.",
+   "published": "2026-10-08",
+   "kev_detail": null,
+   "rank": 8
+  },
+  {
+   "id": "CVE-2025-25469",
+   "component": "FFmpeg",
+   "version": "7.1.5",
+   "services": [
+    "hub"
+   ],
+   "cvss": 8.8,
+   "cvss_version": "3.1",
+   "severity": "HIGH",
+   "epss": 0.00463,
+   "epss_percentile": 0.40667,
+   "kev": "no",
+   "exposure": "reachable",
+   "fixed_in": null,
+   "remediation": "no fixed version is named in the NVD data for FFmpeg 7.1.5; read the vendor advisory, then upgrade or mitigate",
+   "summary": "FFmpeg git-master before commit d5873b was discovered to contain a memory leak in the component libavutil/iamf.c.",
+   "published": "2025-02-18",
+   "kev_detail": null,
+   "rank": 9
+  },
+  {
+   "id": "CVE-2026-30999",
+   "component": "FFmpeg",
+   "version": "7.1.5",
+   "services": [
+    "hub"
+   ],
+   "cvss": 7.5,
+   "cvss_version": "3.1",
+   "severity": "HIGH",
+   "epss": 0.0046,
+   "epss_percentile": 0.40367,
+   "kev": "no",
+   "exposure": "reachable",
+   "fixed_in": null,
+   "remediation": "no fixed version is named in the NVD data for FFmpeg 7.1.5; read the vendor advisory, then upgrade or mitigate",
+   "summary": "A heap buffer overflow in the av_bprint_finalize() function of FFmpeg v8.0.1 allows attackers to cause a Denial of Service (DoS) via a crafted input.",
+   "published": "2026-04-13",
+   "kev_detail": null,
+   "rank": 10
+  },
+  {
+   "id": "CVE-2026-30998",
+   "component": "FFmpeg",
+   "version": "7.1.5",
+   "services": [
+    "hub"
+   ],
+   "cvss": 7.5,
+   "cvss_version": "3.1",
+   "severity": "HIGH",
+   "epss": 0.00415,
+   "epss_percentile": 0.3638,
+   "kev": "no",
+   "exposure": "reachable",
+   "fixed_in": null,
+   "remediation": "no fixed version is named in the NVD data for FFmpeg 7.1.5; read the vendor advisory, then upgrade or mitigate",
+   "summary": "An improper resource deallocation and closure vulnerability in the tools/zmqsend.c component of FFmpeg v8.0.1 allows attackers to cause a Denial of Service (DoS) via supplying a crafted input file.",
+   "published": "2026-04-13",
+   "kev_detail": null,
+   "rank": 11
+  },
+  {
+   "id": "CVE-2026-66036",
+   "component": "FFmpeg",
+   "version": "7.1.5",
+   "services": [
+    "hub"
+   ],
+   "cvss": 8.8,
+   "cvss_version": "3.1",
+   "severity": "HIGH",
+   "epss": 0.00401,
+   "epss_percentile": 0.34869,
+   "kev": "no",
+   "exposure": "reachable",
+   "fixed_in": null,
+   "remediation": "no fixed version is named in the NVD data for FFmpeg 7.1.5; read the vendor advisory, then upgrade or mitigate",
+   "summary": "FFmpeg through 8.1.2, fixed in commit 5d7112c, contains a heap out-of-bounds write vulnerability in the vf_hqdn3d filter that allows attackers to corrupt heap memory by supplying a crafted video whose frame resolution increases between frames when filtergraph reinitialization is disabled via the -reinit_filter 0 option. Attackers can provide a malicious video input where vf_hqdn3d.config_input() allocates undersized per-plane line-history buffers based on the initial frame width, and subsequent larger frames cause denoise_spatial() to write beyond the allocation boundary, resulting in heap memory corruption.",
+   "published": "2026-07-24",
+   "kev_detail": null,
+   "rank": 12
+  },
+  {
+   "id": "CVE-2025-25468",
+   "component": "FFmpeg",
+   "version": "7.1.5",
+   "services": [
+    "hub"
+   ],
+   "cvss": 6.5,
+   "cvss_version": "3.1",
+   "severity": "MEDIUM",
+   "epss": 0.00381,
+   "epss_percentile": 0.32651,
+   "kev": "no",
+   "exposure": "reachable",
+   "fixed_in": null,
+   "remediation": "no fixed version is named in the NVD data for FFmpeg 7.1.5; read the vendor advisory, then upgrade or mitigate",
+   "summary": "FFmpeg git-master before commit d5873b was discovered to contain a memory leak in the component libavutil/mem.c.",
+   "published": "2025-02-18",
+   "kev_detail": null,
+   "rank": 13
+  },
+  {
+   "id": "CVE-2026-107696",
+   "component": "FFmpeg",
+   "version": "7.1.5",
+   "services": [
+    "hub"
+   ],
+   "cvss": 6.5,
+   "cvss_version": "3.1",
+   "severity": "MEDIUM",
+   "epss": 0.00359,
+   "epss_percentile": 0.30154,
+   "kev": "no",
+   "exposure": "reachable",
+   "fixed_in": null,
+   "remediation": "no fixed version is named in the NVD data for FFmpeg 7.1.5; read the vendor advisory, then upgrade or mitigate",
+   "summary": "FFmpeg through 9.0.2 contains an infinite loop vulnerability in ff_rtsp_connect() in libavformat/rtsp.c that follows RTSP 3xx redirects without any redirect limit. Attackers controlling an RTSP server can answer every request with a 302 redirect to itself or another server, causing endless reconnects that saturate a CPU core.",
+   "published": "2026-10-08",
+   "kev_detail": null,
+   "rank": 14
+  },
+  {
+   "id": "CVE-2026-30997",
+   "component": "FFmpeg",
+   "version": "7.1.5",
+   "services": [
+    "hub"
+   ],
+   "cvss": 7.5,
+   "cvss_version": "3.1",
+   "severity": "HIGH",
+   "epss": 0.0035,
+   "epss_percentile": 0.29137,
+   "kev": "no",
+   "exposure": "reachable",
+   "fixed_in": null,
+   "remediation": "no fixed version is named in the NVD data for FFmpeg 7.1.5; read the vendor advisory, then upgrade or mitigate",
+   "summary": "An out-of-bounds read in the read_global_param() function (libavcodec/av1dec.c) of FFmpeg v8.0.1 allows attackers to cause a Denial of Service (DoS) via a crafted input.",
+   "published": "2026-04-13",
+   "kev_detail": null,
+   "rank": 15
+  },
+  {
+   "id": "CVE-2026-66037",
+   "component": "FFmpeg",
+   "version": "7.1.5",
+   "services": [
+    "hub"
+   ],
+   "cvss": 5.5,
+   "cvss_version": "3.1",
+   "severity": "MEDIUM",
+   "epss": 0.00349,
+   "epss_percentile": 0.29006,
+   "kev": "no",
+   "exposure": "reachable",
+   "fixed_in": null,
+   "remediation": "no fixed version is named in the NVD data for FFmpeg 7.1.5; read the vendor advisory, then upgrade or mitigate",
+   "summary": "FFmpeg through 8.1.2, fixed in commit 5d7112c, contains an uncontrolled resource consumption vulnerability in the IAMF demuxer that allows an unauthenticated attacker to cause multi-gigabyte memory allocation from a 17-byte input file by supplying a crafted count_label field. The mix_presentation_obu() function in libavformat/iamf_parse.c calls av_calloc(count_label, sizeof(*language_label)) with an attacker-controlled value before validating available OBU data, enabling an allocation amplification of approximately 126 million bytes per input byte that exhausts process memory or triggers an OOM-kill during format probing.",
+   "published": "2026-07-24",
+   "kev_detail": null,
+   "rank": 16
+  },
+  {
+   "id": "CVE-2025-10256",
+   "component": "FFmpeg",
+   "version": "7.1.5",
+   "services": [
+    "hub"
+   ],
+   "cvss": 5.5,
+   "cvss_version": "3.1",
+   "severity": "MEDIUM",
+   "epss": 0.00342,
+   "epss_percentile": 0.28209,
+   "kev": "no",
+   "exposure": "reachable",
+   "fixed_in": "8.0",
+   "remediation": "upgrade FFmpeg from 7.1.5 to 8.0 or later",
+   "summary": "A NULL pointer dereference vulnerability exists in FFmpeg’s Firequalizer filter (libavfilter/af_firequalizer.c) due to a missing check on the return value of av_malloc_array() in the config_input() function. An attacker could exploit this by tricking a victim into processing a crafted media file with the Firequalizer filter enabled, causing the application to dereference a NULL pointer and crash, leading to denial of service.",
+   "published": "2026-02-18",
+   "kev_detail": null,
+   "rank": 17
+  },
+  {
+   "id": "CVE-2026-64832",
+   "component": "FFmpeg",
+   "version": "7.1.5",
+   "services": [
+    "hub"
+   ],
+   "cvss": 8.8,
+   "cvss_version": "3.1",
+   "severity": "HIGH",
+   "epss": 0.00335,
+   "epss_percentile": 0.27241,
+   "kev": "no",
+   "exposure": "reachable",
+   "fixed_in": null,
+   "remediation": "no fixed version is named in the NVD data for FFmpeg 7.1.5; read the vendor advisory, then upgrade or mitigate",
+   "summary": "FFmpeg versions 4.4 through 8.1.2 contain a double-free vulnerability in the NVIDIA NVDEC hardware decoder within libavcodec/nvdec.c that allows attackers to trigger memory corruption by supplying a crafted video file. When no decoder surfaces remain, the ff_nvdec_start_frame_sep_ref error path frees memory via nvdec_fdd_priv_free while the calling layer subsequently frees the same frame description data, resulting in a double-free of the underlying decoder context in any FFmpeg-based application using NVDEC hardware-accelerated decoding.",
+   "published": "2026-07-22",
+   "kev_detail": null,
+   "rank": 18
+  },
+  {
+   "id": "CVE-2026-65703",
+   "component": "FFmpeg",
+   "version": "7.1.5",
+   "services": [
+    "hub"
+   ],
+   "cvss": 7.8,
+   "cvss_version": "3.1",
+   "severity": "HIGH",
+   "epss": 0.00332,
+   "epss_percentile": 0.26775,
+   "kev": "no",
+   "exposure": "reachable",
+   "fixed_in": null,
+   "remediation": "no fixed version is named in the NVD data for FFmpeg 7.1.5; read the vendor advisory, then upgrade or mitigate",
+   "summary": "FFmpeg versions 2.7 through 8.1.2 contain an out-of-bounds write vulnerability in the TDSC video decoder that allows remote attackers to cause heap corruption by supplying a crafted AVI file that changes frame dimensions across TDSF frames. The tdsc_parse_tdsf() function fails to unreference the existing reference frame before calling av_frame_get_buffer(), causing tdsc_blit() and tdsc_yuv2rgb() to write attacker-controlled pixel data beyond the end of the undersized reference frame buffer, resulting in a process crash and potential code execution.",
+   "published": "2026-07-23",
+   "kev_detail": null,
+   "rank": 19
+  },
+  {
+   "id": "CVE-2026-107697",
+   "component": "FFmpeg",
+   "version": "7.1.5",
+   "services": [
+    "hub"
+   ],
+   "cvss": 4.3,
+   "cvss_version": "3.1",
+   "severity": "MEDIUM",
+   "epss": 0.00319,
+   "epss_percentile": 0.25308,
+   "kev": "no",
+   "exposure": "reachable",
+   "fixed_in": "8.1.3",
+   "remediation": "upgrade FFmpeg from 7.1.5 to 8.1.3 or later",
+   "summary": "FFmpeg before 8.1.3 contains a protection mechanism failure in the HLS demuxer that allows attackers to bypass protocol and allowed_extensions restrictions when opening child playlists. Attackers can supply a crafted master playlist whose child playlists use disallowed protocols or non-multimedia local files, making parse_playlist() open resources the HLS security policy should block.",
+   "published": "2026-10-08",
+   "kev_detail": null,
+   "rank": 20
+  },
+  {
+   "id": "CVE-2026-66039",
+   "component": "FFmpeg",
+   "version": "7.1.5",
+   "services": [
+    "hub"
+   ],
+   "cvss": 7.8,
+   "cvss_version": "3.1",
+   "severity": "HIGH",
+   "epss": 0.00307,
+   "epss_percentile": 0.23854,
+   "kev": "no",
+   "exposure": "reachable",
+   "fixed_in": null,
+   "remediation": "no fixed version is named in the NVD data for FFmpeg 7.1.5; read the vendor advisory, then upgrade or mitigate",
+   "summary": "FFmpeg through 8.1.2, fixed in commit aafb5c6, contains a signed integer overflow vulnerability in the MACE6 audio decoder that allows attackers to corrupt heap memory by supplying a crafted CAF file with a malicious bytes_per_packet value. Attackers can craft a CAF file with oversized bytes_per_packet and frames_per_packet values in the desc chunk to trigger an integer overflow in mace_decode_frame() during output sample count computation, resulting in an undersized buffer allocation and heap out-of-bounds write that could enable code execution.",
+   "published": "2026-07-24",
+   "kev_detail": null,
+   "rank": 21
+  },
+  {
+   "id": "CVE-2026-66038",
+   "component": "FFmpeg",
+   "version": "7.1.5",
+   "services": [
+    "hub"
+   ],
+   "cvss": 6.5,
+   "cvss_version": "3.1",
+   "severity": "MEDIUM",
+   "epss": 0.00242,
+   "epss_percentile": 0.15506,
+   "kev": "no",
+   "exposure": "reachable",
+   "fixed_in": null,
+   "remediation": "no fixed version is named in the NVD data for FFmpeg 7.1.5; read the vendor advisory, then upgrade or mitigate",
+   "summary": "FFmpeg through 8.1.2, fixed in commit 8670835, contains an information disclosure vulnerability in the LCL/ZLIB video decoder that allows attackers to expose uninitialized heap memory by supplying a valid zlib stream that inflates to fewer bytes than the expected frame size. The zlib_decomp() function in lcldec.c treats short decompression as non-fatal and continues to the RGB24 conversion path, which copies a full frame's worth of rows from the allocation buffer using original frame dimensions, causing uninitialized heap contents including pointer-derived allocator bytes to be copied into the attacker-observable AVFrame output and potentially defeating ASLR in long-lived media processing services.",
+   "published": "2026-07-24",
+   "kev_detail": null,
+   "rank": 22
+  },
+  {
+   "id": "CVE-2026-70632",
+   "component": "FFmpeg",
+   "version": "7.1.5",
+   "services": [
+    "hub"
+   ],
+   "cvss": 7.8,
+   "cvss_version": "3.1",
+   "severity": "HIGH",
+   "epss": 0.00228,
+   "epss_percentile": 0.13648,
+   "kev": "no",
+   "exposure": "reachable",
+   "fixed_in": "9",
+   "remediation": "upgrade FFmpeg from 7.1.5 to 9 or later",
+   "summary": "FFmpeg versions from 4.4 up to, but not including, 9.0 contain an out-of-bounds heap write vulnerability in the native GoPro CineForm HD (CFHD) decoder that allows remote attackers to corrupt heap memory by supplying a crafted AVI file during stream probing. The cfhd_decode() function fails to enforce the non-Bayer logical output-width invariant in the transform-type-2 reconstruction path, causing horiz_filter_clip() to write oversized 16-bit sample rows far beyond the allocated output frame buffer, which can be escalated to arbitrary code execution via overwrite of a live cleanup callback pointer.",
+   "published": "2026-08-06",
+   "kev_detail": null,
+   "rank": 23
+  },
+  {
+   "id": "CVE-2026-64833",
+   "component": "FFmpeg",
+   "version": "7.1.5",
+   "services": [
+    "hub"
+   ],
+   "cvss": 7.1,
+   "cvss_version": "3.1",
+   "severity": "HIGH",
+   "epss": 0.00211,
+   "epss_percentile": 0.11447,
+   "kev": "no",
+   "exposure": "reachable",
+   "fixed_in": null,
+   "remediation": "no fixed version is named in the NVD data for FFmpeg 7.1.5; read the vendor advisory, then upgrade or mitigate",
+   "summary": "FFmpeg versions 0.7.1 through 8.1.2 contain an out-of-bounds read vulnerability in the S/PDIF muxer that allows attackers to access memory beyond buffer boundaries by supplying a crafted DTS stream with a core_size value larger than the actual packet length. Attackers can exploit the missing bounds check in the spdif_header_dts4 function by providing a malicious DTS-HD audio stream during S/PDIF re-muxing to trigger unauthorized memory reads beyond the packet buffer.",
+   "published": "2026-07-22",
+   "kev_detail": null,
+   "rank": 24
+  },
+  {
+   "id": "CVE-2026-65705",
+   "component": "FFmpeg",
+   "version": "7.1.5",
+   "services": [
+    "hub"
+   ],
+   "cvss": 7.8,
+   "cvss_version": "3.1",
+   "severity": "HIGH",
+   "epss": 0.00187,
+   "epss_percentile": 0.08416,
+   "kev": "no",
+   "exposure": "reachable",
+   "fixed_in": null,
+   "remediation": "no fixed version is named in the NVD data for FFmpeg 7.1.5; read the vendor advisory, then upgrade or mitigate",
+   "summary": "FFmpeg versions 3.4 through 8.1.2 contain an out-of-bounds write vulnerability in the vf_floodfill video filter that allows attackers to corrupt heap memory by supplying a dynamically sized video stream with filtergraph reinitialization disabled via -reinit_filter 0. When config_input() allocates the points traversal stack based on initial frame dimensions and a subsequent larger frame is processed, filter_frame() performs flood-fill neighbor pushes beyond the original allocation boundary, resulting in heap corruption and process crash with potential for code execution depending on heap layout and process hardening.",
+   "published": "2026-07-23",
+   "kev_detail": null,
+   "rank": 25
+  },
+  {
+   "id": "CVE-2026-65706",
+   "component": "FFmpeg",
+   "version": "7.1.5",
+   "services": [
+    "hub"
+   ],
+   "cvss": 7.8,
+   "cvss_version": "3.1",
+   "severity": "HIGH",
+   "epss": 0.00187,
+   "epss_percentile": 0.08416,
+   "kev": "no",
+   "exposure": "reachable",
+   "fixed_in": null,
+   "remediation": "no fixed version is named in the NVD data for FFmpeg 7.1.5; read the vendor advisory, then upgrade or mitigate",
+   "summary": "FFmpeg versions 3.0 through 8.1.2 contain an out-of-bounds write vulnerability in the vf_swaprect video filter that allows attackers to corrupt heap memory by supplying a crafted NV12 video frame with odd width dimensions. The filter_frame() function reuses a temporary row buffer sized for plane 0's single-byte pixel step across all planes, causing an 18-byte memcpy into a 17-byte heap allocation when processing the two-byte-per-sample interleaved chroma plane of a 17x16 NV12 frame, resulting in heap corruption and process crash with potential for code execution.",
+   "published": "2026-07-23",
+   "kev_detail": null,
+   "rank": 26
+  },
+  {
+   "id": "CVE-2026-107675",
+   "component": "FFmpeg",
+   "version": "7.1.5",
+   "services": [
+    "hub"
+   ],
+   "cvss": 5.9,
+   "cvss_version": "3.1",
+   "severity": "MEDIUM",
+   "epss": 0.00186,
+   "epss_percentile": 0.08255,
+   "kev": "no",
+   "exposure": "reachable",
+   "fixed_in": null,
+   "remediation": "no fixed version is named in the NVD data for FFmpeg 7.1.5; read the vendor advisory, then upgrade or mitigate",
+   "summary": "FFmpeg through 9.0.2 contains a missing host key verification vulnerability in the libssh-based sftp protocol handler that allows network attackers to impersonate SFTP servers. Attackers performing man-in-the-middle, DNS, or ARP spoofing can capture passwords supplied in sftp URLs, serve forged media, or receive uploaded output.",
+   "published": "2026-10-08",
+   "kev_detail": null,
+   "rank": 27
+  },
+  {
+   "id": "CVE-2026-65704",
+   "component": "FFmpeg",
+   "version": "7.1.5",
+   "services": [
+    "hub"
+   ],
+   "cvss": 7.8,
+   "cvss_version": "3.1",
+   "severity": "HIGH",
+   "epss": 0.00178,
+   "epss_percentile": 0.07507,
+   "kev": "no",
+   "exposure": "reachable",
+   "fixed_in": null,
+   "remediation": "no fixed version is named in the NVD data for FFmpeg 7.1.5; read the vendor advisory, then upgrade or mitigate",
+   "summary": "FFmpeg through 8.1.2 contains an out-of-bounds write vulnerability that allows attackers to cause heap corruption by supplying a crafted ffconcat file processed with the -safe 0 flag. The TY demuxer's demux_audio() function decrements packet size without bounds checking, producing a negative size value that is passed to memcpy() in shorten_decode_frame(), where conversion to size_t wraps the value to near SIZE_MAX and triggers reads beyond the source allocation and writes far beyond the Shorten decoder's bitstream buffer.",
+   "published": "2026-07-23",
+   "kev_detail": null,
+   "rank": 28
+  },
+  {
+   "id": "CVE-2026-70631",
+   "component": "FFmpeg",
+   "version": "7.1.5",
+   "services": [
+    "hub"
+   ],
+   "cvss": 5.5,
+   "cvss_version": "3.1",
+   "severity": "MEDIUM",
+   "epss": 0.00178,
+   "epss_percentile": 0.07442,
+   "kev": "no",
+   "exposure": "reachable",
+   "fixed_in": "9",
+   "remediation": "upgrade FFmpeg from 7.1.5 to 9 or later",
+   "summary": "FFmpeg versions from 0.5 up to, but not including, 9.0 contain an uninitialized heap memory disclosure vulnerability in the native TIFF decoder in libavcodec/tiff.c. An attacker who can cause FFmpeg to decode a crafted TIFF file can supply a valid Deflate-compressed strip that terminates successfully after producing fewer bytes than the declared strip requires. The tiff_unpack_zlib() function allocates a heap buffer sized for the full declared strip but copies all declared rows via memcpy() regardless of how many bytes zlib actually decompressed, causing unwritten bytes that can contain stale data from prior heap allocations to be incorporated into decoded image output and potentially exposing sensitive data in persistent services.",
+   "published": "2026-08-06",
+   "kev_detail": null,
+   "rank": 29
+  },
+  {
+   "id": "CVE-2026-52295",
+   "component": "FFmpeg",
+   "version": "7.1.5",
+   "services": [
+    "hub"
+   ],
+   "cvss": 2.9,
+   "cvss_version": "3.1",
+   "severity": "LOW",
+   "epss": 0.00176,
+   "epss_percentile": 0.07176,
+   "kev": "no",
+   "exposure": "reachable",
+   "fixed_in": "9.0",
+   "remediation": "upgrade FFmpeg from 7.1.5 to 9.0 or later",
+   "summary": "FFmpeg before 9.0 has an out-of-bounds read because the copied extradata lacked required padding before GetBitContext-based access in libavformat/iamf_writer.c.",
+   "published": "2026-09-01",
+   "kev_detail": null,
+   "rank": 30
+  },
+  {
+   "id": "CVE-2026-70629",
+   "component": "FFmpeg",
+   "version": "7.1.5",
+   "services": [
+    "hub"
+   ],
+   "cvss": 5.5,
+   "cvss_version": "3.1",
+   "severity": "MEDIUM",
+   "epss": 0.00175,
+   "epss_percentile": 0.07067,
+   "kev": "no",
+   "exposure": "reachable",
+   "fixed_in": "9",
+   "remediation": "upgrade FFmpeg from 7.1.5 to 9 or later",
+   "summary": "FFmpeg versions from 3.0 up to, but not including, 9.0 contain an uninitialized heap memory read vulnerability in the native RSCC decoder (libavcodec/rscc.c) that allows attackers to disclose heap memory contents by supplying a crafted video file with a compressed tile that decompresses fewer bytes than the declared tile geometry requires. When rscc_decode_frame() calls av_image_copy_plane() without validating the decompressed byte count against the tile dimensions, the unwritten suffix of the persistent intermediate buffer ctx->inflated_buf is copied into the decoded frame, potentially exposing data from prior heap allocations or previous decoded frames in persistent decoding services.",
+   "published": "2026-08-06",
+   "kev_detail": null,
+   "rank": 31
+  },
+  {
+   "id": "CVE-2026-70630",
+   "component": "FFmpeg",
+   "version": "7.1.5",
+   "services": [
+    "hub"
+   ],
+   "cvss": 5.5,
+   "cvss_version": "3.1",
+   "severity": "MEDIUM",
+   "epss": 0.00175,
+   "epss_percentile": 0.07067,
+   "kev": "no",
+   "exposure": "reachable",
+   "fixed_in": "9",
+   "remediation": "upgrade FFmpeg from 7.1.5 to 9 or later",
+   "summary": "FFmpeg versions from 3.0 up to, but not including, 9.0 contain an uninitialized heap memory read vulnerability in the native Screenpresso decoder (libavcodec/screenpresso.c) that allows attackers to recover sensitive memory contents by supplying a crafted SPV1 packet with a valid zlib stream that decompresses fewer bytes than the full frame requires. The screenpresso_decode_frame() function fails to validate the produced byte count before calling av_image_copy_plane() to copy the complete frame dimensions from the persistent ctx->inflated_buf buffer, causing unwritten heap memory from prior allocations or prior frames to be copied into decoded output and potentially exposing sensitive data such as userspace addresses from persistent decoding services.",
+   "published": "2026-08-06",
+   "kev_detail": null,
+   "rank": 32
+  },
+  {
+   "id": "CVE-2025-12343",
+   "component": "FFmpeg",
+   "version": "7.1.5",
+   "services": [
+    "hub"
+   ],
+   "cvss": 5.5,
+   "cvss_version": "3.1",
+   "severity": "MEDIUM",
+   "epss": 0.00171,
+   "epss_percentile": 0.0662,
+   "kev": "no",
+   "exposure": "reachable",
+   "fixed_in": "8.1",
+   "remediation": "upgrade FFmpeg from 7.1.5 to 8.1 or later",
+   "summary": "A flaw was found in FFmpeg’s TensorFlow backend within the libavfilter/dnn_backend_tf.c source file. The issue occurs in the dnn_execute_model_tf() function, where a task object is freed multiple times in certain error-handling paths. This redundant memory deallocation can lead to a double-free condition, potentially causing FFmpeg or any application using it to crash when processing TensorFlow-based DNN models. This results in a denial-of-service scenario but does not allow arbitrary code execution under normal conditions.",
+   "published": "2026-02-18",
+   "kev_detail": null,
+   "rank": 33
+  },
+  {
+   "id": "CVE-2026-52296",
+   "component": "FFmpeg",
+   "version": "7.1.5",
+   "services": [
+    "hub"
+   ],
+   "cvss": 7.1,
+   "cvss_version": "3.1",
+   "severity": "HIGH",
+   "epss": 0.00158,
+   "epss_percentile": 0.05013,
+   "kev": "no",
+   "exposure": "reachable",
+   "fixed_in": "9.0",
+   "remediation": "upgrade FFmpeg from 7.1.5 to 9.0 or later",
+   "summary": "FFmpeg before 9.0 has an out-of-bounds read because of missing required padding in WMA extradata allocation paths in libavcodec/wmaenc.c.",
+   "published": "2026-09-13",
+   "kev_detail": null,
+   "rank": 34
+  },
+  {
+   "id": "CVE-2026-70628",
+   "component": "FFmpeg",
+   "version": "7.1.5",
+   "services": [
+    "hub"
+   ],
+   "cvss": 7.8,
+   "cvss_version": "3.1",
+   "severity": "HIGH",
+   "epss": 0.00145,
+   "epss_percentile": 0.03824,
+   "kev": "no",
+   "exposure": "reachable",
+   "fixed_in": "9",
+   "remediation": "upgrade FFmpeg from 7.1.5 to 9 or later",
+   "summary": "FFmpeg versions from 0.5 up to, but not including, 9.0 contain a signed integer overflow vulnerability in the DVB subtitle parser in libavcodec/dvbsub_parser.c that allows attackers to trigger a heap buffer overflow by supplying a crafted WTV file. The overflow causes the bounds-check guard expression to wrap to INT_MIN, bypassing the PARSE_BUF_SIZE comparison and invoking memcpy() with attacker-controlled data into a heap buffer, resulting in an out-of-bounds heap write and potential memory corruption or code execution.",
+   "published": "2026-08-06",
+   "kev_detail": null,
+   "rank": 35
+  },
+  {
+   "id": "CVE-2026-107676",
+   "component": "FFmpeg",
+   "version": "7.1.5",
+   "services": [
+    "hub"
+   ],
+   "cvss": 3.3,
+   "cvss_version": "3.1",
+   "severity": "LOW",
+   "epss": 0.00142,
+   "epss_percentile": 0.03608,
+   "kev": "no",
+   "exposure": "reachable",
+   "fixed_in": null,
+   "remediation": "no fixed version is named in the NVD data for FFmpeg 7.1.5; read the vendor advisory, then upgrade or mitigate",
+   "summary": "FFmpeg through 9.0.2 contains an uninitialized memory disclosure vulnerability in av_dynamic_hdr_plus_to_t35() that leaves up to three payload bytes uninitialized when tone_mapping_flag is 0. Attackers can supply crafted Matroska T.35 BlockAdditional or HEVC/AV1 SEI metadata so that remuxing or transcoding writes leaked process memory into output files.",
+   "published": "2026-10-08",
+   "kev_detail": null,
+   "rank": 36
+  },
+  {
+   "id": "CVE-2026-40962",
+   "component": "FFmpeg",
+   "version": "7.1.5",
+   "services": [
+    "hub"
+   ],
+   "cvss": 9.8,
+   "cvss_version": "3.1",
+   "severity": "CRITICAL",
+   "epss": 0.00139,
+   "epss_percentile": 0.03367,
+   "kev": "no",
+   "exposure": "reachable",
+   "fixed_in": "8.1",
+   "remediation": "upgrade FFmpeg from 7.1.5 to 8.1 or later",
+   "summary": "FFmpeg before 8.1 has an integer overflow and resultant out-of-bounds write via CENC (Common Encryption) subsample data to libavformat/mov.c.",
+   "published": "2026-04-16",
+   "kev_detail": null,
+   "rank": 37
+  },
+  {
+   "id": "CVE-2026-107677",
+   "component": "FFmpeg",
+   "version": "7.1.5",
+   "services": [
+    "hub"
+   ],
+   "cvss": 4.7,
+   "cvss_version": "3.1",
+   "severity": "MEDIUM",
+   "epss": 0.00137,
+   "epss_percentile": 0.03177,
+   "kev": "no",
+   "exposure": "reachable",
+   "fixed_in": null,
+   "remediation": "no fixed version is named in the NVD data for FFmpeg 7.1.5; read the vendor advisory, then upgrade or mitigate",
+   "summary": "FFmpeg through 9.0.2 contains a denial of service vulnerability in the DASH demuxer that allows attackers to trigger an infinite loop by supplying an empty SegmentTemplate media URL. Attackers can craft an .mpd manifest declaring SegmentTemplate media=\"\" so get_current_fragment() calls av_strireplace() with an empty search string, consuming CPU indefinitely.",
+   "published": "2026-10-08",
+   "kev_detail": null,
+   "rank": 38
+  },
+  {
+   "id": "CVE-2026-107660",
+   "component": "FFmpeg",
+   "version": "7.1.5",
+   "services": [
+    "hub"
+   ],
+   "cvss": 4.8,
+   "cvss_version": "3.1",
+   "severity": "MEDIUM",
+   "epss": 0.00136,
+   "epss_percentile": 0.03103,
+   "kev": "no",
+   "exposure": "reachable",
+   "fixed_in": "8.1.3",
+   "remediation": "upgrade FFmpeg from 7.1.5 to 8.1.3 or later",
+   "summary": "FFmpeg before 8.1.3 and 9.x before 9.0.2 contains an improper certificate validation vulnerability in tls_open() of libavformat/tls_mbedtls.c, which skips hostname checks for IP-address hosts. Network attackers can intercept https, rtmps, or tls connections to IP-literal URLs with any trusted CA-issued certificate to read and tamper with streams.",
+   "published": "2026-10-08",
+   "kev_detail": null,
+   "rank": 39
+  },
+  {
+   "id": "CVE-2026-52297",
+   "component": "FFmpeg",
+   "version": "7.1.5",
+   "services": [
+    "hub"
+   ],
+   "cvss": 7.1,
+   "cvss_version": "3.1",
+   "severity": "HIGH",
+   "epss": 0.00116,
+   "epss_percentile": 0.01647,
+   "kev": "no",
+   "exposure": "reachable",
+   "fixed_in": "9.0",
+   "remediation": "upgrade FFmpeg from 7.1.5 to 9.0 or later",
+   "summary": "FFmpeg before 9.0 has an out-of-bounds read because there is insufficiently padded extradata in the MOV parsing path in mov_read_iacb in libavformat/mov.c.",
+   "published": "2026-09-13",
+   "kev_detail": null,
+   "rank": 40
+  },
+  {
+   "id": "CVE-2026-96611",
+   "component": "FFmpeg",
+   "version": "7.1.5",
+   "services": [
+    "hub"
+   ],
+   "cvss": 7.8,
+   "cvss_version": "3.1",
+   "severity": "HIGH",
+   "epss": 0.00108,
+   "epss_percentile": 0.01225,
+   "kev": "no",
+   "exposure": "reachable",
+   "fixed_in": "9.0",
+   "remediation": "upgrade FFmpeg from 7.1.5 to 9.0 or later",
+   "summary": "FFmpeg before 9.0 has a signed integer overflow in libavformat/mov.c. In mov_read_ispe(), uint32_t width/height values from a crafted HEIF ispe box are stored into signed int fields without bounds checking, allowing values exceeding INT_MAX to become negative. In read_image_grid(), accumulating these values causes signed integer overflow (undefined behavior per C17 section 6.5), which on x86 wraps to a small positive value, bypassing downstream validity checks.",
+   "published": "2026-09-23",
+   "kev_detail": null,
+   "rank": 41
+  },
+  {
+   "id": "CVE-2026-107678",
+   "component": "FFmpeg",
+   "version": "7.1.5",
+   "services": [
+    "hub"
+   ],
+   "cvss": 4.7,
+   "cvss_version": "3.1",
+   "severity": "MEDIUM",
+   "epss": 0.00093,
+   "epss_percentile": 0.00533,
+   "kev": "no",
+   "exposure": "reachable",
+   "fixed_in": null,
+   "remediation": "no fixed version is named in the NVD data for FFmpeg 7.1.5; read the vendor advisory, then upgrade or mitigate",
+   "summary": "FFmpeg through 9.0.2 contains a stack exhaustion vulnerability in av_encryption_init_info_free() in libavutil/encryption_info.c, which recursively frees AVEncryptionInitInfo linked lists built by the MOV demuxer's mov_read_pssh(). Attackers can supply a crafted MP4 file with tens of thousands of small pssh boxes to exhaust the stack and crash the process, while also causing quadratic CPU consumption.",
+   "published": "2026-10-08",
+   "kev_detail": null,
+   "rank": 42
+  }
+ ]
+}

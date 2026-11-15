@@ -1,0 +1,39 @@
+IAM live checks, 2026-11-15 21:19:30
+without a session
+  PASS  an unauthenticated request for the dashboard is redirected to the Keycloak login   [302 -> http://localhost:8180/realms/camera-fleet/protocol/openid-co]
+  PASS  an unauthenticated request for /status gets no data   [302]
+  PASS  an unauthenticated request for /history gets no data   [302]
+  PASS  an unauthenticated request for /admin/probe-config gets no data   [302]
+  PASS  a forged admin header sent straight to the hub's own port is refused (headers are only believed from the proxy)   [403]
+wrong password
+  PASS  a wrong password is refused and no session starts   [Invalid username or password.]
+viewer (fleet-viewer)
+  PASS  viewer: a correct password alone does not sign in, Keycloak demands OTP set up   [page=totp-setup]
+  PASS  viewer: with the password accepted but no code, the dashboard is still behind the login
+  PASS  viewer: a wrong code at OTP set up is refused   [Invalid authenticator code.]
+  PASS  viewer: a valid TOTP code (computed from the secret) completes set up and reaches the dashboard
+  PASS  the hub sees the viewer with the fleet-viewer role only   [{"user":"viewer.sample","roles":["fleet-viewer"]}]
+  PASS  a viewer can read the monitor status   [200]
+  PASS  a viewer asking for the admin route gets 403   [403 {"detail":"needs the fleet-admin role"}]
+admin (fleet-admin)
+  PASS  admin: a correct password alone does not sign in, Keycloak demands OTP set up   [page=totp-setup]
+  PASS  admin: with the password accepted but no code, the dashboard is still behind the login
+  PASS  admin: a wrong code at OTP set up is refused   [Invalid authenticator code.]
+  PASS  admin: a valid TOTP code (computed from the secret) completes set up and reaches the dashboard
+  PASS  an admin can reach the admin route   [200 {"camera":"cam1","camera_host":"10.8.0.2","probe_interval_s":5.0}]
+an ordinary sign in (OTP already set up)
+  PASS  admin: password correct, the OTP prompt appears and the dashboard is still closed   [page=otp-prompt]
+  PASS  admin: a wrong OTP code is refused   [Invalid authenticator code.]
+  PASS  admin: correct password plus a valid TOTP code reaches the dashboard
+  PASS  oauth2-proxy session cookie is set only after the code
+token lifespan
+  PASS  the access token's lifespan is 60 seconds   [exp-iat=60]
+  PASS  the same token is accepted while it is fresh   [200]
+  PASS  the token is no longer honoured once past its lifespan   [status 302 (sent back to login) 60 s after it was issued]
+  PASS  a browser session past the 45 s refresh point is renewed with its refresh token and still works   [200]
+brute force lockout (viewer.sample)
+  PASS  ten wrong passwords in a row were all refused   [10 of 10 refused]
+  PASS  Keycloak reports the account as locked after the ten wrong passwords   [numFailures=5, locked from attempt 5]
+  PASS  while locked, even the CORRECT password is refused   [page=login]
+  PASS  after an admin clears the lock the correct password is accepted again (OTP prompt)   [page=otp-prompt]
+live IAM checks passed: 30 of 30
