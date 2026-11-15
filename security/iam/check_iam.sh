@@ -52,7 +52,9 @@ python security/iam/check_iam.py --reset-only || exit 3
 if [[ $BROWSER -eq 1 ]]; then
   echo "2. real Chromium"
   if [[ -z "${PLAYWRIGHT_PATH:-}" ]]; then
+    # a local install first, then the global npm root
     PLAYWRIGHT_PATH="$(node -e "try{console.log(require.resolve('playwright'))}catch(e){}" 2>/dev/null)"
+    [[ -n "$PLAYWRIGHT_PATH" ]] || PLAYWRIGHT_PATH="$(npm root -g 2>/dev/null)/playwright"
     export PLAYWRIGHT_PATH
   fi
   out=$(node security/iam/shots.cjs docs/security/iam 2>&1); rc=$?

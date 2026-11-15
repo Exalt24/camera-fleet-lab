@@ -9,3 +9,6 @@ demo/work/
 security/state/
 # runtime state, never source (class_sweep tracked-runtime)
 *.log
+# the planted and benign log files are test inputs (logs/EXPECTED.json names them) and the evidence bundle logs are hashed in their manifests: source, not runtime state
+!security/logs/**/*.log
+!docs/security/**/*.log
