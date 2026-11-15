@@ -1,0 +1,239 @@
+{
+	"@programName": "ZAP",
+	"@version": "2.17.0",
+	"@generated": "Sun, 15 Nov 2026 13:51:45",
+	"created": "2026-11-15T13:51:45.704226180Z",
+	"insights":[
+		{
+			"level": "Info",
+			"reason": "Informational",
+			"site": "http://172.30.0.10:8000",
+			"key": "insight.code.2xx",
+			"description": "Percentage of responses with status code 2xx",
+			"statistic": "86"
+		},
+		{
+			"level": "Info",
+			"reason": "Informational",
+			"site": "http://172.30.0.10:8000",
+			"key": "insight.code.4xx",
+			"description": "Percentage of responses with status code 4xx",
+			"statistic": "13"
+		},
+		{
+			"level": "Info",
+			"reason": "Informational",
+			"site": "http://172.30.0.10:8000",
+			"key": "insight.endpoint.ctype.application/json",
+			"description": "Percentage of endpoints with content type application/json",
+			"statistic": "85"
+		},
+		{
+			"level": "Info",
+			"reason": "Informational",
+			"site": "http://172.30.0.10:8000",
+			"key": "insight.endpoint.ctype.text/html",
+			"description": "Percentage of endpoints with content type text/html",
+			"statistic": "14"
+		},
+		{
+			"level": "Info",
+			"reason": "Informational",
+			"site": "http://172.30.0.10:8000",
+			"key": "insight.endpoint.method.GET",
+			"description": "Percentage of endpoints with method GET",
+			"statistic": "100"
+		},
+		{
+			"level": "Info",
+			"reason": "Informational",
+			"site": "http://172.30.0.10:8000",
+			"key": "insight.endpoint.total",
+			"description": "Count of total endpoints",
+			"statistic": "7"
+		}
+	],
+	"site":[ 
+		{
+			"@name": "http://172.30.0.10:8000",
+			"@host": "172.30.0.10",
+			"@port": "8000",
+			"@ssl": "false",
+			"alerts": [ 
+				{
+					"pluginid": "10055",
+					"alertRef": "10055-5",
+					"alert": "CSP: script-src unsafe-inline",
+					"name": "CSP: script-src unsafe-inline",
+					"riskcode": "2",
+					"confidence": "3",
+					"riskdesc": "Medium (High)",
+					"desc": "<p>Content Security Policy (CSP) is an added layer of security that helps to detect and mitigate certain types of attacks. Including (but not limited to) Cross Site Scripting (XSS), and data injection attacks. These attacks are used for everything from data theft to site defacement or distribution of malware. CSP provides a set of standard HTTP headers that allow website owners to declare approved sources of content that browsers should be allowed to load on that page \u2014 covered types are JavaScript, CSS, HTML frames, fonts, images and embeddable objects such as Java applets, ActiveX, audio and video files.</p>",
+					"instances":[ 
+						{
+							"id": "4",
+							"uri": "http://172.30.0.10:8000",
+							"nodeName": "http:\/\/172.30.0.10:8000",
+							"method": "GET",
+							"param": "content-security-policy",
+							"attack": "",
+							"evidence": "default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'",
+							"otherinfo": "script-src includes unsafe-inline."
+						},
+						{
+							"id": "14",
+							"uri": "http://172.30.0.10:8000/",
+							"nodeName": "http:\/\/172.30.0.10:8000\/",
+							"method": "GET",
+							"param": "content-security-policy",
+							"attack": "",
+							"evidence": "default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'",
+							"otherinfo": "script-src includes unsafe-inline."
+						}
+					],
+					"count": "2",
+					"systemic": false,
+					"solution": "<p>Ensure that your web server, application server, load balancer, etc. is properly configured to set the Content-Security-Policy header.</p>",
+					"otherinfo": "<p>script-src includes unsafe-inline.</p>",
+					"reference": "<p>https://www.w3.org/TR/CSP/</p><p>https://caniuse.com/#search=content+security+policy</p><p>https://content-security-policy.com/</p><p>https://github.com/HtmlUnit/htmlunit-csp</p><p>https://web.dev/articles/csp#resource-options</p>",
+					"cweid": "693",
+					"wascid": "15",
+					"sourceid": "8"
+				},
+				{
+					"pluginid": "10055",
+					"alertRef": "10055-6",
+					"alert": "CSP: style-src unsafe-inline",
+					"name": "CSP: style-src unsafe-inline",
+					"riskcode": "2",
+					"confidence": "3",
+					"riskdesc": "Medium (High)",
+					"desc": "<p>Content Security Policy (CSP) is an added layer of security that helps to detect and mitigate certain types of attacks. Including (but not limited to) Cross Site Scripting (XSS), and data injection attacks. These attacks are used for everything from data theft to site defacement or distribution of malware. CSP provides a set of standard HTTP headers that allow website owners to declare approved sources of content that browsers should be allowed to load on that page \u2014 covered types are JavaScript, CSS, HTML frames, fonts, images and embeddable objects such as Java applets, ActiveX, audio and video files.</p>",
+					"instances":[ 
+						{
+							"id": "6",
+							"uri": "http://172.30.0.10:8000",
+							"nodeName": "http:\/\/172.30.0.10:8000",
+							"method": "GET",
+							"param": "content-security-policy",
+							"attack": "",
+							"evidence": "default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'",
+							"otherinfo": "style-src includes unsafe-inline."
+						},
+						{
+							"id": "15",
+							"uri": "http://172.30.0.10:8000/",
+							"nodeName": "http:\/\/172.30.0.10:8000\/",
+							"method": "GET",
+							"param": "content-security-policy",
+							"attack": "",
+							"evidence": "default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'",
+							"otherinfo": "style-src includes unsafe-inline."
+						}
+					],
+					"count": "2",
+					"systemic": false,
+					"solution": "<p>Ensure that your web server, application server, load balancer, etc. is properly configured to set the Content-Security-Policy header.</p>",
+					"otherinfo": "<p>style-src includes unsafe-inline.</p>",
+					"reference": "<p>https://www.w3.org/TR/CSP/</p><p>https://caniuse.com/#search=content+security+policy</p><p>https://content-security-policy.com/</p><p>https://github.com/HtmlUnit/htmlunit-csp</p><p>https://web.dev/articles/csp#resource-options</p>",
+					"cweid": "693",
+					"wascid": "15",
+					"sourceid": "1"
+				},
+				{
+					"pluginid": "10109",
+					"alertRef": "10109",
+					"alert": "Modern Web Application",
+					"name": "Modern Web Application",
+					"riskcode": "0",
+					"confidence": "2",
+					"riskdesc": "Informational (Medium)",
+					"desc": "<p>The application appears to be a modern web application. If you need to explore it automatically then the Client Spider may well be more effective than the standard one.</p>",
+					"instances":[ 
+						{
+							"id": "8",
+							"uri": "http://172.30.0.10:8000",
+							"nodeName": "http:\/\/172.30.0.10:8000",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "<script>\nconst WHY = {\n  up: \"Video decodes through the tunnel.\",\n  degraded: \"The port answers but no video decodes. A camera or encoder problem, not the network.\",\n  blocked: \"Packets cross the VPN, the camera port does not answer. Look at the NAT rule, the firewall, the camera.\",\n  tunnel_down: \"No packet crosses the VPN. Look at WireGuard, the keys, the endpoint, the 4G link.\"\n};\nconst $ = id => document.getElementById(id);\nfunction light(prefix, ok, skipped, text, detail) {\n  $(\"d-\" + prefix).className = \"dot \" + (skipped ? \"skip\" : ok ? \"ok\" : \"bad\");\n  // a layer that was not checked has nothing to explain: showing the upstream error under it reads as a second failure\n  $(\"t-\" + prefix).textContent = text; $(\"x-\" + prefix).textContent = skipped ? \"\" : (detail || \"\");\n}\nasync function tick() {\n  try {\n    const [s, h] = await Promise.all([fetch(\"/status\").then(r => r.json()), fetch(\"/history?limit=60\").then(r => r.json())]);\n    const st = $(\"state\"); st.textContent = s.state.replace(\"_\", \" \"); st.className = \"state s-\" + s.state;\n    $(\"why\").textContent = WHY[s.state] || \"\";\n    light(\"tunnel\", s.tunnel_ok, false, s.tunnel_ok ? \"ping crosses\" : \"no reply\", \"last handshake \" + (s.handshake_age_s ?? \"never\") + \" s ago\");\n    const tunnelDown = !s.tunnel_ok;\n    light(\"tcp\", s.tcp_ok, tunnelDown, tunnelDown ? \"not checked\" : s.tcp_ok ? \"open\" : \"silent\", s.tcp_ms != null ? s.tcp_ms + \" ms\" : (tunnelDown ? \"\" : s.error));\n    light(\"rtsp\", s.rtsp_ok, tunnelDown || !s.tcp_ok, (tunnelDown || !s.tcp_ok) ? \"not checked\" : s.rtsp_ok ? (s.codec + \" \" + s.resolution) : \"no video\", s.rtsp_ok ? \"\" : (s.error || \"\"));\n    const cells = $(\"cells\"); cells.innerHTML = \"\";\n    h.slice().reverse().forEach(p => { const c = document.createElement(\"div\"); c.className = \"cell c-\" + p.state; c.title = p.ts + \" \" + p.state; cells.appendChild(c); });\n  } catch (e) { $(\"why\").textContent = \"dashboard cannot reach the API: \" + e; }\n}\nwindow.setCaption = t => { const c = $(\"caption\"); c.style.display = t ? \"block\" : \"none\"; c.textContent = t || \"\"; };\n// Behind the SSO proxy (security/iam/) this shows who is signed in and with which role; without it nothing is shown.\nfetch(\"/whoami\").then(r => r.json()).then(w => { if (w.user) { const e = $(\"who\"); e.style.display = \"block\"; e.textContent = \"Signed in as \" + w.user + \" (\" + (w.roles.join(\", \") || \"no role\") + \")\"; } }).catch(() => {});\ntick(); setInterval(tick, 1000);\n</script>",
+							"otherinfo": "No links have been found while there are scripts, which is an indication that this is a modern web application."
+						},
+						{
+							"id": "16",
+							"uri": "http://172.30.0.10:8000/",
+							"nodeName": "http:\/\/172.30.0.10:8000\/",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "<script>\nconst WHY = {\n  up: \"Video decodes through the tunnel.\",\n  degraded: \"The port answers but no video decodes. A camera or encoder problem, not the network.\",\n  blocked: \"Packets cross the VPN, the camera port does not answer. Look at the NAT rule, the firewall, the camera.\",\n  tunnel_down: \"No packet crosses the VPN. Look at WireGuard, the keys, the endpoint, the 4G link.\"\n};\nconst $ = id => document.getElementById(id);\nfunction light(prefix, ok, skipped, text, detail) {\n  $(\"d-\" + prefix).className = \"dot \" + (skipped ? \"skip\" : ok ? \"ok\" : \"bad\");\n  // a layer that was not checked has nothing to explain: showing the upstream error under it reads as a second failure\n  $(\"t-\" + prefix).textContent = text; $(\"x-\" + prefix).textContent = skipped ? \"\" : (detail || \"\");\n}\nasync function tick() {\n  try {\n    const [s, h] = await Promise.all([fetch(\"/status\").then(r => r.json()), fetch(\"/history?limit=60\").then(r => r.json())]);\n    const st = $(\"state\"); st.textContent = s.state.replace(\"_\", \" \"); st.className = \"state s-\" + s.state;\n    $(\"why\").textContent = WHY[s.state] || \"\";\n    light(\"tunnel\", s.tunnel_ok, false, s.tunnel_ok ? \"ping crosses\" : \"no reply\", \"last handshake \" + (s.handshake_age_s ?? \"never\") + \" s ago\");\n    const tunnelDown = !s.tunnel_ok;\n    light(\"tcp\", s.tcp_ok, tunnelDown, tunnelDown ? \"not checked\" : s.tcp_ok ? \"open\" : \"silent\", s.tcp_ms != null ? s.tcp_ms + \" ms\" : (tunnelDown ? \"\" : s.error));\n    light(\"rtsp\", s.rtsp_ok, tunnelDown || !s.tcp_ok, (tunnelDown || !s.tcp_ok) ? \"not checked\" : s.rtsp_ok ? (s.codec + \" \" + s.resolution) : \"no video\", s.rtsp_ok ? \"\" : (s.error || \"\"));\n    const cells = $(\"cells\"); cells.innerHTML = \"\";\n    h.slice().reverse().forEach(p => { const c = document.createElement(\"div\"); c.className = \"cell c-\" + p.state; c.title = p.ts + \" \" + p.state; cells.appendChild(c); });\n  } catch (e) { $(\"why\").textContent = \"dashboard cannot reach the API: \" + e; }\n}\nwindow.setCaption = t => { const c = $(\"caption\"); c.style.display = t ? \"block\" : \"none\"; c.textContent = t || \"\"; };\n// Behind the SSO proxy (security/iam/) this shows who is signed in and with which role; without it nothing is shown.\nfetch(\"/whoami\").then(r => r.json()).then(w => { if (w.user) { const e = $(\"who\"); e.style.display = \"block\"; e.textContent = \"Signed in as \" + w.user + \" (\" + (w.roles.join(\", \") || \"no role\") + \")\"; } }).catch(() => {});\ntick(); setInterval(tick, 1000);\n</script>",
+							"otherinfo": "No links have been found while there are scripts, which is an indication that this is a modern web application."
+						}
+					],
+					"count": "2",
+					"systemic": false,
+					"solution": "<p>This is an informational alert and so no changes are required.</p>",
+					"otherinfo": "<p>No links have been found while there are scripts, which is an indication that this is a modern web application.</p>",
+					"reference": "",
+					"cweid": "-1",
+					"wascid": "-1",
+					"sourceid": "8"
+				},
+				{
+					"pluginid": "10049",
+					"alertRef": "10049-3",
+					"alert": "Storable and Cacheable Content",
+					"name": "Storable and Cacheable Content",
+					"riskcode": "0",
+					"confidence": "2",
+					"riskdesc": "Informational (Medium)",
+					"desc": "<p>The response contents are storable by caching components such as proxy servers, and may be retrieved directly from the cache, rather than from the origin server by the caching servers, in response to similar requests from other users. If the response data is sensitive, personal or user-specific, this may result in sensitive information being leaked. In some cases, this may even result in a user gaining complete control of the session of another user, depending on the configuration of the caching components in use in their environment. This is primarily an issue where \"shared\" caching servers such as \"proxy\" caches are configured on the local network. This configuration is typically found in corporate or educational environments, for instance.</p>",
+					"instances":[ 
+						{
+							"id": "3",
+							"uri": "http://172.30.0.10:8000",
+							"nodeName": "http:\/\/172.30.0.10:8000",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": "In the absence of an explicitly specified caching lifetime directive in the response, a liberal lifetime heuristic of 1 year was assumed. This is permitted by rfc7234."
+						},
+						{
+							"id": "1",
+							"uri": "http://172.30.0.10:8000/robots.txt",
+							"nodeName": "http:\/\/172.30.0.10:8000\/robots.txt",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": "In the absence of an explicitly specified caching lifetime directive in the response, a liberal lifetime heuristic of 1 year was assumed. This is permitted by rfc7234."
+						},
+						{
+							"id": "10",
+							"uri": "http://172.30.0.10:8000/whoami",
+							"nodeName": "http:\/\/172.30.0.10:8000\/whoami",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": "In the absence of an explicitly specified caching lifetime directive in the response, a liberal lifetime heuristic of 1 year was assumed. This is permitted by rfc7234."
+						}
+					],
+					"count": "3",
+					"systemic": true,
+					"solution": "<p>Validate that the response does not contain sensitive, personal or user-specific information. If it does, consider the use of the following HTTP response headers, to limit, or prevent the content being stored and retrieved from the cache by another user:</p><p>Cache-Control: no-cache, no-store, must-revalidate, private</p><p>Pragma: no-cache</p><p>Expires: 0</p><p>This configuration directs both HTTP 1.0 and HTTP 1.1 compliant caching servers to not store the response, and to not retrieve the response (without validation) from the cache, in response to a similar request.</p>",
+					"otherinfo": "<p>In the absence of an explicitly specified caching lifetime directive in the response, a liberal lifetime heuristic of 1 year was assumed. This is permitted by rfc7234.</p>",
+					"reference": "<p>https://datatracker.ietf.org/doc/html/rfc7234</p><p>https://datatracker.ietf.org/doc/html/rfc7231</p><p>https://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html</p>",
+					"cweid": "524",
+					"wascid": "13",
+					"sourceid": "1"
+				}
+			]
+		}
+	],
+	"sequences":[
+	]
+
+}

@@ -1,0 +1,179 @@
+{
+	"@programName": "ZAP",
+	"@version": "2.17.0",
+	"@generated": "Sun, 15 Nov 2026 14:00:56",
+	"created": "2026-11-15T14:00:56.100562215Z",
+	"insights":[
+		{
+			"level": "Info",
+			"reason": "Informational",
+			"site": "http://172.30.0.10:8000",
+			"key": "insight.code.2xx",
+			"description": "Percentage of responses with status code 2xx",
+			"statistic": "86"
+		},
+		{
+			"level": "Info",
+			"reason": "Informational",
+			"site": "http://172.30.0.10:8000",
+			"key": "insight.code.4xx",
+			"description": "Percentage of responses with status code 4xx",
+			"statistic": "13"
+		},
+		{
+			"level": "Info",
+			"reason": "Informational",
+			"site": "http://172.30.0.10:8000",
+			"key": "insight.endpoint.ctype.application/json",
+			"description": "Percentage of endpoints with content type application/json",
+			"statistic": "85"
+		},
+		{
+			"level": "Info",
+			"reason": "Informational",
+			"site": "http://172.30.0.10:8000",
+			"key": "insight.endpoint.ctype.text/html",
+			"description": "Percentage of endpoints with content type text/html",
+			"statistic": "14"
+		},
+		{
+			"level": "Info",
+			"reason": "Informational",
+			"site": "http://172.30.0.10:8000",
+			"key": "insight.endpoint.method.GET",
+			"description": "Percentage of endpoints with method GET",
+			"statistic": "100"
+		},
+		{
+			"level": "Info",
+			"reason": "Informational",
+			"site": "http://172.30.0.10:8000",
+			"key": "insight.endpoint.total",
+			"description": "Count of total endpoints",
+			"statistic": "7"
+		}
+	],
+	"site":[ 
+		{
+			"@name": "http://172.30.0.10:8000",
+			"@host": "172.30.0.10",
+			"@port": "8000",
+			"@ssl": "false",
+			"alerts": [ 
+				{
+					"pluginid": "10109",
+					"alertRef": "10109",
+					"alert": "Modern Web Application",
+					"name": "Modern Web Application",
+					"riskcode": "0",
+					"confidence": "2",
+					"riskdesc": "Informational (Medium)",
+					"desc": "<p>The application appears to be a modern web application. If you need to explore it automatically then the Client Spider may well be more effective than the standard one.</p>",
+					"instances":[ 
+						{
+							"id": "4",
+							"uri": "http://172.30.0.10:8000",
+							"nodeName": "http:\/\/172.30.0.10:8000",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "<script>\nconst WHY = {\n  up: \"Video decodes through the tunnel.\",\n  degraded: \"The port answers but no video decodes. A camera or encoder problem, not the network.\",\n  blocked: \"Packets cross the VPN, the camera port does not answer. Look at the NAT rule, the firewall, the camera.\",\n  tunnel_down: \"No packet crosses the VPN. Look at WireGuard, the keys, the endpoint, the 4G link.\"\n};\nconst $ = id => document.getElementById(id);\nfunction light(prefix, ok, skipped, text, detail) {\n  $(\"d-\" + prefix).className = \"dot \" + (skipped ? \"skip\" : ok ? \"ok\" : \"bad\");\n  // a layer that was not checked has nothing to explain: showing the upstream error under it reads as a second failure\n  $(\"t-\" + prefix).textContent = text; $(\"x-\" + prefix).textContent = skipped ? \"\" : (detail || \"\");\n}\nasync function tick() {\n  try {\n    const [s, h] = await Promise.all([fetch(\"/status\").then(r => r.json()), fetch(\"/history?limit=60\").then(r => r.json())]);\n    const st = $(\"state\"); st.textContent = s.state.replace(\"_\", \" \"); st.className = \"state s-\" + s.state;\n    $(\"why\").textContent = WHY[s.state] || \"\";\n    light(\"tunnel\", s.tunnel_ok, false, s.tunnel_ok ? \"ping crosses\" : \"no reply\", \"last handshake \" + (s.handshake_age_s ?? \"never\") + \" s ago\");\n    const tunnelDown = !s.tunnel_ok;\n    light(\"tcp\", s.tcp_ok, tunnelDown, tunnelDown ? \"not checked\" : s.tcp_ok ? \"open\" : \"silent\", s.tcp_ms != null ? s.tcp_ms + \" ms\" : (tunnelDown ? \"\" : s.error));\n    light(\"rtsp\", s.rtsp_ok, tunnelDown || !s.tcp_ok, (tunnelDown || !s.tcp_ok) ? \"not checked\" : s.rtsp_ok ? (s.codec + \" \" + s.resolution) : \"no video\", s.rtsp_ok ? \"\" : (s.error || \"\"));\n    const cells = $(\"cells\"); cells.innerHTML = \"\";\n    h.slice().reverse().forEach(p => { const c = document.createElement(\"div\"); c.className = \"cell c-\" + p.state; c.title = p.ts + \" \" + p.state; cells.appendChild(c); });\n  } catch (e) { $(\"why\").textContent = \"dashboard cannot reach the API: \" + e; }\n}\nwindow.setCaption = t => { const c = $(\"caption\"); c.style.display = t ? \"block\" : \"none\"; c.textContent = t || \"\"; };\n// Behind the SSO proxy (security/iam/) this shows who is signed in and with which role; without it nothing is shown.\nfetch(\"/whoami\").then(r => r.json()).then(w => { if (w.user) { const e = $(\"who\"); e.style.display = \"block\"; e.textContent = \"Signed in as \" + w.user + \" (\" + (w.roles.join(\", \") || \"no role\") + \")\"; } }).catch(() => {});\ntick(); setInterval(tick, 1000);\n</script>",
+							"otherinfo": "No links have been found while there are scripts, which is an indication that this is a modern web application."
+						},
+						{
+							"id": "13",
+							"uri": "http://172.30.0.10:8000/",
+							"nodeName": "http:\/\/172.30.0.10:8000\/",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "<script>\nconst WHY = {\n  up: \"Video decodes through the tunnel.\",\n  degraded: \"The port answers but no video decodes. A camera or encoder problem, not the network.\",\n  blocked: \"Packets cross the VPN, the camera port does not answer. Look at the NAT rule, the firewall, the camera.\",\n  tunnel_down: \"No packet crosses the VPN. Look at WireGuard, the keys, the endpoint, the 4G link.\"\n};\nconst $ = id => document.getElementById(id);\nfunction light(prefix, ok, skipped, text, detail) {\n  $(\"d-\" + prefix).className = \"dot \" + (skipped ? \"skip\" : ok ? \"ok\" : \"bad\");\n  // a layer that was not checked has nothing to explain: showing the upstream error under it reads as a second failure\n  $(\"t-\" + prefix).textContent = text; $(\"x-\" + prefix).textContent = skipped ? \"\" : (detail || \"\");\n}\nasync function tick() {\n  try {\n    const [s, h] = await Promise.all([fetch(\"/status\").then(r => r.json()), fetch(\"/history?limit=60\").then(r => r.json())]);\n    const st = $(\"state\"); st.textContent = s.state.replace(\"_\", \" \"); st.className = \"state s-\" + s.state;\n    $(\"why\").textContent = WHY[s.state] || \"\";\n    light(\"tunnel\", s.tunnel_ok, false, s.tunnel_ok ? \"ping crosses\" : \"no reply\", \"last handshake \" + (s.handshake_age_s ?? \"never\") + \" s ago\");\n    const tunnelDown = !s.tunnel_ok;\n    light(\"tcp\", s.tcp_ok, tunnelDown, tunnelDown ? \"not checked\" : s.tcp_ok ? \"open\" : \"silent\", s.tcp_ms != null ? s.tcp_ms + \" ms\" : (tunnelDown ? \"\" : s.error));\n    light(\"rtsp\", s.rtsp_ok, tunnelDown || !s.tcp_ok, (tunnelDown || !s.tcp_ok) ? \"not checked\" : s.rtsp_ok ? (s.codec + \" \" + s.resolution) : \"no video\", s.rtsp_ok ? \"\" : (s.error || \"\"));\n    const cells = $(\"cells\"); cells.innerHTML = \"\";\n    h.slice().reverse().forEach(p => { const c = document.createElement(\"div\"); c.className = \"cell c-\" + p.state; c.title = p.ts + \" \" + p.state; cells.appendChild(c); });\n  } catch (e) { $(\"why\").textContent = \"dashboard cannot reach the API: \" + e; }\n}\nwindow.setCaption = t => { const c = $(\"caption\"); c.style.display = t ? \"block\" : \"none\"; c.textContent = t || \"\"; };\n// Behind the SSO proxy (security/iam/) this shows who is signed in and with which role; without it nothing is shown.\nfetch(\"/whoami\").then(r => r.json()).then(w => { if (w.user) { const e = $(\"who\"); e.style.display = \"block\"; e.textContent = \"Signed in as \" + w.user + \" (\" + (w.roles.join(\", \") || \"no role\") + \")\"; } }).catch(() => {});\ntick(); setInterval(tick, 1000);\n</script>",
+							"otherinfo": "No links have been found while there are scripts, which is an indication that this is a modern web application."
+						}
+					],
+					"count": "2",
+					"systemic": false,
+					"solution": "<p>This is an informational alert and so no changes are required.</p>",
+					"otherinfo": "<p>No links have been found while there are scripts, which is an indication that this is a modern web application.</p>",
+					"reference": "",
+					"cweid": "-1",
+					"wascid": "-1",
+					"sourceid": "8"
+				},
+				{
+					"pluginid": "10049",
+					"alertRef": "10049-1",
+					"alert": "Non-Storable Content",
+					"name": "Non-Storable Content",
+					"riskcode": "0",
+					"confidence": "2",
+					"riskdesc": "Informational (Medium)",
+					"desc": "<p>The response contents are not storable by caching components such as proxy servers. If the response does not contain sensitive, personal or user-specific information, it may benefit from being stored and cached, to improve performance.</p>",
+					"instances":[ 
+						{
+							"id": "1",
+							"uri": "http://172.30.0.10:8000",
+							"nodeName": "http:\/\/172.30.0.10:8000",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "no-store",
+							"otherinfo": ""
+						},
+						{
+							"id": "6",
+							"uri": "http://172.30.0.10:8000/favicon.ico",
+							"nodeName": "http:\/\/172.30.0.10:8000\/favicon.ico",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "no-store",
+							"otherinfo": ""
+						},
+						{
+							"id": "9",
+							"uri": "http://172.30.0.10:8000/history?limit=60",
+							"nodeName": "http:\/\/172.30.0.10:8000\/history (limit)",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "no-store",
+							"otherinfo": ""
+						},
+						{
+							"id": "2",
+							"uri": "http://172.30.0.10:8000/robots.txt",
+							"nodeName": "http:\/\/172.30.0.10:8000\/robots.txt",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "no-store",
+							"otherinfo": ""
+						},
+						{
+							"id": "0",
+							"uri": "http://172.30.0.10:8000/sitemap.xml",
+							"nodeName": "http:\/\/172.30.0.10:8000\/sitemap.xml",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "no-store",
+							"otherinfo": ""
+						}
+					],
+					"count": "5",
+					"systemic": true,
+					"solution": "<p>The content may be marked as storable by ensuring that the following conditions are satisfied:</p><p>The request method must be understood by the cache and defined as being cacheable (\"GET\", \"HEAD\", and \"POST\" are currently defined as cacheable)</p><p>The response status code must be understood by the cache (one of the 1XX, 2XX, 3XX, 4XX, or 5XX response classes are generally understood)</p><p>The \"no-store\" cache directive must not appear in the request or response header fields</p><p>For caching by \"shared\" caches such as \"proxy\" caches, the \"private\" response directive must not appear in the response</p><p>For caching by \"shared\" caches such as \"proxy\" caches, the \"Authorization\" header field must not appear in the request, unless the response explicitly allows it (using one of the \"must-revalidate\", \"public\", or \"s-maxage\" Cache-Control response directives)</p><p>In addition to the conditions above, at least one of the following conditions must also be satisfied by the response:</p><p>It must contain an \"Expires\" header field</p><p>It must contain a \"max-age\" response directive</p><p>For \"shared\" caches such as \"proxy\" caches, it must contain a \"s-maxage\" response directive</p><p>It must contain a \"Cache Control Extension\" that allows it to be cached</p><p>It must have a status code that is defined as cacheable by default (200, 203, 204, 206, 300, 301, 404, 405, 410, 414, 501).</p>",
+					"otherinfo": "",
+					"reference": "<p>https://datatracker.ietf.org/doc/html/rfc7234</p><p>https://datatracker.ietf.org/doc/html/rfc7231</p><p>https://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html</p>",
+					"cweid": "524",
+					"wascid": "13",
+					"sourceid": "1"
+				}
+			]
+		}
+	],
+	"sequences":[
+	]
+
+}

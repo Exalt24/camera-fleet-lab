@@ -1,0 +1,6 @@
+scan: OWASP ZAP baseline, passive (ghcr.io/zaproxy/zaproxy:2.17.0) 2026-11-15T14:00:22Z
+project: cfl-iam
+target: http://172.30.0.10:8000 (hub)
+  ZAP version 2.17.0, 2 alert types: Informational 2
+  - Modern Web Application [Informational], 2 instances
+  - Non-Storable Content [Informational], 5 instances

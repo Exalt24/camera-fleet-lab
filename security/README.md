@@ -59,12 +59,17 @@ It was written from Juniper's public documentation (the pages read are saved as 
 ```
 bash security/vuln/scan.sh --project cfl-iam                     # Nuclei against the lab's own services; results in docs/security/vuln/
 bash security/vuln/scan.sh --check-scope http://8.8.8.8          # only the scope guard: exit 2, refused
+bash security/vuln/zap.sh --project cfl-iam                      # a ZAP baseline scan (passive) of the hub and the SSO proxy; results in docs/security/vuln/zap/
+bash security/vuln/zap.sh --project cfl-iam --only hub --out docs/security/vuln/zap/rescan   # one service again, to check a fix
+node security/vuln/csp_browser_check.cjs                         # loads the dashboard in Chromium and checks the strict policy blocks nothing it needs
 python security/vuln/cve_triage.py --offline --out docs/security/vuln      # from the saved real answers in vuln/snapshots/, no network
 python security/vuln/cve_triage.py --live --resolve-images --save-snapshots --project cfl-iam   # ask NVD, CISA and FIRST now (about 5 minutes: NVD allows 5 requests per 30 s)
 bash security/vuln/triage_checks.sh cfl-iam > docs/security/vuln/triage_checks.txt   # the checks behind the written triage
 ```
 
 `scan.sh` runs the official Nuclei image (`projectdiscovery/nuclei:v3.11.1`) on the lab's Docker networks. It refuses any target that is not on a loopback address or in one of the lab's subnets, and refuses host names other than `localhost`, before it sends anything. Interactsh is off, so no scan traffic goes to an outside server. It exits non zero only when the scan itself fails.
+
+`zap.sh` runs `zap-baseline.py` from the official ZAP image (`ghcr.io/zaproxy/zaproxy:2.17.0`) on the lab's Docker networks: a ZAP baseline scan (passive) of the lab's own hub, and of the SSO proxy from its `/ping` page. ZAP spiders the service and reads every response with its passive rules; it sends no attack payloads and does not run its active scan. It uses the same scope guard as `scan.sh` (one function in `vuln/scope_guard.sh`, sourced by both, with the same tests run against both scripts). Reports are written as JSON, HTML and Markdown to `docs/security/vuln/zap/`. ZAP's own exit code 2 means it raised alerts, which is data, so the script exits 0 and only a failed scan exits 1. The first run raised two Medium alerts on the hub (the dashboard's Content-Security-Policy allowed inline script and style) and a cache alert; the hub now serves the page with a policy built from the hash of each inline block and sends `Cache-Control: no-store`, and the re-run is in `docs/security/vuln/zap/rescan/`. The alerts, verdicts and coverage limits are in [`docs/vuln-and-iam.md`](https://github.com/Exalt24/camera-fleet-lab/blob/master/docs/vuln-and-iam.md).
 
 `cve_triage.py` builds the component inventory from `docker-compose.yml`, the Dockerfiles and the pinned requirements, asks NVD for the CVEs whose affected range includes each version, adds the CISA KEV flag and the EPSS score, and ranks by one rule: known exploited first, then EPSS, then CVSS, then reachable before internal (published ports in the compose file). It writes a Markdown report and a JSON file. A component it cannot look up is reported UNKNOWN, never as clean. A CVE that NVD returns only because the component is the platform the vulnerable software runs on, or because the version is the first fixed release, is listed apart with the reason.
 
@@ -94,7 +99,7 @@ playbooks/        five YAML playbooks
 webhook_receiver.py  local stand-in for the notify step
 junos_review.py   the Junos reviewer;  junos/ six sample configs;  vendor-docs/ the Juniper pages read
 vendor-docs/compliance/   the NIST, HIPAA, AICPA and NYDFS pages read for the compliance map
-vuln/             scan.sh (Nuclei, scope guard), cve_triage.py, triage_checks.sh, snapshots/ (saved real NVD, KEV and EPSS answers)
+vuln/             scan.sh (Nuclei), zap.sh (ZAP baseline), scope_guard.sh (the one scope guard), zap_summary.py, csp_browser_check.cjs, cve_triage.py, triage_checks.sh, snapshots/ (saved real NVD, KEV and EPSS answers)
 iam/              realm-camera-fleet.json, setup.sh, check_iam.sh, check_iam.py, shots.cjs
 tests/            pytest files and run_mutations.py (mutation controls)
 COMPLIANCE-MAP.md
@@ -102,4 +107,4 @@ COMPLIANCE-MAP.md
 
 The live proofs are [`scripts/verify_security.py`](https://github.com/Exalt24/camera-fleet-lab/blob/master/scripts/verify_security.py). Its run files are in [`docs/security/`](https://github.com/Exalt24/camera-fleet-lab/tree/master/docs/security).
 
-The live proof for parts D and E is `security/vuln/scan.sh` plus `cve_triage.py --live`, and `security/iam/check_iam.sh`. Their run files are in [`docs/security/vuln/`](https://github.com/Exalt24/camera-fleet-lab/tree/master/docs/security/vuln) and [`docs/security/iam/`](https://github.com/Exalt24/camera-fleet-lab/tree/master/docs/security/iam).
+The live proof for parts D and E is `security/vuln/scan.sh`, `security/vuln/zap.sh` and `cve_triage.py --live`, and `security/iam/check_iam.sh`. Their run files are in [`docs/security/vuln/`](https://github.com/Exalt24/camera-fleet-lab/tree/master/docs/security/vuln) and [`docs/security/iam/`](https://github.com/Exalt24/camera-fleet-lab/tree/master/docs/security/iam).
