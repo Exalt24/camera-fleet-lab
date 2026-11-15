@@ -478,7 +478,7 @@ def fixed_version(cve: Cve, component: Component) -> str | None:
             if len(parts) < 6 or (parts[3], parts[4]) != (component.vendor, component.product):
                 continue
             end = m.get("versionEndExcluding")
-            if not end:
+            if not end or re.match(r"^\d{4}-\d{2}-\d{2}", str(end)):   # some entries bound a range by a date, which is not a release number
                 continue
             k = vkey(end)
             start = vkey(m["versionStartIncluding"]) if m.get("versionStartIncluding") else None

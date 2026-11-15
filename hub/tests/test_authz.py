@@ -76,3 +76,15 @@ def test_whoami_reports_the_proxy_identity(client):
 def test_the_admin_route_is_closed_when_the_peer_is_not_the_proxy(monkeypatch):
     c = _client(monkeypatch, "172.30.0.30")
     assert c.get("/admin/probe-config", headers={"X-Forwarded-Groups": "fleet-admin"}).status_code == 403
+
+
+def test_every_answer_carries_the_security_headers(client):
+    r = client.get("/whoami")
+    for name in ("X-Content-Type-Options", "X-Frame-Options", "Referrer-Policy", "Content-Security-Policy", "Permissions-Policy"):
+        assert name in r.headers, name
+    assert r.headers["X-Frame-Options"] == "DENY" and "frame-ancestors 'none'" in r.headers["Content-Security-Policy"]
+
+
+def test_the_api_docs_are_off_by_default(client):
+    for path in ("/docs", "/redoc", "/openapi.json"):
+        assert client.get(path).status_code == 404, path

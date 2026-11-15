@@ -53,11 +53,12 @@ scope_ok() {
 
 usage() { sed -n '2,16p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; }
 
-PROJECT=""; OUT="$ROOT/docs/security/vuln"; EXTRA=(); CHECK_ONLY=0
+PROJECT=""; OUT="$ROOT/docs/security/vuln"; EXTRA=(); CHECK_ONLY=0; TEMPLATE_IDS=""
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --project) PROJECT="$2"; shift 2 ;;
     --out) OUT="$2"; shift 2 ;;
+    --template-id) TEMPLATE_IDS="$2"; shift 2 ;;      # run only these templates, e.g. to check a fix (comma separated)
     --target) EXTRA+=("$2"); shift 2 ;;
     --check-scope) CHECK_ONLY=1; EXTRA+=("$2"); shift 2 ;;
     -h|--help) usage; exit 0 ;;
@@ -108,13 +109,13 @@ export MSYS_NO_PATHCONV=1
 CID="$(docker create --network "${NETS[0]}" -v "cfl-nuclei-templates:/root/nuclei-templates" -v "$HOST_OUT:/out" \
   "$NUCLEI_IMAGE" -l /out/.targets.txt -jsonl -o /out/nuclei_results.jsonl \
   -rate-limit 40 -concurrency 10 -timeout 10 -retries 1 -no-color -no-interactsh \
-  -etags dos,fuzz -exclude-severity unknown 2>/dev/null)" || { echo "could not create the nuclei container" >&2; exit 1; }
+  -etags dos,fuzz -exclude-severity unknown ${TEMPLATE_IDS:+-id "$TEMPLATE_IDS"} 2>/dev/null)" || { echo "could not create the nuclei container" >&2; exit 1; }
 for n in "${NETS[@]:1}"; do docker network connect "$n" "$CID" || { docker rm -f "$CID" >/dev/null; echo "could not attach nuclei to $n" >&2; exit 1; }; done
 echo "nuclei image: $NUCLEI_IMAGE   started: $STAMP"
 
 docker start -a "$CID" > "$OUT/nuclei_run.log" 2>&1
 RC=$?
-VER="$(docker run --rm "$NUCLEI_IMAGE" -version 2>&1 | tr -d '\r' | grep -i -E 'nuclei|version' | head -n3 | tr '\n' ' ')"
+VER="$(docker run --rm "$NUCLEI_IMAGE" -version 2>&1 | sed 's/\x1b\[[0-9;]*m//g' | tr -d '\r' | grep -i 'Engine Version' | head -n1)"
 docker rm -f "$CID" >/dev/null 2>&1
 rm -f "$OUT/.targets.txt"
 

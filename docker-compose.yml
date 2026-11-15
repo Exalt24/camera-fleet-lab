@@ -143,7 +143,8 @@ services:
       - --http-address=0.0.0.0:4180
       - --cookie-secure=false                          # plain http on loopback
       - --cookie-expire=30m
-      - --cookie-refresh=45s                           # shorter than the 60 s token, so an expired session is renewed or ended
+      - --cookie-samesite=lax                          # Strict would break the return from the Keycloak login
+      - --cookie-refresh=45s                          # shorter than the 60 s token, so an expired session is renewed or ended
       - --skip-jwt-bearer-tokens=true
       - --oidc-extra-audience=camera-fleet-dashboard
       - --skip-provider-button=true                    # an unauthenticated request is redirected straight to the Keycloak login

@@ -270,6 +270,12 @@ def test_fixed_version_is_the_smallest_end_excluding_above_the_installed_version
     assert ct.fixed_version(_cve_with([m("0.70.0"), m("0.65.2")]), FASTAPI) == "0.65.2"
 
 
+def test_a_date_is_never_named_as_the_fixed_version():
+    # seen in the real FFmpeg answers: a range ended by 2025-01-13, which is not a release
+    m = {"vulnerable": True, "criteria": "cpe:2.3:a:tiangolo:fastapi:*:*:*:*:*:*:*:*", "versionEndExcluding": "2025-01-13"}
+    assert ct.fixed_version(_cve_with([m]), FASTAPI) is None
+
+
 def test_fixed_version_ignores_other_products_and_ranges_that_do_not_contain_the_version():
     other = {"vulnerable": True, "criteria": "cpe:2.3:a:someone:else:*:*:*:*:*:*:*:*", "versionEndExcluding": "9.9"}
     before = {"vulnerable": True, "criteria": "cpe:2.3:a:tiangolo:fastapi:*:*:*:*:*:*:*:*", "versionStartIncluding": "0.70.0", "versionEndExcluding": "0.80.0"}

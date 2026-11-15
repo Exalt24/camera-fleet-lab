@@ -76,7 +76,33 @@ async def lifespan(app: FastAPI):
         await engine.dispose()
 
 
-app = FastAPI(title="camera fleet lab", lifespan=lifespan)
+# The interactive API docs and the OpenAPI document describe every route to anyone who can reach the port. They are off unless API_DOCS=1
+# (a Nuclei scan of the lab flagged both, see docs/vuln-and-iam.md).
+_DOCS_ON = os.environ.get("API_DOCS") == "1"
+app = FastAPI(title="camera fleet lab", lifespan=lifespan,
+              docs_url="/docs" if _DOCS_ON else None, redoc_url="/redoc" if _DOCS_ON else None, openapi_url="/openapi.json" if _DOCS_ON else None)
+
+# The dashboard is one page with an inline script and style, so the policy allows 'self' and inline but nothing from another origin.
+SECURITY_HEADERS = {
+    "X-Content-Type-Options": "nosniff",
+    "X-Frame-Options": "DENY",
+    "Referrer-Policy": "no-referrer",
+    "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
+    "Cross-Origin-Opener-Policy": "same-origin",
+    "Cross-Origin-Resource-Policy": "same-origin",
+    "Cross-Origin-Embedder-Policy": "require-corp",
+    "X-Permitted-Cross-Domain-Policies": "none",
+    "Content-Security-Policy": ("default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; "
+                                "connect-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"),
+}
+
+
+@app.middleware("http")
+async def add_security_headers(request: Request, call_next):
+    response = await call_next(request)
+    for name, value in SECURITY_HEADERS.items():
+        response.headers.setdefault(name, value)
+    return response
 
 
 @app.get("/", response_class=HTMLResponse)
