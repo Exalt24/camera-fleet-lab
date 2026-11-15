@@ -1,0 +1,21 @@
+# A login succeeded from an address that failed repeatedly just before (rule 100300).
+name: brute-force-success
+description: Treat the source address as hostile, tell the on-call channel, block it at the site router, keep the evidence.
+match:
+  rule_ids: [100300]
+steps:
+  - name: enrich
+    type: enrich
+  - name: notify-oncall
+    type: notify
+    text: "Successful ssh login after a brute force. The source address is being blocked at the site router."
+    timeout_s: 5
+    retries: 2
+    backoff_s: 1
+  - name: block-source
+    type: block
+    timeout_s: 20
+    retries: 1
+    backoff_s: 2
+  - name: open-ticket
+    type: ticket

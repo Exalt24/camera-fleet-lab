@@ -1,0 +1,21 @@
+# The same address swept the router's ports and then logged in over ssh (rule 100301).
+name: sweep-then-login
+description: A scan followed by a login from one address is a targeted attack. Notify, block, ticket.
+match:
+  rule_ids: [100301]
+steps:
+  - name: enrich
+    type: enrich
+  - name: notify-oncall
+    type: notify
+    text: "An address that swept the site router then logged in over ssh. Blocking it."
+    timeout_s: 5
+    retries: 2
+    backoff_s: 1
+  - name: block-source
+    type: block
+    timeout_s: 20
+    retries: 1
+    backoff_s: 2
+  - name: open-ticket
+    type: ticket

@@ -29,3 +29,23 @@ jobs:
         run: pip install -r requirements.txt
       - name: Test
         run: python -m pytest -q
+
+  # The security layer's offline checks. Nothing here needs Docker or a Wazuh manager: the playbook engine and the Junos
+  # reviewer are tested, then every mutation control must turn a test red. The wazuh-logtest scenarios skip themselves when no
+  # manager container is running, so they stay a local check (scripts/verify_security.py).
+  security-offline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: security/requirements.txt
+      - name: Install
+        run: pip install -r security/requirements.txt
+      - name: Tests
+        run: python -m pytest security/tests -q
+      - name: Mutation controls
+        run: python security/tests/run_mutations.py

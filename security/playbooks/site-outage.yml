@@ -1,0 +1,16 @@
+# The monitor reports the camera site blocked (100101), unreachable (100102) or the tunnel flapping (100103).
+name: site-outage
+description: An operations alert. Notify the channel and open a ticket. Nothing here is blocked.
+match:
+  rule_ids: [100101, 100102, 100103]
+steps:
+  - name: enrich
+    type: enrich
+  - name: notify-oncall
+    type: notify
+    text: "Camera site state change from the fleet monitor."
+    timeout_s: 5
+    retries: 2
+    backoff_s: 1
+  - name: open-ticket
+    type: ticket

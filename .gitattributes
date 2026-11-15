@@ -12,3 +12,6 @@ Dockerfile* text eol=lf
 *.gif binary
 /edge/Dockerfile text eol=lf
 /hub/Dockerfile text eol=lf
+*.set text eol=lf
+/security/wazuh/*.xml text eol=lf
+/security/wazuh/*.conf text eol=lf

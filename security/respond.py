@@ -412,7 +412,7 @@ def step_block(step: dict, alert: dict, ctx: Context, timeout: float) -> dict:
     except ValueError:
         raise PermanentError(f"no valid source address to block ({ip!r})") from None
     if ctx.is_protected(addr):
-        raise PermanentError(f"{ip} is a protected address and is never blocked")
+        return {"skipped": f"{ip} is a protected address and is never blocked"}
     cmd = block_command(ctx.project, str(addr))
     if not ctx.apply:
         return {"dry_run": True, "would_run": " ".join(cmd)}

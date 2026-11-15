@@ -1,0 +1,16 @@
+# A sweep was followed by the camera site going blocked or tunnel_down (rule 100220).
+name: outage-after-sweep
+description: Page the on-call channel at once and open a ticket. There is no source address on an outage event, so nothing is blocked.
+match:
+  rule_ids: [100220]
+steps:
+  - name: enrich
+    type: enrich
+  - name: notify-oncall
+    type: notify
+    text: "The camera site went down within minutes of a port sweep. Check the edge router first."
+    timeout_s: 5
+    retries: 3
+    backoff_s: 1
+  - name: open-ticket
+    type: ticket

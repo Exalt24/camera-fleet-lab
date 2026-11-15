@@ -1,0 +1,21 @@
+# One address hit many closed ports on the site router (rule 100210).
+name: port-sweep
+description: Record and report the sweep, and block the address unless it is one of the lab's own (the block step skips protected addresses).
+match:
+  rule_ids: [100210]
+steps:
+  - name: enrich
+    type: enrich
+  - name: notify-oncall
+    type: notify
+    text: "Port sweep against the site router."
+    timeout_s: 5
+    retries: 2
+    backoff_s: 1
+  - name: block-source
+    type: block
+    timeout_s: 20
+    retries: 1
+    backoff_s: 2
+  - name: open-ticket
+    type: ticket
