@@ -314,6 +314,14 @@ def test_the_bundle_has_the_alert_the_log_lines_and_a_manifest_that_catches_edit
     assert "context.log is missing" in rs.verify_bundle(folder)[1]
 
 
+def test_bundle_and_audit_files_are_written_with_lf_on_every_platform(tmp_path):
+    rec = Recorder()
+    rig = Rig(tmp_path, apply=True, http=rec.http, runner=rec.run)
+    rig.engine.handle(alert())
+    files = list((tmp_path / "evidence" / "1.1").iterdir()) + [tmp_path / "audit.jsonl"] + list((tmp_path / "tickets").iterdir())
+    assert files and all(b"\r" not in f.read_bytes() for f in files)     # git rewrites CRLF, which would break the manifest hashes
+
+
 def test_a_bundle_folder_without_a_manifest_fails(tmp_path):
     assert rs.verify_bundle(tmp_path) == (False, ["MANIFEST.sha256 is missing"])
 

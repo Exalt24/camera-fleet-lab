@@ -34,7 +34,7 @@
     {
       "check": "the monitor reports the camera up through the tunnel",
       "ok": true,
-      "detail": "after 0.0s"
+      "detail": "after 0.1s"
     },
     {
       "check": "planted planted/blocked_alone.log fires ['100101']",
@@ -84,12 +84,12 @@
     {
       "check": "the monitor reports blocked",
       "ok": true,
-      "detail": "after 4.6s"
+      "detail": "after 5.6s"
     },
     {
       "check": "rule 100101 (site blocked) fired on the real transition",
       "ok": true,
-      "detail": "2.9s after the transition"
+      "detail": "4.5s after the transition"
     },
     {
       "check": "the monitor recovers once the rule is restored",
@@ -99,12 +99,12 @@
     {
       "check": "the monitor reported tunnel_down three times",
       "ok": true,
-      "detail": "[6.1, 6.7, 6.7]"
+      "detail": "[6.2, 6.8, 6.7]"
     },
     {
       "check": "rule 100103 (flapping tunnel) fired",
       "ok": true,
-      "detail": "0.2s after the third drop"
+      "detail": "0.4s after the third drop"
     },
     {
       "check": "rule 100102 (tunnel down) fired for the first two drops; the flapping rule takes the third",
@@ -119,17 +119,17 @@
     {
       "check": "rule 100210 (port sweep) fired on the measured sweep",
       "ok": true,
-      "detail": "sweep took 14.9s, alert 0.3s after it"
+      "detail": "sweep took 25.7s, alert 0.9s after it"
     },
     {
       "check": "the monitor reports blocked",
       "ok": true,
-      "detail": "after 7.7s"
+      "detail": "after 3.6s"
     },
     {
       "check": "rule 100220 (sweep, then an outage) fired on the real sequence",
       "ok": true,
-      "detail": "3.0s after the transition"
+      "detail": "4.1s after the transition"
     },
     {
       "check": "the monitor recovers once the rule is restored",
@@ -144,7 +144,7 @@
     {
       "check": "rule 100300 (brute force that worked) fired on the simulated log",
       "ok": true,
-      "detail": "3.3s"
+      "detail": "3.4s"
     },
     {
       "check": "simulated sweep then login written",
@@ -154,7 +154,7 @@
     {
       "check": "rule 100301 (sweep then ssh login) fired on the simulated logs",
       "ok": true,
-      "detail": "1.7s"
+      "detail": "1.6s"
     },
     {
       "check": "rule 100210 also fired on the simulated sweep",
@@ -265,18 +265,18 @@
       "benign_clean": 2
     },
     "measured_blocked_alone": {
-      "blocked_after_s": 4.6,
-      "alert_100101_after_s": 2.9
+      "blocked_after_s": 5.6,
+      "alert_100101_after_s": 4.5
     },
     "measured_sweep": {
       "ports_probed": 12,
-      "probe_seconds": 14.9,
-      "alert_seconds_after": 0.3,
+      "probe_seconds": 25.7,
+      "alert_seconds_after": 0.9,
       "drop_lines": "16"
     },
     "measured_outage": {
-      "blocked_after_s": 7.7,
-      "alert_100220_after_s": 3.0
+      "blocked_after_s": 3.6,
+      "alert_100220_after_s": 4.1
     },
     "alerts": {
       "lab_alerts": 9,

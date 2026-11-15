@@ -15,3 +15,4 @@ Dockerfile* text eol=lf
 *.set text eol=lf
 /security/wazuh/*.xml text eol=lf
 /security/wazuh/*.conf text eol=lf
+/docs/security/evidence_*/** -text

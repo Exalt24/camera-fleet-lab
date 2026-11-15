@@ -73,6 +73,12 @@ def sha256_file(path: Path) -> str:
     return h.hexdigest()
 
 
+def write_lf(path: Path, text: str) -> None:
+    """Write text as UTF-8 with LF line endings on every platform. The evidence manifest hashes the bytes of these files, so a
+    Windows run must not write CRLF (git then rewrites it and the manifest no longer matches the checked out file)."""
+    Path(path).write_bytes(text.encode("utf-8"))
+
+
 def call_with_timeout(fn, timeout_s: float):
     """Run fn() and give up after timeout_s. The worker is a daemon thread, so a handler that ignores its own timeout can
     not keep the responder alive, and the caller always gets control back on time."""
@@ -113,8 +119,8 @@ class Audit:
         with self.lock:
             entry = {"ts": now_iso(), **fields, "prev": self.prev}
             line = json.dumps(entry, sort_keys=True, ensure_ascii=False)
-            with open(self.path, "a", encoding="utf-8") as fh:
-                fh.write(line + "\n")
+            with open(self.path, "ab") as fh:
+                fh.write(line.encode("utf-8") + b"\n")
             self.prev = sha256_bytes(line.encode("utf-8"))
         return entry
 
@@ -396,7 +402,7 @@ def step_ticket(step: dict, alert: dict, ctx: Context, timeout: float) -> dict:
         return {"dry_run": True, "would_write": f"tickets/{alert.get('id')}.json", "ticket": ticket}
     folder = ctx.state_dir / "tickets"
     folder.mkdir(parents=True, exist_ok=True)
-    (folder / f"{alert.get('id')}.json").write_text(json.dumps(ticket, indent=2), encoding="utf-8")
+    write_lf(folder / f"{alert.get('id')}.json", json.dumps(ticket, indent=2))
     return {"wrote": f"tickets/{alert.get('id')}.json"}
 
 
@@ -504,14 +510,14 @@ class Engine:
 def write_bundle(state_dir: Path, alert: dict, summary: dict, lines: list[str], audit_path: Path) -> Path:
     folder = Path(state_dir) / "evidence" / str(alert["id"])
     folder.mkdir(parents=True, exist_ok=True)
-    (folder / "alert.json").write_text(json.dumps(alert, indent=2, sort_keys=True), encoding="utf-8")
-    (folder / "context.log").write_text("\n".join(lines) + ("\n" if lines else ""), encoding="utf-8")
-    (folder / "playbook_result.json").write_text(json.dumps(summary, indent=2, sort_keys=True), encoding="utf-8")
+    write_lf(folder / "alert.json", json.dumps(alert, indent=2, sort_keys=True))
+    write_lf(folder / "context.log", "\n".join(lines) + ("\n" if lines else ""))
+    write_lf(folder / "playbook_result.json", json.dumps(summary, indent=2, sort_keys=True))
     mine = [ln for ln in Path(audit_path).read_text(encoding="utf-8").splitlines() if f'"alert_id": "{alert["id"]}"' in ln]
-    (folder / "audit_excerpt.jsonl").write_text("\n".join(mine) + "\n", encoding="utf-8")
+    write_lf(folder / "audit_excerpt.jsonl", "\n".join(mine) + "\n")
     names = ["alert.json", "context.log", "playbook_result.json", "audit_excerpt.jsonl"]
     manifest = "".join(f"{sha256_file(folder / n)}  {n}\n" for n in names)
-    (folder / "MANIFEST.sha256").write_text(manifest, encoding="utf-8")
+    write_lf(folder / "MANIFEST.sha256", manifest)
     return folder
 
 

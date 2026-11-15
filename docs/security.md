@@ -19,7 +19,7 @@ flowchart LR
   resp --> out["audit trail, evidence bundles,<br/>webhook, iptables in the edge, tickets"]
 ```
 
-The existing stack is not changed. The three new services (`wazuh`, `fw-sensor`, `fleet-exporter`) sit behind the compose profile `security`, so `docker compose up` and `scripts/verify.py` behave as before. `fw-sensor` joins the edge container's network namespace (`network_mode: service:edge`) and appends an NFLOG rule after the policy's own rules, which is why `edge/` is untouched. `fleet-exporter` reads the hub's existing `/history` API, so `hub/` is untouched too.
+The existing stack is not changed. The three new services (`wazuh`, `fw-sensor`, `fleet-exporter`) sit behind the compose profile `security`, so `docker compose up` and `scripts/verify.py` behave as before. `fw-sensor` joins the edge container's network namespace (`network_mode: service:edge`) and appends an NFLOG rule after the policy's own rules, which is why `edge/` is untouched. `fleet-exporter` reads the hub's existing `/history` API, so `hub/` is untouched too. With the profile off, `scripts/verify.py` still passed 16 of 16 checks on this branch (run after the security work, on the four original containers only; its `docs/last_run.json` was not replaced).
 
 Measured and simulated sources are kept apart on purpose. `fleet_transitions.jsonl` and `edge_firewall.log` are written from the running lab. `ssh_auth.log` and `sim_firewall.log` are written by `security/simulate/ssh_auth_gen.py`, because the lab has no ssh server and no internet-facing router. Wazuh records the source file of each alert in its `location` field, so an alert says which kind it is.
 
@@ -47,22 +47,22 @@ All from one run on one machine, so read the times as orders of magnitude. Sourc
 |---|---|
 | `wazuh-logtest`, planted logs | 5 files, 7 alerting rules, every rule fired as listed in `security/logs/EXPECTED.json` |
 | `wazuh-logtest`, benign logs | 2 files (a quiet run of 8 lines and a near-miss file of 34 lines): none of the lab's rules fired. Stock rules 5715 and 5760 (an accepted login, a failed login) did |
-| live: a real `blocked` fault on its own | monitor `blocked` after 4.6 s, rule 100101 alerted 2.9 s later |
-| live: three real VPN drops | `tunnel_down` after 6.1 s, 6.7 s and 6.7 s; rule 100102 alerted twice and rule 100103 alerted 0.2 s after the third drop |
-| live: a real sweep of 12 closed ports from the hub | the sweep took 14.9 s, rule 100210 alerted 0.3 s after it |
-| live: the real fault again, after the sweep | monitor `blocked` after 7.7 s, rule 100220 alerted 3.0 s later |
-| live: generated brute force, then generated sweep and login | rule 100300 alerted 3.3 s after the lines were written, rule 100210 (generated sweep) and rule 100301 1.7 s after the login |
+| live: a real `blocked` fault on its own | monitor `blocked` after 5.6 s, rule 100101 alerted 4.5 s later |
+| live: three real VPN drops | `tunnel_down` after 6.2 s, 6.8 s and 6.7 s; rule 100102 alerted twice and rule 100103 alerted 0.4 s after the third drop |
+| live: a real sweep of 12 closed ports from the hub | the sweep took 25.7 s, rule 100210 alerted 0.9 s after it |
+| live: the real fault again, after the sweep | monitor `blocked` after 3.6 s, rule 100220 alerted 4.1 s later |
+| live: generated brute force, then generated sweep and login | rule 100300 alerted 3.4 s after the lines were written; rule 100210 alerted on the generated sweep and rule 100301 1.6 s after the login |
 | live: `alerts.json` | 9 lab alerts: 100101 once, 100102 twice, 100103 once, 100210 twice, 100220 once, 100300 once, 100301 once; 6 from the running lab, 3 from generated logs |
 | `respond.py`, dry run over those 9 alerts | 9 done, `iptables` identical afterwards, no tickets, no posts |
 | `respond.py --apply` | 9 notifications received (one retried after a 500), 9 tickets, both generated attacker addresses blocked in the edge container and read back, the hub's tunnel address left alone, the monitor still `up` |
 | `respond.py --apply` again | 9 duplicates ignored, nothing acted on |
 | audit trail and bundles | 108 audit lines, hash chain intact; 9 evidence bundles, all manifests verify |
 | `scripts/verify_security.py` | 51 of 51 checks |
-| `pytest security/tests` | 137 passed (61 Junos, 51 playbook engine including 20 seeded random runs, 15 Wazuh rule checks of which 7 run `wazuh-logtest`, 10 sensor and generator) |
+| `pytest security/tests` | 138 passed (61 Junos, 52 playbook engine including 20 seeded random runs, 15 Wazuh rule checks of which 7 run `wazuh-logtest`, 10 sensor and generator) |
 | `run_mutations.py` | 29 of 29 mutants caught (16 Junos rules switched off one by one, 13 playbook engine breakages) |
 | `junos_review.py` on the six samples | 27 findings, matching the 27 planted faults; the two clean configs report nothing |
 
-One thing the table hides: the first four live runs passed 41 of 48, 42 of 48, 43 of 48 and 47 of 51 checks. The failures were findings about how the manager behaves live (items 1, 2, 7, 8 and 9 below), plus a check that ran before the manager had started its daemons. The fifth run is the 51 of 51 above.
+One thing the table hides: the first four live runs passed 41 of 48, 42 of 48, 43 of 48 and 47 of 51 checks. The failures were findings about how the manager behaves live (items 1, 2, 7, 8 and 9 below), plus a check that ran before the manager had started its daemons. The fifth run is the 51 of 51 above, and a sixth, run after the bundle files were changed to be written with LF line endings, also passed 51 of 51 (the table is from that one).
 
 ## What I got wrong with Wazuh
 

@@ -32,7 +32,7 @@ RESPOND_MUTANTS = [
     ("make a dry run act (the block step runs iptables in dry run)",
      'if not ctx.apply:\n        return {"dry_run": True, "would_run"', 'if False:\n        return {"dry_run": True, "would_run"'),
     ("drop the audit write (nothing reaches audit.jsonl)",
-     'with open(self.path, "a", encoding="utf-8") as fh:\n                fh.write(line + "\\n")', "pass"),
+     'with open(self.path, "ab") as fh:\n                fh.write(line.encode("utf-8") + b"\\n")', "pass"),
     ("do not enforce the step timeout",
      "result = call_with_timeout(lambda: handler(step, alert, self.ctx, timeout), timeout)", "result = handler(step, alert, self.ctx, timeout)"),
     ("retry a 4xx answer (a bad request is retried)",
