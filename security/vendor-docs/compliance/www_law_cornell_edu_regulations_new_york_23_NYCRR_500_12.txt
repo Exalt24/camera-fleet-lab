@@ -1,0 +1,37 @@
+URL: https://www.law.cornell.edu/regulations/new-york/23-NYCRR-500.12
+STATUS: 200
+
+This website uses cookies to ensure you get the best experience on our website. Learn more
+Got it!
+Skip to main content
+Cornell Law School
+Search Cornell
+  
+About LII
+Get the law
+Lawyer directory
+Legal encyclopedia
+Help out
+
+
+
+LII State Regulations New York Codes,Rules,and Regulations N.Y. Comp. Codes R. & Regs. tit. 23 - FINANCIAL SERVICES Chapter I - Regulations of the Superintendent of Financial Services Part 500 - CYBERSECURITY REQUIREMENTS FOR FINANCIAL SERVICES COMPANIES N.Y. Comp. Codes R. & Regs. Tit. 23 § 500.12 - Multi-Factor Authentication
+N.Y. Comp. Codes R. & Regs. Tit. 23 § 500.12 - Multi-Factor Authentication
+State Regulations
+Compare
+(a) Multi-factor authentication shall be utilized for any individual accessing any information systems of a covered entity, unless the covered entity qualifies for a limited exemption pursuant to section 500.19(a) of this Part in which case multi-factor authentication shall be utilized for:
+(1) remote access to the covered entity's information systems;
+(2) remote access to third-party applications, including but not limited to those that are cloud based, from which nonpublic information is accessible; and
+(3) all privileged accounts other than service accounts that prohibit interactive login.
+(b) If the covered entity has a CISO, the CISO may approve in writing the use of reasonably equivalent or more secure compensating controls. Such controls shall be reviewed periodically, but at a minimum annually.
+Notes
+N.Y. Comp. Codes R. & Regs. Tit. 23 § 500.12
+Adopted, New York State Register March 1, 2017/Volume XXXIX, Issue 09, eff. 3/1/2017 Amended New York State Register November 1, 2023/Volume XLV, Issue 44, eff. 11/1/2023
+ State Regulations Toolbox
+Accessibility
+About LII
+Contact us
+Advertise here
+Help
+Terms of use
+Privacy

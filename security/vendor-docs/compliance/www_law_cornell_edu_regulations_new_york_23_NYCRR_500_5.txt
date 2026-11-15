@@ -1,0 +1,40 @@
+URL: https://www.law.cornell.edu/regulations/new-york/23-NYCRR-500.5
+STATUS: 200
+
+This website uses cookies to ensure you get the best experience on our website. Learn more
+Got it!
+Skip to main content
+Cornell Law School
+Search Cornell
+  
+About LII
+Get the law
+Lawyer directory
+Legal encyclopedia
+Help out
+
+
+
+LII State Regulations New York Codes,Rules,and Regulations N.Y. Comp. Codes R. & Regs. tit. 23 - FINANCIAL SERVICES Chapter I - Regulations of the Superintendent of Financial Services Part 500 - CYBERSECURITY REQUIREMENTS FOR FINANCIAL SERVICES COMPANIES N.Y. Comp. Codes R. & Regs. Tit. 23 § 500.5 - Vulnerability management
+N.Y. Comp. Codes R. & Regs. Tit. 23 § 500.5 - Vulnerability management
+State Regulations
+Compare
+
+Each covered entity shall, in accordance with its risk assessment, develop and implement written policies and procedures for vulnerability management that are designed to assess and maintain the effectiveness of its cybersecurity program. These policies and procedures shall be designed to ensure that covered entities:
+
+(a) conduct, at a minimum:
+(1) penetration testing of their information systems from both inside and outside the information systems' boundaries by a qualified internal or external party at least annually; and
+(2) automated scans of information systems, and a manual review of systems not covered by such scans, for the purpose of discovering, analyzing and reporting vulnerabilities at a frequency determined by the risk assessment, and promptly after any material system changes;
+(b) are promptly informed of new security vulnerabilities by having a monitoring process in place; and
+(c) timely remediate vulnerabilities, giving priority to vulnerabilities based on the risk they pose to the covered entity.
+Notes
+N.Y. Comp. Codes R. & Regs. Tit. 23 § 500.5
+Adopted, New York State Register March 1, 2017/Volume XXXIX, Issue 09, eff. 3/1/2017 Amended New York State Register November 1, 2023/Volume XLV, Issue 44, eff. 11/1/2023
+ State Regulations Toolbox
+Accessibility
+About LII
+Contact us
+Advertise here
+Help
+Terms of use
+Privacy

@@ -30,8 +30,9 @@ jobs:
       - name: Test
         run: python -m pytest -q
 
-  # The security layer's offline checks. Nothing here needs Docker or a Wazuh manager: the playbook engine and the Junos
-  # reviewer are tested, then every mutation control must turn a test red. The wazuh-logtest scenarios skip themselves when no
+  # The security layer's offline checks. Nothing here needs Docker, a Wazuh manager, Keycloak or Nuclei and nothing calls the
+  # network: the playbook engine, the Junos reviewer, the CVE triage (saved real NVD, KEV and EPSS answers), the realm file and the
+  # scan scope guard are tested, then every mutation control must turn a test red. The wazuh-logtest scenarios skip themselves when no
   # manager container is running, so they stay a local check (scripts/verify_security.py).
   security-offline:
     runs-on: ubuntu-latest
@@ -45,7 +46,9 @@ jobs:
           cache-dependency-path: security/requirements.txt
       - name: Install
         run: pip install -r security/requirements.txt
-      - name: Tests
+      - name: Tests (playbook engine, Junos reviewer, CVE triage, IAM realm file, scan scope guard)
         run: python -m pytest security/tests -q
       - name: Mutation controls
         run: python security/tests/run_mutations.py
+      - name: Shell scripts parse
+        run: bash -n security/vuln/scan.sh && bash -n security/iam/setup.sh && bash -n security/iam/check_iam.sh

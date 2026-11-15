@@ -307,7 +307,7 @@ def main() -> int:
     # 3. viewer: password, then OTP set up, then dashboard ---------------------------------------------------------------
     run.say("viewer (fleet-viewer)")
     bv = Browser()
-    viewer_secret = enrol(bv, run, "viewer")
+    enrol(bv, run, "viewer")
     _, _, who = bv.follow(PROXY + "/whoami")
     run.check('"viewer.sample"' in who and "fleet-viewer" in who and "fleet-admin" not in who, "the hub sees the viewer with the fleet-viewer role only", who.strip()[:80])
     status, _, body = bv.follow(PROXY + "/status")
@@ -354,7 +354,6 @@ def main() -> int:
             refused = status
             break
         time.sleep(1)
-    waited = time.time() - t0
     run.check(refused is not None, "the token is no longer honoured once past its lifespan", f"status {refused} (sent back to login) {int(time.time() - claims['iat'])} s after it was issued")
     # the browser session is renewed with the refresh token rather than living on past the token
     status, url, body = bo.follow(PROXY + "/status")
