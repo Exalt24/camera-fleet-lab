@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Mutation controls for the two pieces of security code that have tests: junos_review.py and respond.py.
+"""Mutation controls for the pieces of security code that have tests: junos_review.py, respond.py, vuln/cve_triage.py and the Keycloak realm file.
 
 For each mutant this copies the module to a temp folder, changes it in one known way, points the module's own test file at the
 copy (JUNOS_REVIEW_PATH or RESPOND_PATH) and runs pytest. A mutant is CAUGHT when pytest fails. A mutant that leaves every test
@@ -7,6 +7,8 @@ green means a test is missing, and this script exits 1.
 
   junos_review.py  16 mutants, one per rule: the rule's function is made to report nothing
   respond.py       13 mutants: remove the idempotency check, remove the retry, make a dry run act, drop the audit write, and so on
+  cve_triage.py    16 mutants: break the ranking order, drop the KEV boost, treat a failed lookup as clean, drop the exposure rule, and so on
+  realm JSON       12 mutants: remove each setting (OTP required action, brute force detection, short token lifespan, no committed secret, ...) from a copy
 
     python security/tests/run_mutations.py [--save docs/security-mutation-run.txt]
 """
@@ -51,6 +53,57 @@ RESPOND_MUTANTS = [
      'entry = {"ts": now_iso(), **fields, "prev": self.prev}', 'entry = {"ts": now_iso(), **fields, "prev": GENESIS_HASH}'),
     ("repeat finished steps when a failed alert is run again",
      "if self.ledger.step_done(alert_id, self.mode, name):", "if False:"),
+]
+
+
+CVE_MUTANTS = [
+    ("break the ranking order (CVSS compared before EPSS)",
+     "return (kev_group, epss, cvss, reach, f.id)", "return (kev_group, cvss, epss, reach, f.id)"),
+    ("drop the KEV boost (a known exploited CVE ranks like any other)",
+     "kev_group = 0 if f.kev is True else (1 if f.kev is None else 2)", "kev_group = 0"),
+    ("treat a failed lookup as clean (the component reads ok with no CVEs)",
+     'results.append(ComponentResult(comp, "failed", str(err), 0, exp, exp_detail))', 'results.append(ComponentResult(comp, "ok", "", 0, exp, exp_detail))'),
+    ("drop the exposure rule (reachable and internal rank alike)",
+     'reach = 0 if f.exposure == "reachable" else 1', "reach = 0"),
+    ("treat an unloaded KEV catalogue as 'not exploited'",
+     "kev = None if kev_map is None else (cve.id in kev_map)", "kev = False if kev_map is None else (cve.id in kev_map)"),
+    ("remove the CVE id tie-break (equal findings keep input order)",
+     "return (kev_group, epss, cvss, reach, f.id)", "return (kev_group, epss, cvss, reach)"),
+    ("a missing EPSS sorts first instead of last",
+     'epss = -f.epss if f.epss is not None else float("inf")', 'epss = -f.epss if f.epss is not None else float("-inf")'),
+    ("remove the NVD rate limit",
+     "if self.last is not None and now - self.last < self.min_interval:", "if False:"),
+    ("remove the retry (one attempt per lookup)",
+     "for attempt in range(1, self.retries + 1):", "for attempt in range(1, 2):"),
+    ("skip the CPE dictionary check (a product with no CPE reads as clean)",
+     "if known == 0:", "if False:"),
+    ("a failed KEV lookup becomes an empty catalogue",
+     'kev_map, kev_note = None, f"the KEV catalogue lookup failed: {err}"', 'kev_map, kev_note = {}, f"the KEV catalogue lookup failed: {err}"'),
+    ("ignore the version range when picking the fixed version",
+     "if k is None or k <= mine or (start is not None and mine < start):", "if k is None:"),
+    ("accept a garbled NVD answer",
+     '        raise ParseError("the NVD answer has no `vulnerabilities` list and `totalResults` number")', "        return"),
+    ("count a platform match as a finding",
+     'if not any(m.get("vulnerable") for m in covered):', "if False:"),
+    ("count a CVE whose ranges stop short of the version as a finding",
+     'if not covered:\n        return "outside-range"', 'if False:\n        return "outside-range"'),
+    ("read only the first NVD page",
+     'start += len(page["vulnerabilities"])', "start = total"),
+]
+
+REALM_MUTANTS = [
+    ("a sample user is not required to configure OTP", '"requiredActions": ["CONFIGURE_TOTP"],', '"requiredActions": [],'),
+    ("the Configure OTP action is disabled", '"enabled": true, "defaultAction": true', '"enabled": false, "defaultAction": true'),
+    ("brute force detection is off", '"bruteForceProtected": true', '"bruteForceProtected": false'),
+    ("brute force needs 1000 failures before it locks", '"failureFactor": 5', '"failureFactor": 1000'),
+    ("the access token lives a day", '"accessTokenLifespan": 60', '"accessTokenLifespan": 86400'),
+    ("a client secret is committed", '"secret": "${CFL_DASHBOARD_CLIENT_SECRET}"', '"secret": "committed-secret-value"'),
+    ("the fleet-admin role is gone", '"name": "fleet-admin"', '"name": "fleet-root"'),
+    ("fleet-admin no longer includes fleet-viewer", '"composite": true,', '"composite": false,'),
+    ("the dashboard client allows the password grant", '"directAccessGrantsEnabled": false', '"directAccessGrantsEnabled": true'),
+    ("PKCE is not required", '"pkce.code.challenge.method": "S256"', '"pkce.code.challenge.method": ""'),
+    ("the redirect URI is a wildcard", '"http://127.0.0.1:4180/oauth2/callback"', '"http://127.0.0.1:4180/*"'),
+    ("the OTP policy is no longer time based", '"otpPolicyType": "totp"', '"otpPolicyType": "hotp"'),
 ]
 
 
@@ -108,8 +161,10 @@ def main() -> int:
     respond = SECURITY / "respond.py"
     c1, t1 = run_group("junos_review.py", junos, HERE / "test_junos_review.py", "JUNOS_REVIEW_PATH", list(junos_mutants(junos.read_text(encoding="utf-8"))), log)
     c2, t2 = run_group("respond.py", respond, HERE / "test_respond.py", "RESPOND_PATH", RESPOND_MUTANTS, log)
-    ok = t1 > 0 and t2 > 0 and c1 == t1 and c2 == t2
-    log(f"total: {c1 + c2}/{max(t1, 0) + max(t2, 0)} mutants caught" + ("" if ok else "  (NOT ALL CAUGHT)"))
+    c3, t3 = run_group("cve_triage.py", SECURITY / "vuln" / "cve_triage.py", HERE / "test_cve_triage.py", "CVE_TRIAGE_PATH", CVE_MUTANTS, log)
+    c4, t4 = run_group("realm-camera-fleet.json", SECURITY / "iam" / "realm-camera-fleet.json", HERE / "test_iam_realm.py", "REALM_PATH", REALM_MUTANTS, log)
+    ok = t1 > 0 and t2 > 0 and t3 > 0 and t4 > 0 and c1 == t1 and c2 == t2 and c3 == t3 and c4 == t4
+    log(f"total: {c1 + c2 + c3 + c4}/{max(t1, 0) + max(t2, 0) + max(t3, 0) + max(t4, 0)} mutants caught" + ("" if ok else "  (NOT ALL CAUGHT)"))
     if args.save:
         Path(args.save).parent.mkdir(parents=True, exist_ok=True)
         Path(args.save).write_text("\n".join(out) + "\n", encoding="utf-8")
