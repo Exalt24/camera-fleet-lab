@@ -39,6 +39,7 @@
 <body>
 <main>
   <h1>Camera fleet lab</h1>
+  <p class="sub" id="who" style="display:none"></p>
   <p class="sub">One camera behind a site router, reachable only through a WireGuard tunnel. Probed every few seconds, layer by layer.</p>
   <div class="hero">
     <div class="badge"><div class="state" id="state">...</div><div class="why" id="why"></div></div>
@@ -83,6 +84,8 @@ async function tick() {
   } catch (e) { $("why").textContent = "dashboard cannot reach the API: " + e; }
 }
 window.setCaption = t => { const c = $("caption"); c.style.display = t ? "block" : "none"; c.textContent = t || ""; };
+// Behind the SSO proxy (security/iam/) this shows who is signed in and with which role; without it nothing is shown.
+fetch("/whoami").then(r => r.json()).then(w => { if (w.user) { const e = $("who"); e.style.display = "block"; e.textContent = "Signed in as " + w.user + " (" + (w.roles.join(", ") || "no role") + ")"; } }).catch(() => {});
 tick(); setInterval(tick, 1000);
 </script>
 </body>

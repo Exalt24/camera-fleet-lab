@@ -9,11 +9,11 @@ import os
 
 from pathlib import Path
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import HTMLResponse
 from sqlalchemy import text
 
-from . import db
+from . import authz, db
 from .probe import probe_camera
 
 # uvicorn only configures its own loggers, so without this the monitor's own log lines are silently dropped (the root
@@ -22,12 +22,14 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name
 log = logging.getLogger("fleet")
 
 # The route handlers are called by FastAPI's router, not by name, so they are the deliberate public surface.
-__all__ = ["app", "dashboard", "health", "status", "history", "pool"]
+__all__ = ["app", "dashboard", "health", "status", "history", "pool", "whoami", "probe_config"]
 
 DATABASE_URL = os.environ["DATABASE_URL"]
 CAMERA_HOST = os.environ.get("CAMERA_HOST", "10.8.0.2")
 CAMERA_NAME = os.environ.get("CAMERA_NAME", "cam1")
 PROBE_INTERVAL_S = float(os.environ.get("PROBE_INTERVAL_S", "5"))
+# The address of the SSO proxy (security/iam/). Unset means no header is believed. See authz.py.
+TRUSTED_PROXY_IP = os.environ.get("TRUSTED_PROXY_IP") or None
 
 
 async def wait_for_db(engine, attempts: int = 30) -> None:
@@ -107,3 +109,19 @@ async def pool():
     """Connection-pool occupancy, so pool behaviour is observable instead of assumed."""
     p = app.state.engine.pool
     return {"size": p.size(), "checked_out": p.checkedout(), "overflow": p.overflow(), "checked_in": p.checkedin()}
+
+
+@app.get("/whoami")
+async def whoami(request: Request):
+    """Who the SSO proxy says this is. Empty when the request did not come through the proxy."""
+    user, roles = authz.identity(request.headers, request.client.host if request.client else None, TRUSTED_PROXY_IP)
+    return {"user": user, "roles": sorted(roles)}
+
+
+@app.get("/admin/probe-config")
+async def probe_config(request: Request):
+    """The one admin route, read only: how the monitor is probing. Needs the fleet-admin role from the SSO proxy."""
+    _, roles = authz.identity(request.headers, request.client.host if request.client else None, TRUSTED_PROXY_IP)
+    if not authz.is_admin(roles):
+        raise HTTPException(status_code=403, detail="needs the fleet-admin role")
+    return {"camera": CAMERA_NAME, "camera_host": CAMERA_HOST, "probe_interval_s": PROBE_INTERVAL_S}
