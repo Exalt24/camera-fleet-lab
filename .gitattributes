@@ -16,3 +16,7 @@ Dockerfile* text eol=lf
 /security/wazuh/*.xml text eol=lf
 /security/wazuh/*.conf text eol=lf
 /docs/security/evidence_*/** -text
+
+# Deliberate tracked logs: the planted and benign logs are test fixtures that the tests read, and the files under docs/security are the saved run records the write ups cite (class_sweep tracked-runtime).
+security/logs/**/*.log tracked-runtime-ok
+docs/security/**/*.log tracked-runtime-ok
