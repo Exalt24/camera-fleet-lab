@@ -347,7 +347,7 @@ def test_the_shipped_playbooks_load_and_cover_every_alerting_rule():
     books = rs.load_playbooks(SECURITY / "playbooks")
     assert len(books) >= 5
     root = ET.parse(SECURITY / "wazuh" / "camera_fleet_rules.xml").getroot()
-    alerting = {r.get("id") for r in root.iter("rule") if int(r.get("level")) >= 3}
+    alerting = {r.get("id") for r in root.iter("rule") if int(r.get("level")) >= 3 and r.findtext("options") != "no_log"}
     assert alerting and all(rs.pick_playbook(books, rid) for rid in alerting), alerting
     for b in books:
         assert [s["type"] for s in b["steps"]][0] == "enrich"

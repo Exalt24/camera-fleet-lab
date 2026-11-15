@@ -1,7 +1,12 @@
 <!--
   Detection rules for the camera lab. Every rule has an ID in the 100000 range, a description, a MITRE ATT&CK technique where one
-  honestly applies, and a NIST CSF 2.0 function and subcategory in an <info> line. security/COMPLIANCE-MAP.md maps each rule to
-  NIST CSF, HIPAA and SOC 2. Rules that carry no <mitre> block describe an outage or an operations event, not attacker behaviour.
+  honestly applies, and a NIST CSF 2.0 function and subcategory in an info line. security/COMPLIANCE-MAP.md maps each rule to
+  NIST CSF, HIPAA and SOC 2. Rules that carry no mitre block describe an outage, not attacker behaviour.
+
+  Rule 100200 is the base rule the sweep rule counts. It is level 3 with the no_log option on purpose. The manager only remembers an
+  event for a frequency rule when the event's level reaches the alert threshold (3, measured on a live run: at level 1 the sweep
+  rule never fired), and no_log keeps the one-per-packet base alerts out of alerts.json. wazuh-logtest ignores no_log and reports
+  100200 as an alert, so the tests leave the base rules out of what they count. Rule 100100 is only a parent, so it stays at level 0.
 -->
 <group name="camera_fleet,">
 
@@ -33,20 +38,20 @@
     <if_matched_sid>100102</if_matched_sid>
     <description>Camera site tunnel flapping: three tunnel_down transitions inside five minutes.</description>
     <info type="text">NIST CSF 2.0 DETECT DE.AE-02 (potentially adverse events analyzed)</info>
-    <group>nist_csf_detect,hipaa_164.312.b,tsc_CC7.3,</group>
+    <group>nist_csf_detect,hipaa_164.312.b,tsc_CC7.2,</group>
   </rule>
 
   <!-- Source 2: the edge router's firewall drops -->
-  <rule id="100200" level="0">
-    <decoded_as>fw-sensor-drop</decoded_as>
-    <action>^DROP$</action>
+  <rule id="100200" level="3">
+    <decoded_as>fw-sensor</decoded_as>
+    <options>no_log</options>
     <description>Edge firewall dropped a packet.</description>
   </rule>
 
-  <rule id="100210" level="10" frequency="8" timeframe="30" ignore="60">
+  <rule id="100210" level="10" frequency="8" timeframe="30" ignore="10">
     <if_matched_sid>100200</if_matched_sid>
-    <same_srcip />
-    <different_dstport />
+    <same_source_ip />
+    <not_same_field>dst_port</not_same_field>
     <description>Port sweep: one address hit eight different closed ports on the site router inside 30 seconds.</description>
     <mitre>
       <id>T1046</id>
@@ -55,7 +60,7 @@
     <group>nist_csf_detect,hipaa_164.312.b,tsc_CC7.2,</group>
   </rule>
 
-  <!-- Correlation across sources 1 and 2 -->
+  <!-- Correlation across sources 1 and 2: a sweep, then the camera site goes blocked or tunnel_down -->
   <rule id="100220" level="12" frequency="2" timeframe="300" ignore="120">
     <if_sid>100101,100102</if_sid>
     <if_matched_sid>100210</if_matched_sid>
@@ -63,22 +68,38 @@
     <mitre>
       <id>T1046</id>
     </mitre>
-    <info type="text">NIST CSF 2.0 DETECT DE.AE-02 (potentially adverse events analyzed)</info>
+    <info type="text">NIST CSF 2.0 DETECT DE.AE-03 (information is correlated from multiple sources)</info>
     <group>nist_csf_detect,hipaa_164.308.a.6,tsc_CC7.3,</group>
   </rule>
 
-  <!-- Source 3: sshd authentication log (simulated) -->
-  <rule id="100300" level="12" frequency="6" timeframe="300" ignore="120">
-    <if_sid>5715</if_sid>
-    <if_matched_group>authentication_failed</if_matched_group>
-    <same_srcip />
+  <!-- Source 3: the sshd authentication log (simulated) -->
+  <!-- The stock rule 40112 already fires on a login success after a brute force alert from the same address. It matches first, so
+       this rule is its child: it fires on the same event and replaces the stock description and level with the lab's ATT&CK and
+       framework mapping. -->
+  <rule id="100300" level="13">
+    <if_sid>40112</if_sid>
+    <match>^Accepted</match>
     <description>Brute force that worked: a successful ssh login from an address after repeated failures.</description>
     <mitre>
       <id>T1110</id>
       <id>T1078</id>
     </mitre>
     <info type="text">NIST CSF 2.0 DETECT DE.AE-02 (potentially adverse events analyzed)</info>
-    <group>nist_csf_detect,authentication_success,hipaa_164.312.b,tsc_CC6.1,tsc_CC7.3,</group>
+    <group>nist_csf_detect,authentication_success,hipaa_164.312.b,hipaa_164.308.a.5,tsc_CC6.1,tsc_CC7.3,</group>
+  </rule>
+
+  <!-- Correlation across sources 2 and 3: the same address swept the router, then logged in over ssh -->
+  <rule id="100301" level="13" frequency="2" timeframe="900" ignore="120">
+    <if_sid>5715</if_sid>
+    <if_matched_sid>100210</if_matched_sid>
+    <same_source_ip />
+    <description>Port sweep then ssh login: an address that swept the site router's ports logged in over ssh.</description>
+    <mitre>
+      <id>T1046</id>
+      <id>T1078</id>
+    </mitre>
+    <info type="text">NIST CSF 2.0 DETECT DE.AE-03 (information is correlated from multiple sources)</info>
+    <group>nist_csf_detect,authentication_success,hipaa_164.308.a.6,tsc_CC7.3,</group>
   </rule>
 
 </group>

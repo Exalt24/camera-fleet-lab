@@ -1,0 +1,14 @@
+{
+  "_about": "What the lab's own rules (IDs 100000 to 199999) must raise when each log file is run through wazuh-logtest in one session. A planted file lists the rule ids in order. A benign file must raise none. Alerts of stock Wazuh rules (the sshd rules 5710, 5712, 40112 and so on) are not counted here.",
+  "planted": {
+    "planted/blocked_alone.log": ["100101"],
+    "planted/tunnel_flapping.log": ["100102", "100102", "100103"],
+    "planted/port_sweep_then_outage.log": ["100210", "100220"],
+    "planted/ssh_brute_force_success.log": ["100300"],
+    "planted/sweep_then_ssh_login.log": ["100210", "100301"]
+  },
+  "benign": {
+    "benign/quiet_run.log": [],
+    "benign/near_misses.log": []
+  }
+}

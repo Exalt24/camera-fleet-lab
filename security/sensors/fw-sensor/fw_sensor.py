@@ -19,6 +19,10 @@ import time
 GROUPS = {"INPUT": 7, "FORWARD": 8}
 OUT = "/feed/edge_firewall.log"
 HOST = "edge"
+# Wazuh's log collector opens the files it is told about when it starts. A file that appears later is only noticed on its next
+# periodic check (about a minute) and the first sweep after a fresh start was missed that way, so every file Wazuh reads is
+# created here, empty, before the manager starts (compose: wazuh depends on this service).
+FEED_FILES = ["/feed/edge_firewall.log", "/feed/sim_firewall.log", "/feed/ssh_auth.log"]
 
 # tcpdump -nn -t on the nflog pseudo interface prints, for example:
 #   IP 10.8.0.1.41234 > 10.8.0.2.22: Flags [S], seq 1234, win 64240, length 0
@@ -52,6 +56,11 @@ def render(d: dict, now: float | None = None) -> str:
             f"proto={d['proto']} sport={d['sport']} dport={d['dport']} flags={d['flags']}")
 
 
+def ensure_feed_files() -> None:
+    for path in FEED_FILES:
+        open(path, "a", encoding="utf-8").close()
+
+
 def install_rules() -> None:
     for chain, group in GROUPS.items():
         rule = [chain, "-j", "NFLOG", "--nflog-group", str(group), "--nflog-prefix", f"fw-drop-{chain}"]
@@ -73,6 +82,7 @@ def follow(chain: str, group: int, lock: threading.Lock) -> None:
 
 
 def main() -> int:
+    ensure_feed_files()
     install_rules()
     lock = threading.Lock()
     threads = [threading.Thread(target=follow, args=(c, g, lock), daemon=True) for c, g in GROUPS.items()]

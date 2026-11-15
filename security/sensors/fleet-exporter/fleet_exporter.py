@@ -43,6 +43,7 @@ def fetch() -> list[dict] | None:
 def main() -> int:
     state = ts = None
     stop = threading.Event()
+    open(OUT, "a", encoding="utf-8").close()        # exists before the Wazuh manager starts, see fw_sensor.py
     print(f"fleet-exporter: polling {HUB}/history, writing transitions to {OUT}", flush=True)
     while not stop.wait(POLL_S):
         rows = fetch()

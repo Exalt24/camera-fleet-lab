@@ -70,6 +70,9 @@ services:
     profiles: ["security"]
     image: wazuh/wazuh-manager:4.14.10
     hostname: wazuh
+    depends_on:                            # the sensors create the log files Wazuh reads, so they must exist first
+      - fw-sensor
+      - fleet-exporter
     volumes:
       - secfeed:/feed
       - ./security/wazuh/ossec.conf:/wazuh-config-mount/etc/ossec.conf:ro
