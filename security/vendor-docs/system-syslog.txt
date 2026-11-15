@@ -1,0 +1,169 @@
+Source: https://www.juniper.net/documentation/us/en/software/junos/cli-reference/topics/ref/statement/syslog-edit-system.html
+Read in Chromium with Operations/tools/webread/webread.cjs on 2026-11-15. Page text only, navigation removed, kept as read.
+
+ON THIS PAGE
+
+Syntax
+
+Hierarchy Level
+
+Description
+
+Options
+
+Required Privilege Level
+
+Release Information
+
+keyboard_arrow_right
+syslog (System)
+date_range 09-Jan-26
+arrow_backward
+arrow_forward
+Syntax
+syslog {
+    allow-duplicates;
+    alternate-format;
+    archive {
+        (binary-data| no-binary-data);
+        files number;
+        size maximum-file-size;
+        (world-readable | no-world-readable);
+    }
+    console {
+        facility severity;
+        application-status (any | error); 
+    }
+    file filename {
+        allow-duplicates;
+        archive {
+            (binary-data| no-binary-data);
+            files number;
+            size maximum-file-size;
+            start-time "YYYY-MM-DD.hh:mm";
+            transfer-interval minutes;
+            (world-readable | no-world-readable);
+        }
+        archive-sites [url <password password>];
+        facility severity;
+        explicit-priority;
+        match "regular-expression";
+        match-strings [match-strings...];
+        structured-data {
+            brief;
+        }
+    }
+    grpc-replay;
+    host (hostname | other-routing-engine | scc-master) {
+        facility severity;
+        allow-duplicates;
+        exclude-hostname;
+        explicit-priority;
+        facility-override facility;
+        log-prefix string;
+        match "regular-expression";
+        match-strings [match-strings...];
+        routing-instance routing-instance-name;
+        source-address source-address;
+        structured-data {
+            brief;
+        }
+        port port-number;
+        tlsdetails {
+            local-certificate;
+            mutual-authentication {
+                certificate-authority;
+            }
+            trusted-ca-group [trusted-ca-group-name];
+        }
+        transport;
+    }
+    log-rotate-frequency frequency;
+    routing-instance routing-instance-name;
+    server {
+        routing-instances (routing-instance-name | all | default) {
+            disable;
+        }
+    }
+    
+    source-address source-address;
+    time-format (millisecond | year |  year millisecond);
+    user (username | *) {
+        allow-duplicates;
+        facility severity;
+        match "regular-expression";
+        match-strings [match-strings...];
+    }
+}
+
+Hierarchy Level
+[edit system]
+
+Description
+
+Configure the system log messages types to send to different destinations such as files, remote destinations, user terminals, or the system console.
+
+The remaining statements are explained separately.
+
+Options
+archive	
+
+Define parameters for archiving log messages.
+
+allow-duplicates	
+
+Allow the repeated log messages for all targets.
+
+alternate-format	
+
+Configure to append node name with daemon name.
+
+console	
+
+Send log messages of a specified class and severity to the console.
+
+file	
+
+Send log messages to a named file.
+
+host	
+
+Remote location to be notified of specific log messages.
+
+log-rotate-frequency	
+
+Configure the interval for checking logfile size and archiving messages.
+
+server	
+
+Enable a syslog server for compute nodes and VMs in an App Engine.
+
+source-address	
+
+Include a specified address as the source address for log messages.
+
+time-format	
+
+Additional information to include in the system log time stamp.
+
+millisecond — Include milliseconds in time stamp.
+
+year — Include year in time stamp.
+
+user	
+
+Notify a specific user of the log event.
+
+Required Privilege Level
+
+system—To view this statement in the configuration.
+
+system-control—To add this statement to the configuration.
+
+Release Information
+
+Statement introduced before Junos OS Release 7.4.
+
+Option alternate-format introduced in Junos OS Evolved Release 20.4R2.
+
+application-status option introduced in Junos OS Evolved Release 23.1R1.

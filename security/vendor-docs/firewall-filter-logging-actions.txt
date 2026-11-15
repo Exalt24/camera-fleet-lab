@@ -1,0 +1,198 @@
+Source: https://www.juniper.net/documentation/us/en/software/junos/routing-policy/topics/concept/firewall-filter-option-logging-packet-headers-filter-actions.html
+Read in Chromium with Operations/tools/webread/webread.cjs on 2026-11-15. Page text only, navigation removed, kept as read.
+
+URL: https://www.juniper.net/documentation/us/en/software/junos/routing-policy/topics/concept/firewall-filter-option-logging-packet-headers-filter-actions.html
+STATUS: 200
+
+HPE Juniper Networking Documentation
+Search Documentation
+Ask AI
+Home 
+Juniper 
+Junos OS 
+Routing Policies, Firewall Filters, and Traffic Policers User Guide 
+Configuring Firewall Filters 
+Configuring Firewall Filter Accounting and Logging 
+Firewall Filter Logging Actions
+Routing Policies, Firewall Filters, and Traffic Policers User Guide
+keyboard_arrow_left
+Search in this guide
+Table of Contents
+Expand all
+play_arrow
+Understanding and Configuring Junos Routing Policies
+play_arrow
+Configuring Firewall Filters
+play_arrow
+Understanding How Firewall Filters Protect Your Network
+play_arrow
+Firewall Filter Match Conditions and Actions
+play_arrow
+Applying Firewall Filters to Routing Engine Traffic
+play_arrow
+Applying Firewall Filters to Transit Traffic
+play_arrow
+Configuring Firewall Filters in Logical Systems
+play_arrow
+Configuring Firewall Filter Accounting and Logging
+Accounting for Firewall Filters Overview
+System Logging Overview
+System Logging of Events Generated for the Firewall Facility
+Firewall Filter Logging Actions
+Example: Configuring Statistics Collection for a Firewall Filter
+Example: Configuring Logging for a Firewall Filter Term
+play_arrow
+Attaching Multiple Firewall Filters to a Single Interface
+play_arrow
+Attaching a Single Firewall Filter to Multiple Interfaces
+play_arrow
+Configuring Filter-Based Tunneling Across IP Networks
+per-logical-interface-firewall
+play_arrow
+Configuring Service Filters
+play_arrow
+Configuring Simple Filters
+play_arrow
+Configuring Layer 2 Firewall Filters
+play_arrow
+Configuring Firewall Filters for Forwarding, Fragments, and Policing
+play_arrow
+Configuring Firewall Filters (EX Series Switches)
+play_arrow
+Configuring Firewall Filters (QFX Series Switches, EX4600 Switches, PTX Series Routers)
+play_arrow
+Configuring Firewall Filter Accounting and Logging (EX9200 Switches)
+play_arrow
+Configuring Traffic Policers
+play_arrow
+Configuration Statements and Operational Commands
+play_arrow
+Troubleshooting
+file_download PDF
+English
+keyboard_arrow_right
+Firewall Filter Logging Actions
+date_range 02-Jan-26
+arrow_backward
+arrow_forward
+
+For IPv4 and IPv6 firewall filters, you can configure the filter to write a summary of matching packet headers to the log or syslog by specifying either the syslog or log action. The main difference between the two is the permanence of the record. Logs are only buffered in memory, and when that buffer is full, the oldest records are replaced with new ones as they come in. Syslogs, on the other hand, can be saved to disk or forwarded to a remote syslog server. In both cases, a summary of the packet header is logged (not a copy of the packet itself). Service filters and simple filters do not support either the log or syslog action.
+
+NOTE: 
+
+Both the syslog and log actions can consume significant CPU and/or disk space on the device. Juniper recommends that you off-load logs by writing them to a remote syslog server, and that you constrain logging by using it for diagnostics only.
+
+Syslog
+
+As noted, system logs can be written to disk and/or sent to a remote server. Saved logs are written to the /var/log directory. You can view a list of all available log files on the device by running the show log command without options. Note, that within a given log file, the firewall action logs may be interspersed with event messages.
+
+The following syslog configuration shows system logs being sent to a remote server at 172.27.1.1, and also save them to a file named “firewall” on the local device.
+
+host@device-RE0# show system syslog
+host 172.27.1.1 {   
+    firewall any;
+}
+<...>
+file firewall {
+    firewall any;
+}
+
+To view system logs, run the show syslog message command.
+
+To view the contents of a given system log file, run either the show log filename or the file show /var/log/filename command.
+
+To clear system log file contents, run the clear log filename command. You can include the all option to delete all saved logs, including records being written to the current log file.
+
+Configuration details are shown here:
+
+firewall {
+    family {
+        filter filter-name {
+            from {
+                match-conditions;
+            }
+            then {
+                ...
+                syslog;
+                terminating-action;
+            }
+        }
+    }
+}
+
+Log
+
+The log action writes log information to a buffer. There is no option for writing logs to a remote server, or for writing them to disk. Once the available buffer is full, new logs will replace the oldest, so a historical record is not kept. Logs are cleared whenever the device or PFE is restarted.
+
+Configuration details are shown here:
+
+firewall {
+    family {
+        filter filter-name {
+            from {
+                match-conditions;
+            }
+            then {
+                ...
+                log;
+                terminating-action;
+            }
+        }
+    }
+}
+
+To view the logs, run the show firewall log command.
+
+Log Details
+
+The following shows what kind of information is typically included in syslog and log entries:
+
+user@host> show log messages_firewall_any
+
+Mar 20 08:08:45 hostname feb FW: ge-1/1/0.0 A icmp 192.168.207.222 192.168.207.223  0  0 (1 packets) 
+
+The fields are explained here:
+
+Date and Time—Date and time at which the packet was received (not shown in the default).
+
+Hostname—Name of the device on which the match occurred..
+
+Interface—Physical interface that the packet traversed.
+
+Filter action. In the example above, it is A.
+
+A—Accept (or next term)
+
+D—Discard
+
+R—Reject
+
+Protocol—Packet protocol. May be a name or number, and may also include the source and destination ports. In the example above, the protocol is ICMP, which may then include the ICMP type and code.
+
+Source address—Source IP address of the packet.
+
+Destination address—Destination IP address of the packet.
+
+Source port—Source port of the packet (TCP and UDP packets only). In the example above, the port is 0.
+
+Destination port—Destination port of the packet (TCP and UDP packets only). In the example above, the port is 0.
+
+Packets in sample interval—This example show only one matching packet was detected in the sample interval (about a second). If packets arrive at faster rate, the system log automatically compresses the information so that less output is generated.
+
+Platform-Specific Behavior
+
+Use Feature Explorer to confirm platform and release support for specific features.
+
+Use the following table to review platform-specific behavior for your platform:
+
+Platform
+
+	
+
+Difference
+
+MX150
+
+	
+
+MX150 doesn't support firewall filter log and syslog actions

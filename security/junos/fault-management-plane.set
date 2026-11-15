@@ -1,0 +1,16 @@
+# PLANTED FAULTS: management plane (see EXPECTED.json for the list).
+# Sample configuration written from Juniper's public documentation (see security/vendor-docs/). Never run on a Junos device.
+set system host-name fault-mgmt-1
+set system root-authentication encrypted-password "$6$sampleSalt$sampleHashValueNotARealPasswordHash"
+set system services ssh root-login allow
+set system services telnet
+set system services web-management http
+set snmp community public authorization read-only
+set firewall family inet filter mgmt-in term allow-mgmt from protocol tcp
+set firewall family inet filter mgmt-in term allow-mgmt from destination-port ssh
+set firewall family inet filter mgmt-in term allow-mgmt from destination-port telnet
+set firewall family inet filter mgmt-in term allow-mgmt then accept
+set firewall family inet filter mgmt-in term allow-icmp from protocol icmp
+set firewall family inet filter mgmt-in term allow-icmp then accept
+set interfaces lo0 unit 0 family inet address 192.0.2.10/32
+set interfaces lo0 unit 0 family inet filter input mgmt-in

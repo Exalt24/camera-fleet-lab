@@ -1,0 +1,428 @@
+Source: https://www.juniper.net/documentation/us/en/software/junos/cli-reference/topics/ref/statement/ssh-edit-system.html
+Read in Chromium with Operations/tools/webread/webread.cjs on 2026-11-15. Page text only, navigation removed, kept as read.
+
+ON THIS PAGE
+
+Syntax
+
+Hierarchy Level
+
+Description
+
+Options
+
+Required Privilege Level
+
+Release Information
+
+keyboard_arrow_right
+ssh (System Services)
+date_range 27-Jan-26
+arrow_backward
+arrow_forward
+Syntax
+ssh {
+    access-disable-external;
+    authentication-order  [method 1 method2...];
+    authorized-keys-command authorized-keys-command;
+    authorized-keys-command-user authorized-keys-command-user;
+    (authorized-principals principal-names | authorized-principals-command program-path)
+    authorized-principals-file filename
+    ca-signature-algorithms (ecdsa-sha2-nistp256 | ecdsa-sha2-nistp384 | ecdsa-sha2-nistp521 | rsa-sha2-256 | rsa-sha2-512 | ssh-ed25519);
+    ciphers [ cipher-1 cipher-2 cipher-3 ...];
+    client-alive-count-max number;
+    client-alive-interval seconds;
+    connection-limit limit;
+    fingerprint-hash (md5 | sha2-256);
+    host-certificate-file filename
+    hostkey-algorithm (algorithm | no-algorithm);
+    hostkey-algorithm-list {
+        ecdsa-sha2-nistp256;
+        ecdsa-sha2-nistp384;
+        ecdsa-sha2-nistp521;
+        ed25519;
+        rsa;
+        rsa-sha2-256;
+        rsa-sha2-512;
+    }
+    key-exchange [algorithm1 algorithm2...];
+    log-key-changes log-key-changes;
+    macs [algorithm1 algorithm2...];
+    max-pre-authentication-packets number;
+    max-sessions-per-connection number;
+    no-challenge-response;
+    moduli { 
+        type name; 
+        refresh frequency;
+        count count;
+    }
+    no-password-authentication;
+    no-passwords;
+    no-public-keys;
+    allow-tcp-forwarding;
+    port port-number;
+    protocol-version [v2];
+    rate-limit number;
+    rekey {
+        data-limit bytes;
+        time-limit minutes;
+    }
+    root-login (allow | deny | deny-password);
+    sftp-server;
+    trusted-user-ca-key-file filename
+}
+
+Hierarchy Level
+[edit system services] 
+
+Description
+
+Allow SSH requests from remote systems to access the local device.
+
+Options
+access-disable-external	
+
+Disable external SSH access without disabling internal SSH access.
+
+zoom_out_map
+allow-tcp-forwarding	
+
+Enable a user to create an SSH tunnel over a CLI session to a disaggregated Junos OS platform by using SSH.
+
+Starting in Junos OS Release 22.2R1, we’ve disabled the TCP forwarding feature by default to enhance security. To enable the TCP forwarding feature, you can configure the allow-tcp-forwarding statement at the [edit system services ssh] hierarchy level. In addition, we’ve deprecated the tcp-forwarding and no-tcp-forwarding statements at the [edit system services ssh] hierarchy level.
+
+authentication-order [method1 method2...]	
+
+Configure the order in which the software tries different user authentication methods when attempting to authenticate a user. For each login attempt, the software tries the authentication methods in order, starting with the first one, until the password matches.
+
+Default: If you do not include the authentication-order statement, users are verified based on their configured passwords.
+
+Syntax: Specify one or more of the following authentication methods listed in the order in which they must be tried:
+
+password—Use the password configured for the user with the authentication statement at the [edit system login user] hierarchy level.
+
+radius—Use RADIUS authentication services.
+
+tacplus—Use TACACS+ authentication services.
+
+authorized-keys-command	
+
+Specify a command string to be used to look up the user's public keys.
+
+authorized-keys-command-user	
+
+Specify the user under whose account the authorized-keys-command is run.
+
+authorized-principals principal-names	
+
+Specify a list of principals that can be accepted for authenticaiton. Principals added through this command are supplemental to the principals added with the authorized-principals-file command.
+
+NOTE: 
+
+The authorized-principals and authorized-principals-command options are mutually exclusive.
+
+authorized-principals-file filename	
+
+Configure the AuthorizedPrincipals file for SSH certificate-based authentication. This file contains a list of names, one of which must appear in the certificate for it to be accepted for authentication.
+
+authorized-principals-command program-path	
+
+Specify a program to be used for generating the list of allowed certificate principals found in the AuthorizedPrincipals file for SSH certificate-based authentication.
+
+NOTE: 
+
+The authorized-principals-command and authorized-principals options are mutually exclusive.
+
+ca-signature-algorithms algorithms	
+
+Starting in Junos OS Evolved Release 25.2R1, configure the signature algorithms that Certificate Authorities (CAs) can use when signing certificates.
+
+Values: Specify one or more of the following signature algorithms:
+
+ecdsa-sha2-nistp256
+
+ecdsa-sha2-nistp521
+
+rsa-sha2-256
+
+rsa-sha2-512
+
+ssh-ed25519
+
+ciphers [ cipher-1 cipher-2 cipher-3 ...]	
+
+Specify the set of ciphers the SSH server can use to perform encryption and decryption functions.
+
+Values: Specify one or more of the following ciphers:
+
+aes128-ctr—128-bit AES in counter mode.
+
+aes128-gcm@openssh.com—128-bit AES with Galois/Counter Mode
+
+aes192-ctr—192-bit AES in counter mode.
+
+aes256-ctr—256-bit AES in counter mode.
+
+aes256-gcm@openssh.com—256-bit AES with Galois/Counter Mode
+
+client-alive-count-max number	
+
+Configure the number of client alive messages that can be sent without sshd receiving any messages back from the client. If this threshold is reached while client alive messages are being sent, sshd will disconnect the client, terminating the session. Client alive messages are sent through the encrypted channel. Use in conjunction with the client-alive-interval statement to disconnect unresponsive SSH clients.
+
+Default: 3 messages
+
+Range: 0 through 255 messages
+
+client-alive-interval seconds	
+
+Configure a timeout interval in seconds, after which if no data has been received from the client, sshd will send a message through the encrypted channel to request a response from the client. This option applies to SSH protocol version 2 only. Use in conjunction with the client-alive-count-max statement to disconnect unresponsive SSH clients.
+
+Default: 0 seconds
+
+Range: 1 through 65535 seconds
+
+fingerprint-hash (md5 | sha2-256)	
+
+Specify the hash algorithm used by the SSH server when it displays key fingerprints.
+
+NOTE: 
+
+The FIPS image does not permit the use of MD5 fingerprints. On systems in FIPS mode, sha2-256 is the only available option.
+
+Values: Specify one of the following:
+
+md5—Enable the SSH server to use the MD5 algorithm.
+
+sha2-256—Enable the SSH server to use the sha2-256 algorithm.
+
+Default: sha2-256
+
+host-certificate-file filename	
+
+Configure the HostCertificate file for SSH certificate-based authentication. This file contains the signed host certificate.
+
+hostkey-algorithm-list	Configure the specified SSH hostkey algorithms.
+
+Values: Specify one or more of the following SSH hostkey algorithms:
+
+ecdsa-sha2-nistp256
+
+ecdsa-sha2-nistp384
+
+ecdsa-sha2-nistp521
+
+ed25519
+
+rsa
+
+rsa-sha2-256
+
+rsa-sha2-512
+
+log-key-changes log-key-changes	
+
+Enable Junos OS to log the authorized SSH keys. When the log-key-changes statement is configured and committed, Junos OS logs the changes to the set of authorized SSH keys for each user (including the keys that were added or removed). Junos OS logs the differences since the last time the log-key-changes statement was configured. If the log-key-changes statement was never configured, then Junos OS logs all the authorized SSH keys.
+
+Default: Junos OS logs all the authorized SSH keys.
+
+macs [algorithm1 algorithm2...]	
+
+Specify the set of message authentication code (MAC) algorithms that the SSH server can use to authenticate messages.
+
+NOTE: 
+
+The macs configuration statement represents a set. Therefore, it must be configured as follows:
+
+user@host#set system services ssh macs [hmac-md5 hmac-sha1]
+
+Values: Specify one or more of the following MAC algorithms to authenticate messages:
+
+hmac-md5—Hash-based MAC using Message-Digest 5 (MD5)
+
+hmac-md5-96—96-bits of hash-based MAC using MD5
+
+hmac-md5-96-etm@openssh.com—96-bits of hash-based Encrypt-then-MAC using MD5
+
+hmac-md5-etm@openssh.com—Hash-based Encrypt-then-MAC using MMD5
+
+hmac-sha1—Hash-based MAC using secure hash algorithm-1 (SHA-1)
+
+hmac-sha1-96—96-bits of hash-based MAC using SHA-1
+
+hmac-sha1-96-etm@openssh.com—96-bits of hash-based Encrypt-then-MAC using SHA-1
+
+hmac-sha1-etm@openssh.com—Hash-based Encrypt-then-MAC using SHA-1
+
+hmac-sha2-256—256-bits of hash-based MAC using secure hash algorithm-2 (SHA-2)
+
+hmac-sha2-256-etm@openssh.com—Hash-based Encrypt-then-Mac using SHA-2
+
+hmac-sha2-512—512-bits of hash-based MAC using SHA-2
+
+hmac-sha2-512-etm@openssh.com—Hash-based Encrypt-then-Mac using SHA-2
+
+umac-128-etm@openssh.com—Encrypt-then-MAC using UMAC-128 algorithm specified in RFC4418
+
+umac-128@openssh.com—UMAC-128 algorithm specified in RFC4418
+
+umac-64-etm@openssh.com—Encrypt-then-MAC using UMAC-64 algorithm specified in RFC4418
+
+umac-64@openssh.com—UMAC-64 algorithm specified in RFC4418
+
+max-pre-authentication-packets number	
+
+Define the maximum number of pre-authentication SSH packets that the SSH server will accept prior to user authentication.
+
+Range: 20 through 2147483647 packets
+
+Default: 128 packets
+
+max-sessions-per-connection number	
+
+Specify the maximum number of ssh sessions allowed per single SSH connection.
+
+Range: 1 through 65535 sessions
+
+Default: 10 sessions
+
+moduli type name refresh frequency [count count]	
+
+Specify the type, set the refresh frequency, and determine the count of the prime moduli that you need.
+
+no-challenge-response	
+
+Disable SSH challenge-response-based authentication methods.
+
+NOTE: 
+
+Configuring this statement under the [edit system services ssh] hierarchy affects both the SSH login service and the NETCONF over SSH service.
+
+no-password-authentication	
+
+Disable SSH password-based authentication methods.
+
+NOTE: 
+
+Configuring this statement under the [edit system services ssh] hierarchy affects both the SSH login service and the NETCONF over SSH service.
+
+no-passwords	
+
+Disable both password-based and challenge-response-based authentication for SSH.
+
+NOTE: 
+
+Configuring this statement under the [edit system services ssh] hierarchy affects both the SSH login service and the NETCONF over SSH service.
+
+no-public-keys	
+
+Disable public key authentication system wide. If you specify the no-public-keys statement at the [edit system login user user-name authentication] hierarchy level, you disable public key authentication for a specific user.
+
+port port-number	
+
+Specify the port number on which to accept incoming SSH connections.
+
+Default: 22
+
+Range: 1 through 65535
+
+protocol-version [v2]	
+
+Specify the Secure Shell (SSH) protocol version.
+
+Starting in Junos OS Release 19.3R1 and Junos OS Release 18.3R3, on all SRX Series devices, we’ve removed the nonsecure SSH protocol version 1 (v1) option from the [edit system services ssh protocol-version] hierarchy level. You can use the SSH protocol version 2 (v2) as the default option to remotely manage systems and applications. With the v1 option deprecated, Junos OS is compatible with OpenSSH 7.4 and later versions.
+
+Junos OS releases before 19.3R1 and 18.3R3 continue to support the v1 option to remotely manage systems and applications.
+
+Default: v2—SSH protocol version 2 is the default, introduced in Junos OS Release 11.4.
+
+rate-limit number	
+
+Configure the maximum number of connection attempts per minute, per protocol (either IPv6 or IPv4) on an access service. For example, a rate limit of 10 allows 10 IPv6 SSH session connection attempts per minute and 10 IPv4 SSH session connection attempts per minute.
+
+Range: 1 through 250 connections
+
+Default: 150 connections
+
+rekey	
+
+Specify limits before the session keys are renegotiated.
+
+data-limit bytes	
+
+Specify the data limit before renegotiating the session keys.
+
+time-limit minutes	
+
+Specify the time limit before renegotiating the session keys.
+
+Range: 1 through 1440 minutes
+
+root-login (allow | deny | deny-password)	
+
+Control user access through SSH.
+
+allow—Allow users to log in to the device as root through SSH.
+
+deny—Disable users from logging in to the device as root through SSH.
+
+deny-password—Allow users to log in to the device as root through SSH when the authentication method (for example, RSA authentication) does not require a password.
+
+Default: deny-password is the default for most systems.
+
+Starting in Junos release 17.4R1 for MX Series routers, the default for root-login is deny. In previous Junos OS releases, the default setting for the MX240, MX480, MX960, MX2010 and MX2020 was allow.
+
+sftp-server	
+
+Globally enable incoming SSH File Transfer Protocol (SFTP) connections. By configuring the sftp-server statement, you enable authorized devices to connect to the device through SFTP. If the sftp-server statement is not present in the configuration, then SFTP is globally disabled and no devices can connect to the device through SFTP.
+
+trusted-user-ca-key-file filename	
+
+Configure the TrustedUserCAKey file for SSH certificate-based authentication. This file contains the public keys of an SSH certificate.
+
+The remaining statements are explained separately. Search for a statement in CLI Explorer or click a linked statement in the Syntax section for details.
+
+Required Privilege Level
+
+system—To view this statement in the configuration.
+
+system-control—To add this statement to the configuration.
+
+Release Information
+
+Statement introduced before Junos OS Release 7.4.
+
+ciphers, hostkey-algorithm, key-exchange, and macs statements introduced in Junos OS Release 11.2.
+
+max-sessions-per-connection and no-tcp-forwarding statements introduced in Junos OS Release 11.4.
+
+SHA-2 options introduced in Junos OS Release 12.1.
+
+Support for the curve25519-sha256 option on the key-exchange statement added in Junos OS Release 12.1X47-D10.
+
+client-alive-interval and client-alive-count-max statements introduced in Junos OS Release 12.2.
+
+max-pre-authentication-packets statement introduced in Junos OS Release 12.3X48-D10.
+
+no-passwords statement introduced in Junos OS Release 13.3.
+
+no-public-keys statement introduced in Junos OS release 15.1.
+
+tcp-forwarding statement introduced in Junos OS Release 15.1X53-D50 for the NFX250 Network Services Platform.
+
+fingerprint-hash statement introduced in Junos OS Release 16.1.
+
+log-key-changes statement introduced in Junos OS Release 17.4R1.
+
+sftp-server statement introduced in Junos OS Release 19.1R1.
+
+no-challenge-response and no-password-authentication statements introduced in Junos OS Release 19.4R1.
+
+allow-tcp-forwarding option added in Junos OS Release 22.2R1.
+
+access-disable-external option added in Junos OS Release 22.2R3.
+
+The athorized-prinicpals, authorized-principals-command, and the authorized-principals-file options added in Junos OS Release 22.3R1.
+
+ca-signature-algorithms option added in Junos OS Evolved Release 25.2R1.
+
+moduli option added in Junos OS Evolved Release 25.2R1.

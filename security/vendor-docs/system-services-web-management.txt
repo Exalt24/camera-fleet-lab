@@ -1,0 +1,162 @@
+Source: https://www.juniper.net/documentation/en_US/junos12.1x46/topics/reference/configuration-statement/system-edit-web-management.html
+Read in Chromium with Operations/tools/webread/webread.cjs on 2026-11-15. Page text only, navigation removed, kept as read.
+
+URL: https://www.juniper.net/documentation/en_US/junos12.1x46/topics/reference/configuration-statement/system-edit-web-management.html
+STATUS: 200
+
+HPE Juniper Networking Documentation
+Search Documentation
+Ask AI
+HomeJuniperJunos OS Administration Library for Security DevicesAdministration Guide for Security Devices 
+CLI Explorer
+Compliance Advisor
+Documentation Archives
+Enterprise MIBs
+Feature Explorer
+Glossary
+Hardware Compatibility Tool
+Junos XML API Explorer
+Pathfinder
+Portable Libraries
+System Log Explorer
+Supported Platforms
+J Series
+LN Series
+SRX Series
+Related Documentation
+WLAN Feature Guide for Security Devices
+Administration Guide for Security Devices
+Firewall User Authentication Feature Guide for Security Devices
+Dynamic VPN Feature Guide for SRX Series Gateway Devices
+web-management (System Services)
+Syntax
+web-management {
+http {
+interfaces interface-names ;
+port port;
+}
+https {
+interfaces interface-names;
+system-generated-certificate name;
+port port;
+}
+management url management url;
+session {
+idle-timout minutes;
+session-limit number;
+}
+traceoptions {
+file {
+filename;
+files number;
+match regular-expression;
+size maximum-file-size;
+(no-world-readable | world-readable);
+}
+flag flag;
+level level;
+no-remote-trace;
+}
+}
+Hierarchy Level
+[edit system services]
+Release Information
+
+Statement introduced in Junos OS Release 9.0.
+
+Description
+
+Configure settings for HTTP or HTTPS access. HTTP access allows management of the device using the J-Web interface. HTTPS access allows secure management of the device using the J-Web interface. With HTTPS access, communication is encrypted between your browser and the webserver for your device.
+
+Options
+control
+	—	
+
+Disable the SBC process.
+
+max-threads—Maximum simultaneous threads to handle requests.
+
+Range: 0 through 16
+
+http
+	—	
+
+Configure HTTP.
+
+interface [value]—Interface value that accept HTTP access.
+port number—TCP port for incoming HTTP connections.
+
+Range: 1 through 65,535
+
+https
+	—	
+
+Configure HTTPS.
+
+interface [value]—Interface value that accept HTTP access.
+port number—TCP port for incoming HTTP connections.
+
+Range: 1 through 65,535
+
+local-certificate—X.509 certificate to use from configuration.
+pki-local-certificate—X.509 certificate to use from PKI local store.
+system-generated-certificate—X.509 certificate generated automatically by system.
+management url management url
+	—	
+
+URL Path for Web management access.
+
+session
+	—	
+
+Configure web management session.
+
+idle-timout minutes—Default timeout of web-management sessions in minutes.
+session-limit number—Maximum number of web-management sessions to allow.
+traceoptions
+	—	
+
+Set the trace options.
+
+file—Configure the trace file information.
+filename—Name of the file to receive the output of the tracing operation. Enclose the name within quotation marks. All files are placed in the directory /var/log. By default, the name of the file is the name of the process being traced.
+files number— Maximum number of trace files. When a trace file named trace-file reaches its maximum size, it is renamed trace-file.0, then trace-file.1, and so on, until the maximum number of trace files is reached. Then the oldest trace file is overwritten.
+
+If you specify a maximum number of files, you also must specify a maximum file size with the size maximum file-size option.
+
+Range: 2 through 1000 files
+
+Default: 10 files
+
+match regular-expression—Refine the output to include lines that contain the regular expression.
+size maximum-file-size—Maximum size of each trace file, in kilobytes (KB), megabytes (MB), or gigabytes (GB).
+
+Range: 10 KB through 1 GB
+
+Default: 128 KB
+
+If you specify a maximum file size, you also must specify a maximum number of trace files with the files number option.
+
+(world-readable | no-world-readable)— By default, log files can be accessed only by the user who configures the tracing operation. The world-readable option enables any user to read the file. To explicitly set the default behavior, use the no-world-readable option.
+flag flag—Specify which tracing operation to perform. To specify more than one tracing operation, include multiple flag statements. You can include the following flags.
+all—Trace all areas.
+configuration—Trace configuration.
+dynamic-vpn—Trace dynamic-vpn events.
+init—Trace daemon init process.
+mgd—Trace MGD requests.
+webauth—Trace webauth requests.
+level level —Specify the level of debugging output.
+all—Match all levels.
+error—Match error conditions.
+info—Match informational messages.
+notice—Match conditions that should be handled specially.
+verbose—Match verbose messages.
+warning—Match warning messages.
+no-remote-trace—Disable the remote tracing.
+Required Privilege Level
+
+system—To view this statement in the configuration.
+
+system-control—To add this statement to the configuration.
+
+Modified: 2016-07-06

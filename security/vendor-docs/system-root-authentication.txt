@@ -1,0 +1,84 @@
+Source: https://www.juniper.net/documentation/us/en/software/junos/cli-reference/topics/ref/statement/root-authentication-edit-system.html
+Read in Chromium with Operations/tools/webread/webread.cjs on 2026-11-15. Page text only, navigation removed, kept as read.
+
+ON THIS PAGE
+
+Syntax
+
+Hierarchy Level
+
+Description
+
+Options
+
+Required Privilege Level
+
+Release Information
+
+keyboard_arrow_right
+root-authentication
+date_range 23-Jan-25
+arrow_backward
+arrow_forward
+Syntax
+root-authentication {
+    encrypted-password "password";
+    no-public-keys;
+    ssh-ecdsa name {
+        from hosts;
+    }
+    ssh-ed25519 name {
+        from hosts;
+    }
+    ssh-rsa name {
+        from hosts;
+    }
+}
+
+Hierarchy Level
+[edit system]
+
+Description
+
+Configure the authentication methods for the root-level user, whose username is root.
+
+You can use the ssh-ecdsa, ssh-ed25519, or ssh-rsa statements to directly configure SSH ECDSA, ED25519, or RSA keys to authenticate root logins. You can configure more than one public key for SSH authentication of root logins as well as for user accounts. When a user logs in as root, the public keys are referenced to determine whether the private key matches any of them.
+
+NOTE: 
+
+There is a difference in the way a plain-text password is hashed and stored as encrypted in Junos OS release 15.1 and newer vs. that used in release 12.3 and earlier.
+
+In Junos OS release 12.3 and earlier images, encrypting and decrypting of passwords using SHA-256 is not supported. This is a limitation in Junos OS release 12.3. Therefore, if a password that is encrypted by using SHA-256 in Junos OS release 15.1 is provided to Junos OS releases 12.3 and earlier, the password decryption will fail.
+
+See this KB article for instructions on how to first configure a compatible MD5 hashed root password before you downgrade. If you downgrade without first configuring a compatible root password you will not be able to login as root after the downgrade.
+
+Options
+encrypted-password "password"	
+
+Specify the MD5 or other password. You can specify only one encrypted password. You cannot configure a blank password using blank quotation marks (" "). You must configure a password whose number of characters range from 1 through 128 characters and enclose the password in quotation marks.
+
+no-public-keys	
+
+Disable SSH public key-based authentication.
+
+ssh-ecdsa name from hosts	
+
+Use an SSH ECDSA public key. You can specify one or more public keys. Use the from option to specify a list of hosts.
+
+ssh-ed25519 name from hosts	
+
+Use an SSH ED25519 public key. You can specify one or more public keys. Use the from option to specify a list of hosts.
+
+ssh-rsa name from hosts	
+
+Use an SSH RSA public key. You can specify one or more public keys. Use the from option to specify a list of hosts.
+
+Required Privilege Level
+
+admin—To view this statement in the configuration.
+
+admin-control—To add this statement to the configuration.
+
+Release Information
+
+Statement introduced before Junos OS Release 7.4.

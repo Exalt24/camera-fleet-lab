@@ -1,0 +1,66 @@
+Source: https://www.juniper.net/documentation/us/en/software/junos/network-mgmt/topics/ref/statement/community-edit-snmp.html
+Read in Chromium with Operations/tools/webread/webread.cjs on 2026-11-15. Page text only, navigation removed, kept as read.
+
+ON THIS PAGE
+
+Syntax
+
+Hierarchy Level
+
+Description
+
+Default
+
+Options
+
+Required Privilege Level
+
+Release Information
+
+keyboard_arrow_right
+community (SNMP)
+date_range 21-May-25
+arrow_backward
+arrow_forward
+Syntax
+community community-name {
+    authorization authorization;
+    client-list-name client-list-name;
+    clients {
+        address restrict;
+    }
+    view view-name;
+}
+
+Hierarchy Level
+[edit snmp]
+
+Description
+
+Define an SNMP community. An SNMP community authorizes SNMP clients based on the source IP address of incoming SNMP request packets. A community also defines which MIB objects are available and the operations (read-only or read-write) allowed on those objects.
+
+NOTE: 
+
+The authorization read-write option is not supported on the QFX3000 QFabric system.
+
+The SNMP client application specifies an SNMP community name in Get, GetBulk, GetNext, and Set SNMP requests.
+
+Default
+
+If you omit the community statement, all SNMP requests are denied.
+
+Options
+
+community-name—Community string. If the name includes spaces, enclose it in quotation marks (" ").
+
+The remaining statements are explained separately. See CLI Explorer.
+
+Required Privilege Level
+
+snmp—To view this statement in the configuration.
+
+snmp-control—To add this statement to the configuration.
+
+Release Information
+
+Statement introduced before Junos OS Release 7.4.

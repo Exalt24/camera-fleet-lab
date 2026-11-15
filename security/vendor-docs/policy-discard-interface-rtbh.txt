@@ -1,0 +1,453 @@
+Source: https://www.juniper.net/documentation/en_US/junos/topics/example/policy-discard-interface.html
+Read in Chromium with Operations/tools/webread/webread.cjs on 2026-11-15. Page text only, navigation removed, kept as read.
+
+ON THIS PAGE
+
+Requirements
+
+Overview
+
+Configuration
+
+Verification
+
+keyboard_arrow_right
+Example: Forwarding Packets to the Discard Interface
+date_range 25-Sep-25
+arrow_backward
+arrow_forward
+
+This example shows how to use discard routing to mitigate denial of service (DoS) attacks, protect vital network resources from outside attack, provide protection services for customers so that each customer can initiate its own protection, and log and track DoS attempts.
+
+Requirements
+
+No special configuration beyond device initialization is required before configuring this example.
+
+Overview
+
+In discard routing, routers are configured with rules that disallow millions of requests in a short period of time from being sent to the same address. If too many requests are received in a short period of time, the router simply discards the requests without forwarding them. The requests are sent to a router that does not forward the packets. The problematic routes are sometimes referred to as discard routes or black-holed routes. The types of routes that should be discarded are identified as attacks to customers from peers or other customers, attacks from customers to peers or other customers, attack controllers, which are hosts providing attack instructions, and unallocated address spaces, known as bogons or invalid IP addresses.
+
+After the attack attempt is identified, operators can put a configuration in place to mitigate the attack. One way to configure discard routing in Junos OS is to create a discard static route for each next hop used for discard routes. A discard static route uses the discard option.
+
+For example:
+
+user@host# show routing-options
+static {
+    route 192.0.2.101/32 discard;
+    route 192.0.2.103/32 discard;
+    route 192.0.2.105/32 discard;
+}
+
+user@host> show route protocol static terse
+inet.0: 3 destinations, 3 routes (3 active, 0 holddown, 0 hidden)
++ = Active Route, - = Last Active, * = Both
+
+A V Destination        P Prf   Metric 1   Metric 2  Next hop        AS path
+* ? 192.0.2.101/32     S   5                        Discard
+* ? 192.0.2.103/32     S   5                        Discard
+* ? 192.0.2.105/32     S   5                        Discard
+
+Another strategy, which is the main focus of this example, is to use routing policy and the discard interface. In this approach, the discard interface contains the next hop you are assigning to the null route routes. A discard interface can have only one logical unit (unit 0), but you can configure multiple IP addresses on unit 0.
+
+For example:
+
+user@host# show interfaces dsc
+unit 0 {
+    family inet {
+        address 192.0.2.102/32 {
+            destination 192.0.2.101;
+        }
+        address 192.0.2.104/32 {
+            destination 192.0.2.103;
+        }
+        address 192.0.2.106/32 {
+            destination 192.0.2.105;
+        }
+    }
+}
+
+user@host> show interfaces terse dsc
+b
+Interface               Admin Link Proto    Local                 Remote
+dsc                     up    up
+dsc.0                   up    up   inet     192.0.2.102         --> 192.0.2.101
+                                            192.0.2.104         --> 192.0.2.103
+                                            192.0.2.106         --> 192.0.2.105
+
+The advantage of using a discard interface instead of using discard static routes is that the discard interface allows you to configure and assign filters to the interface for counting, logging, and sampling the traffic. This is demonstrated in this example.
+
+To actually discard packets requires a routing policy attached to the BGP sessions. To locate discard-eligible routes, you can use a route filter, an access list, or a BGP community value.
+
+For example, here is how you would use a route filter:
+
+Route Filter
+
+protocols {
+    bgp {
+        import blackhole-by-route;
+    }
+}
+policy-options {
+    policy-statement blackhole-by-route {
+        term specific-routes {
+            from {
+                route-filter 10.10.10.1/32 exact;
+                route-filter 10.20.20.2/32 exact;
+                route-filter 10.30.30.3/32 exact;
+                route-filter 10.40.40.4/32 exact;
+            }
+            then {
+                next-hop 192.0.2.101
+            }
+        }
+    }
+}
+
+Figure 1 shows the sample network.
+
+Figure 1: Discard Interface Sample Network
+
+The example includes three routers with external BGP (EBGP) sessions established.
+
+Device R1 represents the attacking device. Device R3 represents the router closest to the device that is being attacked. Device R2 mitigates the attack by forwarding packets to the discard interface.
+
+The example shows an outbound filter applied to the discard interface.
+
+NOTE: 
+
+An issue with using a single null route filter is visibility. All discard packets increment the same counter. To see which categories of packets are being discarded, use destination class usage (DCU), and associate a user-defined class with each null route community. Then reference the DCU classes in a firewall filter. For related examples, see Example: Grouping Source and Destination Prefixes into a Forwarding Class and Example: Configuring a Rate-Limiting Filter Based on Destination Class.
+
+Compared to using route filters and access lists, using a community value is the least administratively difficult and the most scalable approach. Therefore, this is the approach shown in this example.
+
+By default, the next hop must be equal the external BGP (EBGP) peer address. Altering the next hop for null route services requires the multihop feature to be configured on the EBGP sessions.
+
+CLI Quick Configuration shows the configuration for all of the devices in Figure 1.
+
+The section #configuration756__policy-discard-st describes the steps on Device R2.
+
+Configuration
+Procedure
+CLI Quick Configuration
+Step-by-Step Procedure
+Results
+CLI Quick Configuration
+
+To quickly configure this example, copy the following commands, paste them into a text file, remove any line breaks, change any details necessary to match your network configuration, and then copy and paste the commands into the CLI at the [edit] hierarchy level.
+
+Device R1
+
+set interfaces fe-1/2/0 unit 0 family inet address 10.0.0.1/30
+set interfaces lo0 unit 0 family inet address 192.168.0.1/32
+set protocols bgp group ext type external
+set protocols bgp group ext peer-as 200
+set protocols bgp group ext neighbor 10.0.0.2
+set routing-options autonomous-system 100
+
+Device R2
+
+set interfaces fe-1/2/0 unit 0 family inet address 10.0.0.2/30
+set interfaces fe-1/2/1 unit 0 family inet address 10.1.0.1/30
+set interfaces dsc unit 0 family inet filter output log-discard
+set interfaces dsc unit 0 family inet address 192.0.2.102/32 destination 192.0.2.101
+set interfaces lo0 unit 0 family inet address 192.168.0.2/32
+set protocols bgp import blackhole-policy
+set protocols bgp group ext type external
+set protocols bgp group ext multihop
+set protocols bgp group ext export dsc-export
+set protocols bgp group ext neighbor 10.0.0.1 peer-as 100
+set protocols bgp group ext neighbor 10.1.0.2 peer-as 300
+set policy-options policy-statement blackhole-policy term blackhole-communities from community blackhole-all-routers
+set policy-options policy-statement blackhole-policy term blackhole-communities then next-hop 192.0.2.101
+set policy-options policy-statement dsc-export from route-filter 192.0.2.101/32 exact
+set policy-options policy-statement dsc-export from route-filter 192.0.2.102/32 exact
+set policy-options policy-statement dsc-export then community set blackhole-all-routers
+set policy-options policy-statement dsc-export then accept
+set policy-options community blackhole-all-routers members 100:5555
+set routing-options static route 192.0.2.102/32 next-hop 192.0.2.101
+set routing-options autonomous-system 200
+set firewall filter log-discard term one then count counter
+set firewall filter log-discard term one then log
+
+Device R3
+
+set interfaces fe-1/2/1 unit 0 family inet address 10.1.0.2/30
+set interfaces lo0 unit 0 family inet address 192.168.0.3/32
+set interfaces lo0 unit 0 family inet address 192.0.2.102/32
+set protocols bgp group ext type external
+set protocols bgp group ext peer-as 200
+set protocols bgp group ext neighbor 10.1.0.1
+set routing-options autonomous-system 300
+
+Step-by-Step Procedure
+
+The following example requires you to navigate various levels in the configuration hierarchy. For instructions on how to do that, see Use the CLI Editor in Configuration Mode in the Junos OS CLI User Guide.
+
+To configure Device R2:
+
+Create the router interfaces.
+
+[edit interfaces]
+user@R2# set fe-1/2/0 unit 0 family inet address 10.0.0.2/30
+user@R2# set fe-1/2/1 unit 0 family inet address 10.1.0.1/30
+user@R2# set lo0 unit 0 family inet address 192.168.0.2/32
+
+Configure a firewall filter that matches all packets and counts and logs the packets.
+
+[edit firewall filter log-discard term one]
+user@R2# set then count counter
+user@R2# set then log
+
+Create a discard interface and apply the output firewall filter.
+
+Input firewall filters have no impact in this context.
+
+[edit interfaces dsc unit 0 family inet]
+user@R2# set filter output log-discard
+user@R2# set address 192.0.2.102/32 destination 192.0.2.101
+
+Configure a static route that sends the next hop to the destination address that is specified in the discard interface.
+
+[edit routing-options static]
+user@R2# set route 192.0.2.102/32 next-hop 192.0.2.101
+
+Configure BGP peering.
+
+[edit protocols bgp ]
+user@R2# set group ext type external
+user@R2# set group ext multihop
+user@R2# set group ext neighbor 10.0.0.1 peer-as 100
+user@R2# set group ext neighbor 10.1.0.2 peer-as 300
+
+Configure the routing policies.
+
+[edit policy-options policy-statement blackhole-policy term blackhole-communities]
+user@R2# set from community blackhole-all-routers
+user@R2# set then next-hop 192.0.2.101
+[edit policy-options policy-statement dsc-export]
+user@R2# set from route-filter 192.0.2.101/32 exact
+user@R2# set from route-filter 192.0.2.102/32 exact
+user@R2# set then community set blackhole-all-routers
+user@R2# set then accept
+[edit policy-options community blackhole-all-routers]
+user@R2# set members 100:5555
+
+Apply the routing policies.
+
+[edit protocols bgp ]
+user@R2# set import blackhole-policy
+user@R2# set group ext export dsc-export
+
+Configure the autonomous system (AS) number.
+
+[edit routing-options]
+user@R2# set autonomous-system 200
+
+Results
+
+From configuration mode, confirm your configuration by issuing the show interfaces, show protocols , show policy-options, show routing-options, and show firewall commands. If the output does not display the intended configuration, repeat the instructions in this example to correct the configuration.
+
+[edit]
+user@R2# show interfaces
+fe-1/2/0 {
+    unit 0 {
+        family inet {
+            address 10.0.0.2/30;
+        }
+    }
+}
+fe-1/2/1 {
+    unit 0 {
+        family inet {
+            address 10.1.0.1/30;
+        }
+    }
+}
+dsc {
+    unit 0 {
+        family inet {
+            filter {
+                output log-discard;
+            }
+            address 192.0.2.102/32 {
+                destination 192.0.2.101;
+            }
+        }
+    }
+}
+lo0 {
+    unit 0 {
+        family inet {
+            address 192.168.0.2/32;
+        }
+    }
+}
+
+user@R2# show protocols
+bgp {
+    import blackhole-policy;
+    group ext {
+        type external;
+        multihop;
+        export dsc-export;
+        neighbor 10.0.0.1 {
+            peer-as 100;
+        }
+        neighbor 10.1.0.2 {
+            peer-as 300;
+        }
+    }
+}
+
+user@R2# show policy-options
+policy-statement blackhole-policy {
+    term blackhole-communities {
+        from community blackhole-all-routers;
+        then {
+            next-hop 192.0.2.101;
+        }
+    }
+}
+policy-statement dsc-export {
+    from {
+        route-filter 192.0.2.101/32 exact;
+        route-filter 192.0.2.102/32 exact;
+    }
+    then {
+        community set blackhole-all-routers;
+        accept;
+    }
+}
+community blackhole-all-routers members 100:5555;
+
+user@R2# show routing-options
+static {
+    route 192.0.2.102/32 next-hop 192.0.2.101;
+}
+autonomous-system 200;
+
+user@R2# show firewall
+filter log-discard {
+    term one {
+        then {
+            count counter;
+            log;
+        }
+    }
+}
+
+If you are done configuring the device, enter commit from configuration mode.
+
+Verification
+
+Confirm that the configuration is working properly.
+
+Clearing the Firewall Counters
+Pinging the 192.0.2.101 Address
+Checking the Output Filter
+Checking the Community Attribute
+Clearing the Firewall Counters
+Purpose
+Action
+Purpose
+
+Clear the counters to make sure you are starting from a known zero (0) state.
+
+Action
+
+From Device R2, run the clear firewall command.
+
+user@R2> clear firewall filter log-discard
+
+From Device R2, run the show firewall command.
+
+user@R2> show firewall filter log-discard
+Filter: /log-discard                                       
+Counters:
+Name                                                Bytes              Packets
+counter                                                 0                    0
+Pinging the 192.0.2.101 Address
+Purpose
+Action
+Meaning
+Purpose
+
+Send packets to the destination address.
+
+Action
+
+From Device R1, run the ping command.
+
+user@R1> ping 192.0.2.101
+PING 192.0.2.101 (192.0.2.101): 56 data bytes
+^C
+--- 192.0.2.101 ping statistics ---
+4 packets transmitted, 0 packets received, 100% packet loss
+Meaning
+
+As expected, the ping request fails, and no response is sent. The packets are being discarded.
+
+Checking the Output Filter
+Purpose
+Action
+Meaning
+Purpose
+
+Verify that Device R2’s firewall filter is functioning properly.
+
+Action
+
+From Device R2, enter the show firewall filter log-discard command.
+
+user@R2> show firewall filter log-discard
+Filter: log-discard                                       
+Counters:
+Name                                                Bytes              Packets
+counter                                               336                    4
+Meaning
+
+As expected, the counter is being incremented.
+
+NOTE: 
+
+The ping packet carries an additional 20 bytes of IP overhead as well as 8 bytes of ICMP header.
+
+Checking the Community Attribute
+Purpose
+Action
+Meaning
+Purpose
+
+Verify that the route is being tagged with the community attribute.
+
+Action
+
+From Device R1, enter the show route extensive command, using the neighbor address for Device R2, 192.0.2.101.
+
+user@R1> show route 192.0.2.101 extensive
+
+inet.0: 4 destinations, 4 routes (4 active, 0 holddown, 0 hidden)
+192.0.2.101/32 (1 entry, 1 announced)
+TSI:
+KRT in-kernel 192.0.2.101/32 -> {10.0.0.2}
+        *BGP    Preference: 170/-101
+                Next hop type: Router, Next hop index: 684
+                Address: 0x94141d8
+                Next-hop reference count: 2
+                Source: 10.0.0.2
+                Next hop: 10.0.0.2 via fe-1/2/0.0, selected
+                Session Id: 0x8000a
+                State: <Active Ext>
+                Local AS:   100 Peer AS:   200
+                Age: 53:03 
+                Validation State: unverified 
+                Task: BGP_200.10.0.0.2+63097
+                Announcement bits (1): 2-KRT 
+                AS path: 200 I
+                Communities: 100:5555
+                Accepted
+                Localpref: 100
+                Router ID: 192.168.0.2
+
+Meaning
+
+As expected, when Device R2 advertises the 192.0.2.101 route to Device R1, Device R2 adds the 100:5555 community tag.

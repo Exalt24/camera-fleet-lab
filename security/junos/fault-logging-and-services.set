@@ -1,0 +1,15 @@
+# PLANTED FAULTS: logging gaps and services (see EXPECTED.json for the list).
+# Sample configuration written from Juniper's public documentation (see security/vendor-docs/). Never run on a Junos device.
+set system host-name fault-hygiene-1
+set system root-authentication ssh-ed25519 "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL0lSampleKeyForTheLabOnlyNotUsedAnywhere0000 lab-sample"
+set system services ssh root-login deny
+set system services ftp
+set snmp community private authorization read-write
+set snmp community private clients 192.0.2.0/24
+set firewall family inet filter edge-in term allow-web from protocol tcp
+set firewall family inet filter edge-in term allow-web from destination-port 443
+set firewall family inet filter edge-in term allow-web from destination-address 10.20.0.10/32
+set firewall family inet filter edge-in term allow-web then accept
+set firewall family inet filter edge-in term discard-rest then discard
+set interfaces ge-0/0/0 unit 0 family inet address 198.51.100.2/30
+set interfaces ge-0/0/0 unit 0 family inet filter input edge-in

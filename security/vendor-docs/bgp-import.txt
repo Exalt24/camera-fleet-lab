@@ -1,0 +1,72 @@
+Source: https://www.juniper.net/documentation/us/en/software/junos/cli-reference/topics/ref/statement/import-edit-protocols-bgp.html
+Read in Chromium with Operations/tools/webread/webread.cjs on 2026-11-15. Page text only, navigation removed, kept as read.
+
+ON THIS PAGE
+
+Syntax
+
+Hierarchy Level
+
+Description
+
+Options
+
+Required Privilege Level
+
+Release Information
+
+keyboard_arrow_right
+import (BGP)
+date_range 30-May-25
+arrow_backward
+arrow_forward
+Syntax
+import [ policy-names ];
+
+Hierarchy Level
+[edit logical-systems logical-system-name protocols bgp],
+[edit logical-systems logical-system-name protocols bgp group group-name],
+[edit logical-systems logical-system-name protocols bgp group group-name neighbor address],
+[edit logical-systems logical-system-name routing-instances routing-instance-name protocols bgp],
+[edit logical-systems logical-system-name routing-instances routing-instance-name protocols bgp group group-name],
+[edit logical-systems logical-system-name routing-instances routing-instance-name protocols bgp group group-name neighbor address],
+[edit protocols bgp],
+[edit protocols bgp group group-name],
+[edit protocols bgp group group-name neighbor address],
+[edit routing-instances routing-instance-name protocols bgp],
+[edit routing-instances routing-instance-name protocols bgp group group-name],
+[edit routing-instances routing-instance-name protocols bgp group group-name neighbor address],
+[edit protocols bgp family nlri],
+[edit protocols bgp group group-name family nlri],
+[edit protocols bgp group group-name neighbor address family nlri]
+Description
+
+Apply one or more routing policies to routes being imported into the Junos OS routing table from BGP.
+
+If you specify more than one policy, they are evaluated in the order specified, from left to right, and the first matching filter is applied to the route. If no match is found, BGP places into the routing table only those routes that were learned from BGP routing devices. The policy framework software evaluates the routing policies in a chain sequentially. If an action specified in one of the policies manipulates a route characteristic, the policy framework software carries the new route characteristic forward during the evaluation of the remaining policies. For example, if the action specified in the first policy of a chain sets a route’s metric to 500, this route matches the criterion of metric 500 defined in the next policy.
+
+It is also important to understand that in Junos OS, although an import policy (inbound route filter) might reject a route, not use it for traffic forwarding, and not include it in an advertisement to other peers, the router retains these routes as hidden routes. These hidden routes are not available for policy or routing purposes. However, they do occupy memory space on the router. A service provider filtering routes to control the amount of information being kept in memory and processed by a router might want the router to entirely drop the routes being rejected by the import policy.
+
+Hidden routes can be viewed by using the show route receive-protocol bgp neighbor-address hidden command. The hidden routes can then be retained or dropped from the routing table by configuring the keep all | none statement at the [edit protocols bgp] or [edit protocols bgp group group-name] hierarchy level.
+
+The rules of BGP route retention are as follows:
+
+By default, all routes learned from BGP are retained, except those where the AS path is looped. (The AS path includes the local AS.)
+
+By configuring the keep all statement, all routes learned from BGP are retained, even those with the local AS in the AS path.
+
+By configuring the keep none statement, all routes received are discarded. When this statement is configured and the inbound policy changes, Junos OS re-advertises all the routes advertised by the peer.
+
+Options
+
+policy-names—Name of one or more policies.
+
+Required Privilege Level
+
+routing—To view this statement in the configuration.
+
+routing-control—To add this statement to the configuration.
+
+Release Information
+
+Statement introduced before Junos OS Release 7.4.

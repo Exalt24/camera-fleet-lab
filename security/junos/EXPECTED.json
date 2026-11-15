@@ -1,0 +1,41 @@
+{
+  "_about": "What junos_review.py must report for each sample configuration. A finding matches an entry when the rule id is the same and the entry's statement text is part of the statement the finding points at (an empty text matches a whole-configuration finding). The tests require every entry to be found exactly once and nothing else to be reported. The clean configurations expect no findings.",
+  "clean": ["edge-router-clean.set", "site-gateway-clean.set"],
+  "planted": {
+    "fault-management-plane.set": [
+      {"rule": "JR003", "statement": "filter mgmt-in term allow-mgmt"},
+      {"rule": "JR005", "statement": "root-authentication encrypted-password"},
+      {"rule": "JR005", "statement": "ssh root-login allow"},
+      {"rule": "JR004", "statement": "services telnet"},
+      {"rule": "JR004", "statement": "web-management http"},
+      {"rule": "JR006", "statement": "community public"},
+      {"rule": "JR015", "statement": ""},
+      {"rule": "JR016", "statement": ""},
+      {"rule": "JR001", "statement": "mgmt-in term allow-icmp"}
+    ],
+    "fault-filter-logic.set": [
+      {"rule": "JR007", "statement": "term drop-site-guest"},
+      {"rule": "JR007", "statement": "term block-telnet from protocol"},
+      {"rule": "JR002", "statement": "term allow-any"},
+      {"rule": "JR001", "statement": "term block-telnet then discard"}
+    ],
+    "fault-bgp-and-policy.set": [
+      {"rule": "JR008", "statement": "neighbor 203.0.113.1"},
+      {"rule": "JR009", "statement": "neighbor 203.0.113.1"},
+      {"rule": "JR010", "statement": "neighbor 203.0.113.1"},
+      {"rule": "JR011", "statement": "neighbor 203.0.113.1"},
+      {"rule": "JR012", "statement": "customer-in term accept-everything"},
+      {"rule": "JR012", "statement": "rtbh-in term trigger"},
+      {"rule": "JR013", "statement": "rtbh-in term trigger"},
+      {"rule": "JR013", "statement": "static route 192.0.2.101/32 discard"}
+    ],
+    "fault-logging-and-services.set": [
+      {"rule": "JR003", "statement": "ssh root-login deny"},
+      {"rule": "JR006", "statement": "community private"},
+      {"rule": "JR015", "statement": ""},
+      {"rule": "JR016", "statement": ""},
+      {"rule": "JR004", "statement": "services ftp"},
+      {"rule": "JR014", "statement": "edge-in term discard-rest"}
+    ]
+  }
+}

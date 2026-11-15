@@ -1,0 +1,108 @@
+Source: https://www.juniper.net/documentation/us/en/software/junos/cli-reference/topics/ref/statement/server-edit-system-ntp.html
+Read in Chromium with Operations/tools/webread/webread.cjs on 2026-11-15. Page text only, navigation removed, kept as read.
+
+ON THIS PAGE
+
+Syntax
+
+Hierarchy Level
+
+Description
+
+Options
+
+Required Privilege Level
+
+Release Information
+
+keyboard_arrow_right
+server (NTP)
+date_range 14-May-26
+arrow_backward
+arrow_forward
+Syntax
+server address {
+    key key;
+    nts remote-identity {
+ 	 hostname hostname;
+ 	 distinguished-name(container container | wildcard wildcard);
+       }
+    prefer;
+    routing-instance routing-instance;
+    version version;
+}
+
+Hierarchy Level
+[edit system ntp]
+
+Description
+
+For NTP, configure the local router or switch to operate in client mode with the remote system at the specified address. In this mode, the local router or switch can be synchronized with the remote system, but the remote system can never be synchronized with the local router or switch.
+
+If the NTP client time drifts so that the difference in time from the NTP server exceeds 128 milliseconds, the client is automatically stepped back into synchronization. If the offset between the NTP client and server exceeds the 1000-second threshold, the client still synchronizes with the server, but it also generates a system log message noting that the threshold was exceeded.
+
+Options
+address	
+
+Address of the remote system. You must specify an address, not a hostname.
+
+key key-number	
+
+(Optional) Use the specified key number to encrypt authentication fields in all packets sent to the specified address.
+
+Range: Any unsigned 32-bit integer
+
+nts	
+
+Enables Network Time Security (NTS), which uses Transport Layer Security (TLS) protocol and Authenticated Encryption with Associated Data (AEAD) to obtain network time in an authenticated manner to the users. Specified server must also support the NTS feature when you enable NTS on a client device.
+
+remote-identity	
+
+(Optional) Configure the options to verify the NTS enabled server’s identity.
+
+hostname hostname	
+
+(Optional) Specify the fully qualified domain name (FDQN) of the server. This hostname should match with the FQDN of the server in its local certificate’s Subject Alternative Name field.
+
+distinguished-name (container container | wildcard wildcard)	
+
+(Optional) You can verify the identity of NTS-enabled server by its distinguished name in the server certificate.
+
+container container	
+
+If you use the container option, the order of the fields in the distinguished-name and their values must exactly match with the values in the server certificate.
+
+wildcard wildcard	If you use the wildcard option, the order of the fields in the distinguished-name does not matter.
+prefer	
+
+(Optional) Mark the remote system as preferred host, which means that if all other things are equal, this remote system is chosen for synchronization among a set of correctly operating systems.
+
+routing-instance routing-instance	
+
+(Optional) Routing instance through which the server is reachable.
+
+NOTE:
+
+The specified routing instance must be an L3 routing instance. NTP does not support L2 routing instances like EVPN and VPLS.
+
+You can use the routing instance name mgmt_junos to enable access to NTP servers through the management interface.
+
+When configuring the NTP service in the management VRF (mgmt_junos), you must configure at least one IP address on a physical or logical interface within the default routing instance and ensure that this interface is up in order for the NTP service to work with the mgmt_junos VRF.
+
+version value	
+
+(Optional) Specify the version number to be used in outgoing NTP packets.
+
+Range: 1 through 4
+
+Default: 4
+
+Required Privilege Level
+
+system—To view this statement in the configuration.
+
+system-control—To add this statement to the configuration.
+
+Release Information
+
+Statement introduced before Junos OS Release 7.4.

@@ -1,0 +1,275 @@
+Source: https://www.juniper.net/documentation/us/en/software/junos/routing-policy/topics/example/routing-stateless-firewall-filter-security-accept-traffic-from-trusted-source-configuring.html
+Read in Chromium with Operations/tools/webread/webread.cjs on 2026-11-15. Page text only, navigation removed, kept as read.
+
+ON THIS PAGE
+
+Requirements
+
+Overview
+
+Configuration
+
+Verification
+
+keyboard_arrow_right
+Example: Configuring a Stateless Firewall Filter to Accept Traffic from Trusted Sources
+date_range 24-Nov-23
+arrow_backward
+arrow_forward
+
+This example shows how to create a stateless firewall filter that protects the Routing Engine from traffic originating from untrusted sources.
+
+Requirements
+
+No special configuration beyond device initialization is required before configuring stateless firewall filters.
+
+Overview
+
+In this example, you create a stateless firewall filter called protect-RE that discards all traffic destined for the Routing Engine except SSH and BGP protocol packets from specified trusted sources. This example includes the following firewall filter terms:
+
+ssh-term—Accepts TCP packets with a source address of 192.168.122.0/24 and a destination port that specifies SSH.
+
+bgp-term—Accepts TCP packets with a source address of 10.2.1.0/24 and a destination port that specifies BGP.
+
+discard-rest-term—For all packets that are not accepted by ssh-term or bgp-term, creates a firewall filter log and system logging records, then discards all packets.
+
+NOTE: 
+
+You can move terms within the firewall filter using the insert command. See insert in the Junos OS CLI User Guide.
+
+Configuration
+Procedure
+CLI Quick Configuration
+Step-by-Step Procedure
+Results
+CLI Quick Configuration
+
+To quickly configure this example, copy the following commands, paste them into a text file, remove any line breaks, change any details necessary to match your network configuration, and then copy and paste the commands into the CLI at the [edit] hierarchy level.
+
+set firewall family inet filter protect-RE term ssh-term from source-address 192.168.122.0/24 
+set firewall family inet filter protect-RE term ssh-term from protocol tcp 
+set firewall family inet filter protect-RE term ssh-term from destination-port ssh 
+set firewall family inet filter protect-RE term ssh-term then accept 
+set firewall family inet filter protect-RE term bgp-term from source-address 10.2.1.0/24 
+set firewall family inet filter protect-RE term bgp-term from protocol tcp 
+set firewall family inet filter protect-RE term bgp-term from destination-port bgp 
+set firewall family inet filter protect-RE term bgp-term then accept 
+set firewall family inet filter protect-RE term discard-rest-term then log 
+set firewall family inet filter protect-RE term discard-rest-term then syslog 
+set firewall family inet filter protect-RE term discard-rest-term then discard
+set interfaces lo0 unit 0 family inet filter input protect-RE
+
+Step-by-Step Procedure
+
+The following example requires you to navigate various levels in the configuration hierarchy. For instructions on how to do that, see Use the CLI Editor in Configuration Mode in the Junos OS CLI User Guide.
+
+To configure the stateless firewall filter:
+
+Create the stateless firewall filter.
+
+[edit]
+user@host# edit firewall family inet filter protect-RE 
+
+Create the first filter term.
+
+[edit firewall family inet filter protect-RE]
+user@host# edit term ssh-term 
+
+Define the protocol, destination port, and source address match conditions for the term.
+
+[edit firewall family inet filter protect-RE term ssh-term]
+user@host# set from protocol tcp destination-port ssh source-address 192.168.122.0/24
+
+Define the actions for the term.
+
+[edit firewall family inet filter protect-RE term ssh-term]
+user@host# set then accept
+
+Create the second filter term.
+
+[edit firewall family inet filter protect-RE]
+user@host# edit term bgp-term
+
+Define the protocol, destination port, and source address match conditions for the term.
+
+[edit firewall family inet filter protect-RE term bgp-term]
+user@host# set from protocol tcp destination-port bgp source-address 10.2.1.0/24
+
+Define the action for the term.
+
+[edit firewall family inet filter protect-RE term bgp-term]
+user@host# set then accept
+
+Create the third filter term.
+
+[edit firewall family inet filter protect-RE]
+user@host# edit term discard-rest-term 
+
+Define the action for the term.
+
+[edit firewall family inet filter protect-RE term discard-rest]
+user@host# set then log syslog discard
+
+Apply the filter to the input side of the Routing Engine interface.
+
+[edit]
+user@host# set interfaces lo0 unit 0 family inet filter input protect-RE
+
+Results
+
+Confirm your configuration by entering the show firewall command and the show interfaces lo0 command from configuration mode. If the output does not display the intended configuration, repeat the instructions in this example to correct the configuration.
+
+user@host# show firewall
+family inet {
+    filter protect-RE {
+        term ssh-term {
+            from {
+                source-address {
+                    192.168.122.0/24;
+                }
+                protocol tcp;
+                destination-port ssh;
+            }
+            then accept;
+        }
+        term bgp-term {
+            from {
+                source-address {
+                    10.2.1.0/24;
+                }
+                protocol tcp;
+                destination-port bgp;
+            }
+            then accept;
+        }
+        term discard-rest-term {
+            then {
+                log;
+                syslog;
+                discard;
+            }
+        }
+    }
+}
+
+user@host# show interfaces lo0
+unit 0 {
+    family inet {
+        filter {
+            input protect-RE;
+        }
+        address 127.0.0.1/32;
+    }
+}
+
+If you are done configuring the device, enter commit from configuration mode.
+
+[edit]
+user@host# commit
+
+Verification
+
+To confirm that the configuration is working properly, perform these tasks:
+
+Displaying Stateless Firewall Filter Configurations
+Verifying a Services, Protocols, and Trusted Sources Firewall Filter
+Displaying Stateless Firewall Filter Logs
+Displaying Stateless Firewall Filter Configurations
+Purpose
+Action
+Meaning
+Purpose
+
+Verify the configuration of the firewall filter.
+
+Action
+
+From configuration mode, enter the show firewall command and the show interfaces lo0 command.
+
+Meaning
+
+Verify that the output shows the intended configuration of the firewall filter. In addition, verify that the terms are listed in the order in which you want the packets to be tested. You can move terms within a firewall filter by using the insert CLI command.
+
+Verifying a Services, Protocols, and Trusted Sources Firewall Filter
+Purpose
+Action
+Meaning
+Purpose
+
+Verify that the actions of the firewall filter terms are taken.
+
+Action
+
+Send packets to the device that match the terms. In addition, verify that the filter actions are not taken for packets that do not match.
+
+Use the ssh host-name command from a host at an IP address that matches 192.168.122.0/24 to verify that you can log in to the device using only SSH from a host with this address prefix.
+
+Use the show route summary command to verify that the routing table on the device does not contain any entries with a protocol other than Direct, Local, BGP, or Static.
+
+Sample Output
+command-name
+% ssh 192.168.249.71
+%ssh host
+user@host's password: 
+--- JUNOS 6.4-20040518.0 (JSERIES) #0: 2004-05-18 09:27:50 UTC
+
+user@host>
+command-name
+user@host> show route summary
+Router ID: 192.168.249.71
+
+inet.0: 34 destinations, 34 routes (33 active, 0 holddown, 1 hidden)
+              Direct:     10 routes,      9 active
+               Local:      9 routes,      9 active
+                 BGP:     10 routes,     10 active
+              Static:      5 routes,      5 active
+...
+
+Meaning
+
+Verify the following information:
+
+You can successfully log in to the device using SSH.
+
+The show route summary command does not display a protocol other than Direct, Local, BGP, or Static.
+
+Displaying Stateless Firewall Filter Logs
+Purpose
+Action
+Meaning
+Purpose
+
+Verify that packets are being logged. If you included the log or syslog action in a term, verify that packets matching the term are recorded in the firewall log or your system logging facility.
+
+Action
+
+From operational mode, enter the show firewall log command.
+
+Sample Output
+command-name
+user@host> show firewall log
+Log :
+Time      Filter    Action Interface     Protocol Src Addr      Dest Addr
+15:11:02  pfe       D      ge-0/0/0.0    TCP      172.17.28.19  192.168.70.71
+15:11:01  pfe       D      ge-0/0/0.0    TCP      172.17.28.19  192.168.70.71
+15:11:01  pfe       D      ge-0/0/0.0    TCP      172.17.28.19  192.168.70.71
+15:11:01  pfe       D      ge-0/0/0.0    TCP      172.17.28.19  192.168.70.71
+...
+
+Meaning
+
+Each record of the output contains information about the logged packet. Verify the following information:
+
+Under Time, the time of day the packet was filtered is shown.
+
+The Filter output is always pfe.
+
+Under Action, the configured action of the term matches the action taken on the packet—A (accept), D (discard), R (reject).
+
+Under Interface, the inbound (ingress) interface on which the packet arrived is appropriate for the filter.
+
+Under Protocol, the protocol in the IP header of the packet is appropriate for the filter.
+
+Under Src Addr, the source address in the IP header of the packet is appropriate for the filter.
+
+Under Dest Addr, the destination address in the IP header of the packet is appropriate for the filter.

@@ -1,0 +1,671 @@
+Source: https://www.juniper.net/documentation/us/en/software/junos/routing-policy/topics/concept/policy-configuring-actions-in-routing-policy-terms.html
+Read in Chromium with Operations/tools/webread/webread.cjs on 2026-11-15. Page text only, navigation removed, kept as read.
+
+ON THIS PAGE
+
+Configuring Flow Control Actions
+
+Configuring Actions That Manipulate Route Characteristics
+
+Configuring the Default Action in Routing Policies
+
+Configuring a Final Action in Routing Policies
+
+Logging Matches to a Routing Policy Term
+
+Configuring Separate Actions for Routes in Route Lists
+
+Platform-Specific Behavior
+
+keyboard_arrow_right
+Actions in Routing Policy Terms
+date_range 05-Dec-25
+arrow_backward
+arrow_forward
+
+Each term in a routing policy can include a then statement, which defines the actions to take if a route matches all the conditions in the from and to statements in the term:
+
+then {
+    actions;
+}
+
+You can include this statement at the following hierarchy levels:
+
+[edit policy-options policy-statement policy-name term term-name]
+
+[edit logical-systems logical-system-name policy-options policy-statement policy-name term term-name]
+
+If a term does not have from and to statements, all routes are considered to match, and the actions apply to them all. For information about the from and to statements, see Routing Policy Match Conditions.
+
+You can specify one or more actions in the then statement. There are three types of actions:
+
+Flow control actions, which affect whether to accept or reject the route and whether to evaluate the next term or routing policy.
+
+Actions that manipulate route characteristics.
+
+Trace action, which logs route matches.
+
+NOTE: 
+
+When you specify an action that manipulates the route characteristics, the changes occur in a copy of the source route. The source route itself does not change. The effect of the action is visible only after the route is imported into or exported from the routing table. To view the source route before the routing policy has been applied, use the show route receive-protocol command. To view a route after an export policy has been applied, use the show route advertised-protocol command.
+
+During policy evaluation, the characteristics in the copy of the source route always change immediately after the action is evaluated. However, the route is not copied to the routing table or a routing protocol until the policy evaluation is complete.
+
+The then statement is optional. If you omit it, one of the following occurs:
+
+The next term in the routing policy, if one is present, is evaluated.
+
+If there are no more terms in the routing policy, the next routing policy, if one is present, is evaluated.
+
+If there are no more terms or routing policies, the accept or reject action specified by the default policy is taken. For more information, see Default Routing Policies.
+
+The following sections discuss these actions:
+
+Configuring Flow Control Actions
+
+Table 1 lists the flow control actions. You can specify one of these actions along with the trace action or one or more of the actions that manipulate route characteristics (see Configuring Actions That Manipulate Route Characteristics).
+
+Table 1: Flow Control Actions
+
+Flow Control Action
+
+	
+
+Description
+
+accept
+
+	
+
+Accept the route and propagate it. After a route is accepted, no other terms in the routing policy and no other routing policies are evaluated.
+
+default-action accept
+
+	
+
+Accept and override any action intrinsic to the protocol. This is a nonterminating policy action.
+
+reject
+
+	
+
+Reject the route and do not propagate it. After a route is rejected, no other terms in the routing policy and no other routing policies are evaluated.
+
+default-action reject
+
+	
+
+Reject and override any action intrinsic to the protocol. This is a nonterminating policy action.
+
+next term
+
+	
+
+Skip to and evaluate the next term in the same routing policy. Any accept or reject action specified in the then statement is skipped. Any actions in the then statement that manipulate route characteristics are applied to the route.
+
+next term is the default control action if a match occurs and you do not specify a flow control action.
+
+NOTE: 
+
+On Junos OS Evolved, next term cannot appear as the last term of the action. A filter term where next term is specified as an action but without any match conditions configured is not supported.
+
+next policy
+
+	
+
+Skip to and evaluate the next routing policy. Any accept or reject action specified in the then statement is skipped. Any actions in the then statement that manipulate route characteristics are applied to the route.
+
+next policy is the default control action if a match occurs, you do not specify a flow control action, and there are no further terms in the current routing policy.
+
+sr-te-template
+
+	
+
+Segment routing-traffic engineered (SR-TE) template to apply for PCE-initiated LSPs.
+
+Configuring Actions That Manipulate Route Characteristics
+
+You can specify one or more of the actions listed in Table 2 to manipulate route characteristics.
+
+Table 2: Actions That Manipulate Route Characteristics
+
+Action
+
+	
+
+Description
+
+add-path send-count path-count
+
+	
+
+(BGP only) Enable sending up to 20 BGP paths to a destination for a subset of add-path advertised prefixes.
+
+as-path-prepend as-path
+
+	
+
+(BGP only) Affix one or more AS numbers at the beginning of the AS path. If specifying more than one AS number, enclose the numbers in quotation marks (“ ”). The AS numbers are added after the local AS number has been added to the path. This action adds AS numbers to AS sequences only, not to AS sets. If the existing AS path begins with a confederation sequence or set, the affixed AS numbers are placed within a confederation sequence. Otherwise, the affixed AS numbers are placed within a nonconfederation sequence. For more information, see Understanding Prepending AS Numbers to BGP AS Paths.
+
+You can specify 4-byte AS numbers as defined in RFC 4893, BGP Support for Four-octet AS Number Space, as well as the 2-byte AS numbers that are supported in earlier releases of the Junos OS.
+
+as-path-expand last-as count n
+
+	
+
+(BGP only) Extract the last AS number in the existing AS path and affix that AS number to the beginning of the AS path n times, where n is a number from 1 through 32.
+
+The AS number is added before the local AS number has been added to the path. This action adds AS numbers to AS sequences only, not to AS sets. If the existing AS path begins with a confederation sequence or set, the affixed AS numbers are placed within a confederation sequence. Otherwise, the affixed AS numbers are placed within a non-confederation sequence. This option is typically used in non-IBGP export policies.
+
+NOTE: 
+
+It is possible to commit a null configuration for the count value, and if so, Junos will convert the null to a 1 count rather than a 0 count, or disallowing the commit. The effect of having your as-path-expand count equal one is that such an as-path is longer, and therefore less preferable. We recommend that you either explicitly set the as-path-expand count, or delete the unused setting to avoid any unexpected behavior.
+
+assisted-replication replicator-ip replicator-ip (strict | fallback-replicator-ip fallback-replicator-ip)
+
+	
+
+(Assisted replication [AR] with optimized intersubnet multicast [OISM] only) Enable an AR leaf device in an EVPN network running OISM to deterministically steer multicast flows to specific AR replicator devices. Optionally include the strict option to strictly forward matching flows only to the preferred specified AR replicator. Or, you can include a fallback AR replicator address to use in case the preferred AR replicator goes down. See assisted-replication (Deterministic AR Replicator Policy Actions) for details.
+
+bgp-output-queue-priority
+
+	
+
+(BGP only) Set the output priority queue used for this route. There are 17 prioritized output queues: an expedited queue that is the highest priority, and 16 numbered queues where 1 is the lowest priority and 16 is the highest.
+
+class class-name
+
+	
+
+(Class of service [CoS] only) Apply the specified class-of-service parameters to routes installed into the routing table. For more information, see the Junos OS Class of Service User Guide for Routing Devices.
+
+color preference color2 preference
+
+	
+
+Set the preference value to the specified value. The color and color2 preference values are even more fine-grained than those specified in the preference and preference2 actions. The color value can be a number in the range from 0 through 4,294,967,295 (232 – 1). A lower number indicates a more preferred route.
+
+If you set the preference with the color action, the value is internal to Junos OS and is not transitive.
+
+color (add | subtract) number color2 (add | subtract) number
+
+	
+
+Change the color preference value by the specified amount. If an addition operation results in a value that is greater than 4,294,967,295 (232 – 1), the value is set to 232 – 1. If a subtraction operation results in a value less than 0, the value is set to 0. If an attribute value is not already set at the time of the addition or subtraction operation, the attribute value defaults to a value of 0 regardless of the amount specified. If you perform an addition to an attribute with a value of 0, the number you add becomes the resulting attribute value.
+
+community (+ | add) [ names ]
+
+	
+
+(BGP only) Add the specified communities to the set of communities in the route. For more information, see Understanding BGP Communities, Extended Communities, and Large Communities as Routing Policy Match Conditions.
+
+community (– | delete) [ names ]
+
+	
+
+(BGP only) Delete the specified communities from the set of communities in the route. For more information, see Understanding BGP Communities, Extended Communities, and Large Communities as Routing Policy Match Conditions.
+
+community (= | set) [ names ]
+
+	
+
+(BGP only) Replace any communities that were in the route in with the specified communities. For more information, see Understanding BGP Communities, Extended Communities, and Large Communities as Routing Policy Match Conditions.
+
+cos-next-hop-map map-name
+
+	
+
+Set CoS-based next-hop map in forwarding table.
+
+damping name
+
+	
+
+(BGP only) Apply the specified route-damping parameters to the route. These parameters override the default damping parameters. This action is useful only in an import policy, because the damping parameters affect the state of routes in the routing table.
+
+To apply damping parameters, you must enable BGP flap damping as described in the Junos OS Routing Protocols Library for Routing Devices, and you must create a named list of parameters as described in Using Routing Policies to Damp BGP Route Flapping.
+
+destination-class destination-class-name
+
+	
+
+Maintain packet counts for a route passing through your network, based on the destination address in the packet. You can do the following:
+
+Configure group destination prefixes by configuring a routing policy.
+
+Apply that routing policy to the forwarding table with the corresponding destination class.
+
+Enable packet counting on one or more interfaces by including the destination-class-usage statement at the [edit interfaces interface-name unit logical-unit-number family inet accounting] hierarchy level (see the Junos OS Class of Service User Guide for Routing Devices).
+
+View the output by using one of the following commands: show interfaces destination-class (all | destination-class-name logical-interface-name), show interfaces interface-name extensive, or show interfaces interface-name statistics (see the CLI Explorer).
+
+To configure a packet count based on the source address, use the source-class statement described in this table.
+
+external type metric
+
+	
+
+Set the external metric type for routes exported by OSPF. You must specify the keyword type.
+
+forwarding-class forwarding-class-name
+
+	
+
+Create the forwarding class that includes packets based on both the destination address and the source address in the packet. You can do the following:
+
+Configure group prefixes by configuring a routing policy.
+
+Apply that routing policy to the forwarding table with the corresponding forwarding class.
+
+Enable packet counting on one or more interfaces by using the procedure described in either the destination-class or source-class actions defined in this table.
+
+install-nexthop <strict> lsp lsp-name
+
+	
+
+Choose which next hops, among a set of equal LSP next hops, are installed in the forwarding table. Use the export policy for the forwarding table to specify the LSP next hop to be used for the desired routes. Specify the strict option to enable strict mode, which checks to see if any of the LSP next hops specified in the policy are up. If none of the specified LSP next hops are up, the policy installs the discard next hop.
+
+install-to-fib
+
+	
+
+Override the default BGP routing policy. For more information, see Example: Overriding the Default BGP Routing Policy on PTX Series Packet Transport Routers.
+
+load-balance consistent-hash
+
+	
+
+(BGP only) Specify consistent load balancing for one or more IP addresses. This feature preserves the affinity of a flow to a path in an equal-cost multipath (ECMP) group when one or more next-hop paths fail. Only flows for paths that are inactive are redirected. Flows mapped to servers that remain active are maintained.
+
+You can enable consistent load balancing in a kernel routing table (KRT) export policy for routes resolving over a flex route profile with multiple gateways. The policy applies to direct flows to the flex route IP address to maintain flow affinity. Use the KRT policy with caution to allow specific prefixes only and to avoid undesirable outcomes in the Packet Forwarding Engine.
+
+load-balance symmetric-consistent-hash
+
+	
+
+Enable symmetric consistent hashing to support consistent hashing with static routes and achieve symmetric load-balancing with correlated source IP and destination IP load-balancing hash-key in forward and reverse direction.
+
+This action is used in a scenario where consistent hash is to be applied on anycast IPs used for load-balancing the traffic learnt via static route towards ECMP server group in upstream and downstream direction. Because the expectation is that all flows from a customer should reach the same ECMP server, only the source-IP is used for creating the load-balancing hash in one direction and destination-IP is used for creating the load-balancing hash in the reverse direction.
+
+load-balance destination-ip-only
+
+	
+
+Calculate load balancing hash based solely on destination IP address. This allows a service provider to direct traffic toward a specific content server in per-subscriber aware environments.
+
+load-balance per-packet
+
+	
+
+(For export to the forwarding table only) Install all next-hop addresses in the forwarding table and have the forwarding table perform per-packet load balancing. This policy action allows you to optimize VPLS traffic flows across multiple paths. For more information, see Configuring Per-Packet Load Balancing.
+
+load-balance per-prefix
+
+	
+
+Override the default per-packet load balancing routing policy for BGP. For more information, see Example: Overriding the Default BGP Routing Policy on PTX Series Packet Transport Routers.
+
+load-balance source-ip-only
+
+	
+
+Calculate load balancing hash based solely on source IP address. This allows a service provider to direct traffic toward a specific content server in per-subscriber aware environments.
+
+local-preference value
+
+	
+
+(BGP only) Set the BGP local preference (LOCAL_PREF) attribute. The preference value can be a number in the range from 0 through 4,294,967,295 (232 – 1).
+
+local-preference (add | subtract) number
+
+	
+
+Change the local preference value by the specified amount. If an addition operation results in a value that is greater than 4,294,967,295 (232 – 1), the value is set to 232 – 1. If a subtraction operation results in a value less than 0, the value is set to 0. If an attribute value is not already set at the time of the addition or subtraction operation, the attribute value defaults to a value of 0 regardless of the amount specified. If you perform an addition to an attribute with a value of 0, the number you add becomes the resulting attribute value.
+
+For BGP, if the attribute value is not known, it is initialized to 100 before the routing policy is applied.
+
+map-to-interface (interface-name | self)
+
+	
+
+Sets the map-to-interface value which is similar to existing metric or tag actions. The map-to-interface action requires you to specify one of the following:
+
+A logical interface (for example, ge-0/0/0.0). The logical interface can be any interface that multicast currently supports, including VLAN and aggregated Ethernet interfaces.
+
+NOTE: 
+
+If you specify a physical interface as the map-to-interface (for example, ge-0/0/0), a value of .0 is appended to physical interface to create a logical interface.
+
+The keyword self. The self keyword specifies that multicast data packets are sent on the same interface as the control packets and no mapping occurs.
+
+If no term matches, then no multicast data packets are sent.
+
+metric metric metric2 metric metric3 metric metric4 metric
+
+	
+
+Set the metric. You can specify up to four metric values, starting with metric (for the first metric value) and continuing with metric2, metric3, and metric4.
+
+(BGP only) metric corresponds to the MED, and metric2 corresponds to the IGP metric if the BGP next hop loops through another router.
+
+metric (add | subtract) number metric2 (add | subtract) number metric3 (add | subtract) number metric4 (add | subtract) number
+
+	
+
+Change the metric value by the specified amount. If an addition operation results in a value that is greater than 4,294,967,295 (232 – 1), the value is set to 232 – 1. If a subtraction operation results in a value less than 0, the value is set to 0. If an attribute value is not already set at the time of the addition or subtraction operation, the attribute value defaults to a value of 0 regardless of the amount specified. If you perform an addition to an attribute with a value of 0, the number you add becomes the resulting attribute value.
+
+metric expression (metric multiplier x offset a | metric2 multiplier y offset b)
+
+	
+
+Calculate a metric based on the current values of metric and metric2.
+
+This policy action overrides the current value of the metric attribute with the result of the expression
+
+((x * metric) + a) + ((y * metric2) + b)
+
+where metric and metric2 are the current input values. Metric multipliers are limited in range to eight significant digits.
+
+metric (igp | minimum-igp) site-offset
+
+	
+
+(BGP only) Change the metric (MED) value by the specified negative or positive offset. This action is useful only in an external BGP (EBGP) export policy.
+
+next-hop (address | discard | next-table table-name | peer-address | reject | self)
+
+	
+
+Set the next-hop address. When the advertising protocol is BGP, you can set the next hop only when any third-party next hop can be advertised; that is, when you are using IBGP or EBGP confederations.
+
+If you specify self, the next-hop address is replaced by one of the local routing device’s addresses. The advertising protocol determines which address to use. When the advertising protocol is BGP, this address is set to the local IP address used for the BGP adjacency. A routing device cannot install routes with itself as the next hop.
+
+If you specify peer-address, the next-hop address is replaced by the peer’s IP address. This option is valid only in import policies. Primarily used by BGP to enforce using the peer’s IP address for advertised routes, this option is meaningful only when the next hop is the advertising routing device or another directly connected routing device.
+
+If you specify discard, the next-hop address is replaced by a discard next hop.
+
+If you specify next-table, the routing device performs a forwarding lookup in the specified table.
+
+If you use the next-table action, the configuration must include a term qualifier that specifies a different table than the one specified in the next-table action. In other words, the term qualifier in the from statement must exclude the table in the next-table action. In the following example, the first term contains rib vrf-customer2.inet.0 as a matching condition. The action specifies a next-hop in a different routing table, vrf-customer1.inet.0. The second term does the opposite by using rib vrf-customer1.inet.0 in the match condition and vrf-customer2.inet.0 In the next-table action.
+
+term 1 {
+    from {
+        protocol bgp;
+        rib vrf-customer2.inet.0;
+        community customer;
+    }
+    then {
+        next-hop next-table vrf-customer1.inet.0;
+    }
+}
+term 2 {
+    from {
+        protocol bgp;
+        rib vrf-customer1.inet.0;
+        community customer;
+    }
+    then {
+        next-hop next-table vrf-customer2.inet.0;
+    }
+}
+
+If you specify reject, the next-hop address is replaced by a reject next hop.
+
+origin value
+
+	
+
+(BGP only) Set the BGP origin attribute to one of the following values:
+
+igp—Path information originated within the local AS.
+
+egp—Path information originated in another AS.
+
+incomplete—Path information learned by some other means.
+
+p2mp-lsp-root
+
+	
+
+Set the ingress root node for a multipoint LDP (M-LDP)-based point-to-multipoint label-switched path (LSP). For more information, see Example: Configuring Multipoint LDP In-Band Signaling for Point-to-Multipoint LSPs.
+
+preference preference preference2 preference
+
+	
+
+Set the preference value. You can specify a primary preference value (preference) and a secondary preference value (preference2). The preference value can be a number in the range from 0 through 4,294,967,295 (232 – 1). A lower number indicates a more preferred route. When you use an import policy to set the value of preference2 to the highest allowed value of 4,294,967,295, Junos OS resets this value to -1. If you set preference2 to a number greater than (231 – 1), it is reset to a negative value.
+
+To specify even finer-grained preference values, see the color and color2 actions in this table.
+
+If you set the preference with the preference action, the new preference remains associated with the route. The new preference is internal to the Junos OS and is not transitive.
+
+preference (add | subtract) number preference2 (add | subtract) number
+
+	
+
+Change the preference value by the specified amount. If an addition operation results in a value that is greater than 4,294,967,295 (232 – 1), the value is set to 232 – 1. If a subtraction operation results in a value less than 0, the value is set to 0. If an attribute value is not already set at the time of the addition or subtraction operation, the attribute value defaults to a value of 0 regardless of the amount specified. If you perform an addition to an attribute with a value of 0, the number you add becomes the resulting attribute value.
+
+priority (low | medium | high)
+
+	
+
+(OSPF import only) Specify a priority for prefixes included in an OSPF import policy. Prefixes learned through OSPF are installed in the routing table based on the priority assigned to the prefixes. Prefixes assigned a priority of high are installed first, while prefixes assigned a priority of low are installed last.
+
+NOTE: 
+
+An OSPF import policy can only be used to set priority or to filter OSPF external routes. If an OSPF import policy is applied that results in a reject terminating action for a nonexternal route, then the reject action is ignored and the route is accepted anyway.
+
+source-class source-class-name
+
+	
+
+Maintain packet counts for a route passing through your network, based on the source address. You can do the following:
+
+Configure group source prefixes by configuring a routing policy.
+
+Apply that routing policy to the forwarding table with the corresponding source class.
+
+Enable packet counting on one or more interfaces by including the source-class-usage interface-name statement at the [edit interfaces logical-unit-number unit family inet accounting] hierarchy level. Also, follow the source-class-usage statement with the input or output statement to define the inbound and outbound interfaces on which traffic monitored for source-class usage (SCU) is arriving and departing (or define one interface for both). The complete syntax is [edit interfaces interface-name unit family inet accounting source-class-usage (input | output | input output) unit-number].
+
+View the output by using one of the following commands: show interfaces interface-name source-class source-class-name, show interfaces interface-name extensive, or show interfaces interface-name statistics (see the CLI Explorer).
+
+To configure a packet count based on the destination address, use the destination-class statement described in this table.
+
+For a detailed source-class usage example configuration, see the Example: Grouping Source and Destination Prefixes into a Forwarding Class.
+
+NOTE: 
+
+When configuring policy action statements, you can configure only one source class for each matching route. In other words, more than one source class cannot be applied to the same route.
+
+ssm-source [ addresses ];
+
+	
+
+Specify one or more IPv4 or IPv6 source addresses for the source-specific multicast (SSM) policy
+
+ssm-source [ addresses ];
+
+	
+
+Specify one or more IPv4 or IPv6 source addresses for the source-specific multicast (SSM) policy.
+
+tag tag tag2 tag
+
+	
+
+Set the tag value. You can specify two tag strings: tag (for the first string) and tag2 (a second string). These values are local to the router.
+
+For OSPF routes the tag action sets the 32-bit tag field in OSPF external link-state advertisement (LSA) packets.
+
+For IS-IS routes, the tag action sets the 32-bit flag in the IS-IS IP prefix type length values (TLV).
+
+For RIPv2 routes, the tag action sets the route-tag community. The tag2 option is not supported.
+
+tag (add | subtract) number tag2 (add | subtract) number
+
+	
+
+Change the tag value by the specified amount. If an addition operation results in a value that is greater than 4,294,967,295 (232 – 1), the value is set to 232 – 1. If a subtraction operation results in a value less than 0, the value is set to 0. If an attribute value is not already set at the time of the addition or subtraction operation, the attribute value defaults to a value of 0 regardless of the amount specified. If you perform an addition to an attribute with a value of 0, the number you add becomes the resulting attribute value.
+
+validation-state
+
+	
+
+When BGP origin validation is configured, set the validation state of a route prefix to valid, invalid, or unknown.
+
+The route validation database contains route origin authorization (ROA) records that map route prefixes to expected originating autonomous systems (ASs). This prevents the accidental advertisement of invalid routes.
+
+See Understanding Origin Validation for BGP.
+
+Configuring the Default Action in Routing Policies
+
+The default-action statement overrides any action intrinsic to the protocol. This action is also nonterminating, so that various policy terms can be evaluated before the policy is terminated. You can specify a default action, either accept or reject, as follows:
+
+[edit]
+policy-options {
+    policy-statement policy-name {
+        term term-name {
+            from {
+                family family-name;
+                match-conditions;
+                policy subroutine-policy-name;
+                prefix-list name;
+                route-filter destination-prefix match-type <actions>;
+                source-address-filter source-prefix match-type <actions>;
+            }
+            to {
+                match-conditions;
+                policy subroutine-policy-name;
+            }
+            then {
+                actions;
+                default-action (accept | reject);
+            }
+        }
+    }
+}
+
+The resulting action is set either by the protocol or by the last policy term that is matched.
+
+Example: Configuring the Default Action in a Routing Policy
+
+Configure a routing policy that matches routes based on three policy terms. If the route matches the first term, a certain community tag is attached. If the route matches two separate terms, then both community tags are attached. If the route does not match any terms, it is rejected (protocol’s default action). Note that the terms hub and spoke are mutually exclusive.
+
+[edit]
+policy-options {
+    policy-statement test {
+        term set-default {
+            then default-action reject;
+        }
+        term hub {
+            from interface ge-2/1/0.5;
+            then {
+                community add test-01-hub;
+                default-action accept;
+            }
+        }
+        term spoke {
+            from interface [ ge-2/1/0.1 ge-2/1/0.2 ];
+            then {
+                community add test-01-spoke;
+                default-action accept;
+            }
+        }
+        term management {
+            from protocol direct;
+            then {
+                community add management;
+                default-action accept;
+            }
+        }
+    }
+}
+
+Configuring a Final Action in Routing Policies
+
+In addition to specifying an action using the then statement in a named term, you can also specify an action using the then statement in an unnamed term, as follows:
+
+[edit]
+policy-options {
+    policy-statement policy-name {
+        term term-name {
+            from {
+                family family-name;
+                match-conditions;
+                policy subroutine-policy-name;
+                prefix-list name;
+                route-filter destination-prefix match-type <actions>;
+                source-address-filter source-prefix match-type <actions>;
+            }
+            to {
+                match-conditions;
+                policy subroutine-policy-name;
+            }
+            then {
+                actions;
+            }
+        }
+        then action;
+    }
+}
+
+Logging Matches to a Routing Policy Term
+
+If you specify the trace action, the match is logged to a trace file. To set up a trace file, you must specify the following elements in the global traceoptions statement:
+
+Trace filename
+
+policy option in the flag statement
+
+The following example uses the trace filename of policy-log:
+
+[edit]
+routing-options {
+    traceoptions {
+        file “policy-log";
+        flag policy;
+    }
+}
+
+This action does not affect the flow control during routing policy evaluation.
+
+If a term that specifies a trace action also specifies a flow control action, the name of the term is logged in the trace file. If a term specifies a trace action only, the word <default> is logged.
+
+Configuring Separate Actions for Routes in Route Lists
+
+If you specify route lists in the from statement, for each route in the list, you can specify an action to take on that individual route directly, without including a then statement. For more information, see Understanding Route Filters for Use in Routing Policy Match Conditions.
+
+Platform-Specific Behavior
+
+Use Feature Explorer to confirm platform and release support for specific features.
+
+Use the following table to review platform-specific behaviors for your platform:
+
+Platform
+
+	
+
+Difference
+
+MX Series Routers
+
+	
+
+load-balance consistent-hash is for MX Series routers with modular port concentrators (MPCs).
+
+load-balance symmetric-consistent-hash is applicable for MX Series Routers - AFT-based.
+
+QFX Series Routers
+
+	
+
+load-balance consistent-hash is for QFX10000.
+
+PTX Series Routers
+
+	
+
+install-to-fib is only applicable for PTX Series Routers.
+
+load-balance per-prefix is only applicable for PTX Series Routers.

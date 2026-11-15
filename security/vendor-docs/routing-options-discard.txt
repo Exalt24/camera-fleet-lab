@@ -1,0 +1,58 @@
+Source: https://www.juniper.net/documentation/en_US/junos/topics/reference/configuration-statement/discard-edit-routing-options.html
+Read in Chromium with Operations/tools/webread/webread.cjs on 2026-11-15. Page text only, navigation removed, kept as read.
+
+ON THIS PAGE
+
+Syntax
+
+Hierarchy Level
+
+Description
+
+Default
+
+Required Privilege Level
+
+Release Information
+
+keyboard_arrow_right
+discard (routing-options)
+date_range 30-May-24
+arrow_backward
+arrow_forward
+Syntax
+discard;
+
+Hierarchy Level
+[edit logical-systems logical-system-name routing-instances routing-instance-name routing-options (aggregate | generate) (defaults | route)],
+[edit logical-systems logical-system-name routing-instances routing-instance-name routing-options rib routing-table-name (aggregate | generate) (defaults | route)],
+[edit logical-systems logical-system-name routing-options (aggregate | generate) (defaults | route)],
+[edit logical-systems logical-system-name routing-options rib routing-table-name (aggregate | generate) (defaults | route)],
+[edit routing-instances routing-instance-name routing-options (aggregate | generate) (defaults | route)],
+[edit routing-instances routing-instance-name routing-options rib routing-table-name (aggregate | generate) (defaults | route)],
+[edit routing-options (aggregate | generate) (defaults | route)],
+[edit routing-options rib routing-table-name (aggregate | generate) (defaults | route)]
+
+Description
+
+Do not forward packets addressed to this destination. Instead, drop the packets, do not send ICMP unreachable messages to the packets’ originators, and install a reject route for this destination into the routing table.
+
+To propagate static routes into the routing protocols, include the discard statement when you define the route, along with a routing policy.
+
+NOTE: 
+
+In other vendors’ software, a common way to propagate static routes into routing protocols is to configure the routes so that the next-hop routing device is the loopback address (commonly, 127.0.0.1). However, configuring static routes in this way (by including a statement such as route address/mask-length next-hop 127.0.0.1) does not propagate the static routes, because the forwarding table ignores static routes whose next-hop routing device is the loopback address.
+
+Default
+
+When an aggregate route becomes active, it is installed in the routing table with a reject next hop, which means that ICMP unreachable messages are sent.
+
+Required Privilege Level
+
+routing—To view this statement in the configuration.
+
+routing-control—To add this statement to the configuration.
+
+Release Information
+
+Statement introduced before Junos OS Release 7.4.

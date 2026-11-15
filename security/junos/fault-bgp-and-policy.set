@@ -1,0 +1,57 @@
+# PLANTED FAULTS: BGP session hygiene, accept-all policy, untagged black hole (see EXPECTED.json).
+# Sample configuration written from Juniper's public documentation (see security/vendor-docs/). Never run on a Junos device.
+set system host-name site-edge-1
+set system root-authentication ssh-ed25519 "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL0lSampleKeyForTheLabOnlyNotUsedAnywhere0000 lab-sample"
+set system login user ops class super-user
+set system login user ops authentication ssh-ed25519 "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL0lSampleKeyForTheLabOnlyNotUsedAnywhere0000 lab-sample"
+set system services ssh root-login deny
+set system services netconf ssh
+set system services web-management https system-generated-certificate
+set system ntp server 192.0.2.123
+set system ntp server 192.0.2.124
+set system syslog host 192.0.2.50 any notice
+set system syslog file messages any notice
+set snmp community lab-ro-7d9f authorization read-only
+set snmp community lab-ro-7d9f clients 192.0.2.0/24
+set snmp community lab-ro-7d9f clients 0.0.0.0/0 restrict
+set policy-options prefix-list mgmt-hosts 192.0.2.0/24
+set policy-options community blackhole members 65535:666
+set firewall family inet filter protect-RE term ssh-term from source-prefix-list mgmt-hosts
+set firewall family inet filter protect-RE term ssh-term from protocol tcp
+set firewall family inet filter protect-RE term ssh-term from destination-port ssh
+set firewall family inet filter protect-RE term ssh-term from destination-port netconf
+set firewall family inet filter protect-RE term ssh-term then accept
+set firewall family inet filter protect-RE term bgp-term from source-address 198.51.100.0/30
+set firewall family inet filter protect-RE term bgp-term from protocol tcp
+set firewall family inet filter protect-RE term bgp-term from destination-port bgp
+set firewall family inet filter protect-RE term bgp-term then accept
+set firewall family inet filter protect-RE term snmp-term from source-prefix-list mgmt-hosts
+set firewall family inet filter protect-RE term snmp-term from protocol udp
+set firewall family inet filter protect-RE term snmp-term from destination-port snmp
+set firewall family inet filter protect-RE term snmp-term then accept
+set firewall family inet filter protect-RE term icmp-term from protocol icmp
+set firewall family inet filter protect-RE term icmp-term then accept
+set firewall family inet filter protect-RE term discard-rest-term then count protect-RE-discards
+set firewall family inet filter protect-RE term discard-rest-term then log
+set firewall family inet filter protect-RE term discard-rest-term then syslog
+set firewall family inet filter protect-RE term discard-rest-term then discard
+set interfaces lo0 unit 0 family inet address 192.0.2.10/32
+set interfaces lo0 unit 0 family inet filter input protect-RE
+set routing-options autonomous-system 64512
+set protocols bgp group transit type external
+set protocols bgp group transit peer-as 64500
+set protocols bgp group transit neighbor 203.0.113.1
+set protocols bgp group customers type external
+set protocols bgp group customers peer-as 64600
+set protocols bgp group customers authentication-key "lab-sample-secret-not-real"
+set protocols bgp group customers import customer-in
+set protocols bgp group customers export customer-out
+set protocols bgp group customers family inet unicast prefix-limit maximum 100
+set protocols bgp group customers neighbor 203.0.113.9
+set policy-options policy-statement customer-in term accept-everything then accept
+set policy-options policy-statement customer-out term ours from route-filter 198.18.0.0/24 exact
+set policy-options policy-statement customer-out term ours then accept
+set policy-options policy-statement customer-out term default then reject
+set policy-options policy-statement rtbh-in term trigger then next-hop 192.0.2.101
+set policy-options policy-statement rtbh-in term trigger then accept
+set routing-options static route 192.0.2.101/32 discard

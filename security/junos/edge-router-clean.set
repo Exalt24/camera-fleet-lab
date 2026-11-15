@@ -1,0 +1,84 @@
+# CLEAN: edge router with a protected control plane, an authenticated and limited BGP peer, a tagged RTBH trigger.
+# Sample configuration written from Juniper's public documentation (see security/vendor-docs/). Never run on a Junos device.
+set system host-name site-edge-1
+set system root-authentication ssh-ed25519 "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL0lSampleKeyForTheLabOnlyNotUsedAnywhere0000 lab-sample"
+set system login user ops class super-user
+set system login user ops authentication ssh-ed25519 "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL0lSampleKeyForTheLabOnlyNotUsedAnywhere0000 lab-sample"
+set system services ssh root-login deny
+set system services netconf ssh
+set system services web-management https system-generated-certificate
+set system ntp server 192.0.2.123
+set system ntp server 192.0.2.124
+set system syslog host 192.0.2.50 any notice
+set system syslog file messages any notice
+set snmp community lab-ro-7d9f authorization read-only
+set snmp community lab-ro-7d9f clients 192.0.2.0/24
+set snmp community lab-ro-7d9f clients 0.0.0.0/0 restrict
+set policy-options prefix-list mgmt-hosts 192.0.2.0/24
+set policy-options community blackhole members 65535:666
+set firewall family inet filter protect-RE term ssh-term from source-prefix-list mgmt-hosts
+set firewall family inet filter protect-RE term ssh-term from protocol tcp
+set firewall family inet filter protect-RE term ssh-term from destination-port ssh
+set firewall family inet filter protect-RE term ssh-term from destination-port netconf
+set firewall family inet filter protect-RE term ssh-term then accept
+set firewall family inet filter protect-RE term bgp-term from source-address 198.51.100.0/30
+set firewall family inet filter protect-RE term bgp-term from protocol tcp
+set firewall family inet filter protect-RE term bgp-term from destination-port bgp
+set firewall family inet filter protect-RE term bgp-term then accept
+set firewall family inet filter protect-RE term snmp-term from source-prefix-list mgmt-hosts
+set firewall family inet filter protect-RE term snmp-term from protocol udp
+set firewall family inet filter protect-RE term snmp-term from destination-port snmp
+set firewall family inet filter protect-RE term snmp-term then accept
+set firewall family inet filter protect-RE term icmp-term from protocol icmp
+set firewall family inet filter protect-RE term icmp-term then accept
+set firewall family inet filter protect-RE term discard-rest-term then count protect-RE-discards
+set firewall family inet filter protect-RE term discard-rest-term then log
+set firewall family inet filter protect-RE term discard-rest-term then syslog
+set firewall family inet filter protect-RE term discard-rest-term then discard
+set interfaces lo0 unit 0 family inet address 192.0.2.10/32
+set interfaces lo0 unit 0 family inet filter input protect-RE
+set firewall family inet filter wan-in term block-private-src from source-address 10.0.0.0/8
+set firewall family inet filter wan-in term block-private-src from source-address 172.16.0.0/12
+set firewall family inet filter wan-in term block-private-src from source-address 192.168.0.0/16
+set firewall family inet filter wan-in term block-private-src then count spoofed-source
+set firewall family inet filter wan-in term block-private-src then log
+set firewall family inet filter wan-in term block-private-src then discard
+set firewall family inet filter wan-in term allow-camera-streams from destination-address 10.20.0.10/32
+set firewall family inet filter wan-in term allow-camera-streams from protocol tcp
+set firewall family inet filter wan-in term allow-camera-streams from destination-port 8554
+set firewall family inet filter wan-in term allow-camera-streams from destination-port 8889
+set firewall family inet filter wan-in term allow-camera-streams then accept
+set firewall family inet filter wan-in term allow-bgp from source-address 198.51.100.0/30
+set firewall family inet filter wan-in term allow-bgp from protocol tcp
+set firewall family inet filter wan-in term allow-bgp from port bgp
+set firewall family inet filter wan-in term allow-bgp then accept
+set firewall family inet filter wan-in term discard-rest then count wan-in-discards
+set firewall family inet filter wan-in term discard-rest then log
+set firewall family inet filter wan-in term discard-rest then discard
+set interfaces ge-0/0/0 unit 0 family inet address 198.51.100.2/30
+set interfaces ge-0/0/0 unit 0 family inet filter input wan-in
+set interfaces ge-0/0/1 unit 0 family inet address 10.20.0.1/24
+set routing-options autonomous-system 64512
+set protocols bgp group transit type external
+set protocols bgp group transit peer-as 64500
+set protocols bgp group transit authentication-key "lab-sample-secret-not-real"
+set protocols bgp group transit import transit-in
+set protocols bgp group transit export transit-out
+set protocols bgp group transit family inet unicast prefix-limit maximum 1000
+set protocols bgp group transit family inet unicast prefix-limit teardown 80
+set protocols bgp group transit neighbor 198.51.100.1
+set policy-options policy-statement transit-in term no-default from route-filter 0.0.0.0/0 exact
+set policy-options policy-statement transit-in term no-default then reject
+set policy-options policy-statement transit-in term rtbh from community blackhole
+set policy-options policy-statement transit-in term rtbh from route-filter 0.0.0.0/0 prefix-length-range /32-/32
+set policy-options policy-statement transit-in term rtbh then next-hop 192.0.2.101
+set policy-options policy-statement transit-in term rtbh then accept
+set policy-options policy-statement transit-in term accept-valid from route-filter 203.0.113.0/24 orlonger
+set policy-options policy-statement transit-in term accept-valid then accept
+set policy-options policy-statement transit-in term default then reject
+set policy-options policy-statement transit-out term ours from route-filter 198.18.0.0/24 exact
+set policy-options policy-statement transit-out term ours then accept
+set policy-options policy-statement transit-out term default then reject
+set routing-options static route 192.0.2.101/32 discard
+set routing-options static route 192.0.2.101/32 community 65535:666
+set interfaces dsc unit 0 family inet address 192.0.2.102/32 destination 192.0.2.101

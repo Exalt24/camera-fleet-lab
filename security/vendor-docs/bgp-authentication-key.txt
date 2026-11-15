@@ -1,0 +1,64 @@
+Source: https://www.juniper.net/documentation/us/en/software/junos/bgp/topics/ref/statement/authentication-key-edit-protocols-bgp.html
+Read in Chromium with Operations/tools/webread/webread.cjs on 2026-11-15. Page text only, navigation removed, kept as read.
+
+ON THIS PAGE
+
+Syntax
+
+Hierarchy Level
+
+Description
+
+Options
+
+Required Privilege Level
+
+Release Information
+
+keyboard_arrow_right
+authentication-key (Protocols BGP and BMP)
+date_range 01-Oct-25
+arrow_backward
+arrow_forward
+Syntax
+authentication-key key;
+
+Hierarchy Level
+[edit logical-systems logical-system-name protocols bgp],
+[edit logical-systems logical-system-name protocols bgp group group-name],
+[edit logical-systems logical-system-name protocols bgp group group-name neighbor address],
+[edit logical-systems logical-system-name routing-instances routing-instance-name protocols bgp],
+[edit logical-systems logical-system-name routing-instances routing-instance-name protocols bgp group group-name],
+[edit logical-systems logical-system-name routing-instances routing-instance-name protocols bgp group group-name neighbor address],
+[edit logical-systems logical-system-name routing-options bmp],
+[edit logical-systems logical-system-name routing-options bmp station station-name],
+[edit protocols bgp],
+[edit protocols bgp group group-name],
+[edit protocols bgp group group-name neighbor address],
+[edit routing-instances routing-instance-name protocols bgp],
+[edit routing-instances routing-instance-name protocols bgp group group-name],
+[edit routing-instances routing-instance-name protocols bgp group group-name neighbor address],
+[edit routing-options bmp],
+[edit routing-options bmp station station-name]
+
+Description
+
+Configure an MD5 authentication key (password). Neighboring routing devices use the same password to verify the authenticity of BGP packets sent from this system.
+
+Options
+
+key—Authentication password. It can be up to 126 characters. Characters can include any ASCII strings. If you include spaces, enclose all characters in quotation marks (“ ”).
+
+Required Privilege Level
+
+routing—To view this statement in the configuration.
+
+routing-control—To add this statement to the configuration.
+
+Release Information
+
+Statement introduced before Junos OS Release 7.4.
+
+Statement introduced for BMP in Junos OS Release 13.2X51-D15 for the QFX Series.
+
+Statement introduced for BMP version 3 in Junos OS Release 13.3.

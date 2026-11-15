@@ -1,0 +1,84 @@
+Source: https://www.juniper.net/documentation/us/en/software/junos/cli-reference/topics/ref/statement/telnet-edit-system.html
+Read in Chromium with Operations/tools/webread/webread.cjs on 2026-11-15. Page text only, navigation removed, kept as read.
+
+ON THIS PAGE
+
+Syntax
+
+Hierarchy Level
+
+Description
+
+Options
+
+Required Privilege Level
+
+Release Information
+
+keyboard_arrow_right
+telnet (Services)
+date_range 21-May-24
+arrow_backward
+arrow_forward
+Syntax
+telnet {
+    authentication-order [authentication-methods];
+    connection-limit limit;
+    rate-limit limit;
+}
+
+Hierarchy Level
+[edit system services]
+
+Description
+
+Provide Telnet connections from remote systems to the local device.
+
+Options
+authentication-order [authentication-methods	
+
+Configure the order in which the software tries different user authentication methods when attempting to authenticate a user. For each login attempt, the software tries the authentication methods in order, starting with the first one, until the password matches.
+
+Values: Specify one or more of the following authentication methods listed in the order in which they must be tried:
+
+ldaps—Use LDAP authentication services.
+
+password—Use the password configured for the user with the authentication statement at the [edit system login user] hierarchy level.
+
+radius—Use RADIUS authentication services.
+
+tacplus—Use TACACS+ authentication services.
+
+Default: If you do not include the authentication-order statement, users are verified based on their configured passwords.
+
+connection-limit limit	
+
+Configure the maximum number of connections sessions for the telnet service per protocol (either IPv6 or IPv4).
+
+NOTE: 
+
+The actual number of maximum connections depends on the availability of system resources, and might be fewer than the configured connection-limit value if the system resources are limited.
+
+Range: 1 through 250 connections
+
+Default: 75 connections
+
+rate-limit limit	
+
+Configure the maximum number of connections attempts per minute, per protocol (either IPv6 or IPv4) on an access service. For example, a rate limit of 10 allows 10 IPv6 telnet session connection attempts per minute and 10 IPv4 telnet session connection attempts per minute.
+
+Range: 1 through 250 connections
+
+Default: 150 connections
+
+Required Privilege Level
+
+system—To view this statement in the configuration.
+
+system-control—To add this statement to the configuration.
+
+Release Information
+
+Statement introduced before Junos OS Release 7.4.
+
+Option ldaps introduced in Junos OS Release 20.2R1.

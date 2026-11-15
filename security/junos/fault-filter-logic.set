@@ -1,0 +1,38 @@
+# PLANTED FAULTS: filter logic (see EXPECTED.json for the list).
+# Sample configuration written from Juniper's public documentation (see security/vendor-docs/). Never run on a Junos device.
+set system host-name site-gw-2
+set system root-authentication ssh-ed25519 "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL0lSampleKeyForTheLabOnlyNotUsedAnywhere0000 lab-sample"
+set system services ssh root-login deny
+set system services web-management https system-generated-certificate
+set system ntp server 192.0.2.123
+set system syslog host 192.0.2.50 any notice
+set snmp community gw-ro-41c2 authorization read-only
+set snmp community gw-ro-41c2 clients 192.0.2.0/24
+set policy-options prefix-list mgmt-hosts 192.0.2.0/24
+set policy-options prefix-list camera-vlan 10.20.0.0/24
+set firewall family inet filter protect-RE term ssh-term from source-prefix-list mgmt-hosts
+set firewall family inet filter protect-RE term ssh-term from protocol tcp
+set firewall family inet filter protect-RE term ssh-term from destination-port ssh
+set firewall family inet filter protect-RE term ssh-term then accept
+set firewall family inet filter protect-RE term snmp-term from source-prefix-list mgmt-hosts
+set firewall family inet filter protect-RE term snmp-term from protocol udp
+set firewall family inet filter protect-RE term snmp-term from destination-port snmp
+set firewall family inet filter protect-RE term snmp-term then accept
+set firewall family inet filter protect-RE term discard-rest-term then count protect-RE-discards
+set firewall family inet filter protect-RE term discard-rest-term then log
+set firewall family inet filter protect-RE term discard-rest-term then discard
+set interfaces lo0 unit 0 family inet filter input protect-RE
+set policy-options prefix-list corp-nets 10.0.0.0/8
+set firewall family inet filter transit-in term allow-corp from source-prefix-list corp-nets
+set firewall family inet filter transit-in term allow-corp then accept
+set firewall family inet filter transit-in term drop-site-guest from source-address 10.20.5.0/24
+set firewall family inet filter transit-in term drop-site-guest then count guest-drops
+set firewall family inet filter transit-in term drop-site-guest then log
+set firewall family inet filter transit-in term drop-site-guest then discard
+set firewall family inet filter transit-in term allow-any then accept
+set firewall family inet filter transit-in term block-telnet from protocol tcp
+set firewall family inet filter transit-in term block-telnet from destination-port telnet
+set firewall family inet filter transit-in term block-telnet then count telnet-drops
+set firewall family inet filter transit-in term block-telnet then discard
+set interfaces ge-0/0/1 unit 0 family inet address 10.20.0.1/24
+set interfaces ge-0/0/1 unit 0 family inet filter input transit-in

@@ -1,0 +1,101 @@
+Source: https://www.juniper.net/documentation/us/en/software/junos/bgp/topics/ref/statement/prefix-limit-edit-protocols-bgp.html
+Read in Chromium with Operations/tools/webread/webread.cjs on 2026-11-15. Page text only, navigation removed, kept as read.
+
+ON THIS PAGE
+
+Syntax
+
+Hierarchy Level
+
+Description
+
+Options
+
+Required Privilege Level
+
+Release Information
+
+keyboard_arrow_right
+prefix-limit
+date_range 10-Sep-26
+arrow_backward
+arrow_forward
+Syntax
+prefix-limit {
+    maximum number;
+    teardown <percentage> <idle-timeout (forever | minutes)>;
+    drop-excess <percentage>;
+    hide-excess <percentage>;
+}
+
+Hierarchy Level
+[edit logical-systems logical-system-name protocols bgp family (inet | inet6 | evpn) (any | flow | labeled-unicast | multicast | unicast)],
+[edit logical-systems logical-system-name protocols bgp group group-name family (inet | inet6 | evpn) (any | flow | labeled-unicast | multicast | unicast)],
+[edit logical-systems logical-system-name protocols bgp group group-name neighbor address family  (inet | inet6 | evpn) (any | flow | labeled-unicast | multicast | unicast)],
+[edit logical-systems logical-system-name routing-instances routing-instance-name protocols bgp family (inet | inet6 | evpn) (any | flow | labeled-unicast | multicast | unicast)],
+[edit logical-systems logical-system-name routing-instances routing-instance-name protocols bgp group group-name family (inet | inet6 | evpn) (any | flow | labeled-unicast | multicast | unicast)],
+[edit logical-systems logical-system-name routing-instances routing-instance-name protocols bgp group group-name neighbor address family (inet | inet6 | evpn) (any | flow | labeled-unicast | multicast | unicast)],
+[edit protocols bgp family (inet | inet6 | evpn) (any | flow | labeled-unicast | multicast | unicast)],
+[edit protocols bgp family prefix-limit (inet | inet6 | evpn) (any | flow | labeled-unicast | multicast | unicast)],
+[edit protocols bgp group group-name family (inet | inet6 | evpn) (any | labeled-unicast | multicast | unicast)],
+[edit protocols bgp group group-name neighbor address family (inet | inet6 | evpn) (any | flow | labeled-unicast | multicast | unicast)],
+[edit routing-instances routing-instance-name protocols bgp family (inet | inet6 | evpn) (any | flow |  labeled-unicast | multicast | unicast)],
+[edit routing-instances routing-instance-name protocols bgp group group-name family (inet | inet6 | evpn) (any | flow | labeled-unicast | multicast | unicast)],
+[edit routing-instances routing-instance-name protocols bgp group group-name neighbor address family (inet | inet6 | evpn) (any | flow |  labeled-unicast | multicast | unicast)]
+
+Description
+
+Limit the number of prefixes received on a BGP peer session and a rate-limit logging when injected prefixes exceed a set limit.
+
+This functionality is identical to the accepted-prefix-limit functionality except that it operates against received prefixes rather than accepted prefixes.
+
+Options
+maximum number	
+
+When you set the maximum number of prefixes, a message is logged when that number is exceeded.
+
+Range: 1 through 4,294,967,295 (232 – 1)
+
+teardown <percentage>	
+
+(Optional) If you include the teardown statement, the session is torn down when the maximum number of prefixes is reached. If you specify a percentage, messages are logged when the number of prefixes exceeds that percentage. After the session is torn down, it is reestablished in a short time unless you include the idle-timeout statement. Then the session can be kept down for a specified amount of time, or forever. If you specify forever, the session is reestablished only after you issue a clear bgp neighbor command.
+
+If the teardown statement is not configured, a message is logged when the number of prefixes exceeds the value configured for the maximum option.
+
+Range: 1 through 100
+
+idle-timeout (forever | timeout-in-minutes)	
+
+(Optional) If you include the idle-timeout statement, the session is torn down for a specified amount of time, or forever. If you specify a period of time, the session is allowed to reestablish after this timeout period. If you specify forever, the session is reestablished only after you intervene with a clear bgp neighbor command.
+
+Range: 1 through 2400
+
+drop-excess <percentage>	
+
+(Optional) If you include the drop-excess <percentage> option, the excess routes are dropped when the maximum number of prefixes is reached. If you specify a percentage, the routes are logged when the number of prefixes exceeds that percentage value of the maximum number.
+
+hide-excess <percentage>	
+
+(Optional) If you include the hide-excess <percentage> option, the excess routes are hidden when the maximum number of prefixes is reached. If you specify a percentage, the routes are logged when the number of prefixes exceeds that percentage value of the maximum number. If the percentage is modified, the routes are re-evaluated automatically. If the active routes drop below the specified percentage, those routes are kept as hidden.
+
+To recover the routes from the hidden state, run the following commands to refresh the routes and get a complete re-evaluation of the routes:
+
+clear bgp table <table-name> and clear bgp neighbor <neighbor address> soft-inbound
+
+NOTE: 
+
+You can include either the teardown <percentage>, drop-excess <percentage>, or hide-excess <percentage> statement option one at a time.
+
+Required Privilege Level
+
+routing—To view this statement in the configuration.
+
+routing-control—To add this statement to the configuration.
+
+Release Information
+
+Statement introduced before Junos OS Release 7.4.
+
+drop-excess <percentage> and hide-excess <percentage> options introduced in Junos OS Release 21.2.
+
+drop-excess <percentage> and hide-excess <percentage> options introduced in Junos OS Evolved Release 21.3R1.
