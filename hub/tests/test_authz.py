@@ -85,6 +85,25 @@ def test_every_answer_carries_the_security_headers(client):
     assert r.headers["X-Frame-Options"] == "DENY" and "frame-ancestors 'none'" in r.headers["Content-Security-Policy"]
 
 
+def test_the_dashboard_policy_has_no_unsafe_inline_and_carries_the_hash_of_the_served_script(client):
+    # the hash in the header is the one a browser computes over the script text of the page the hub actually serves
+    import base64
+    import hashlib
+    import re
+    r = client.get("/")
+    csp = r.headers["Content-Security-Policy"]
+    assert "unsafe-inline" not in csp
+    script = re.search(r"<script>(.*?)</script>", r.text, re.S).group(1)
+    assert "'sha256-" + base64.b64encode(hashlib.sha256(script.encode("utf-8")).digest()).decode() + "'" in csp
+
+
+def test_a_json_answer_gets_the_allow_nothing_policy_and_every_answer_is_no_store(client):
+    r = client.get("/whoami")
+    assert r.headers["Content-Security-Policy"] == "default-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
+    for path in ("/whoami", "/", "/admin/probe-config", "/nope"):
+        assert client.get(path).headers["Cache-Control"] == "no-store", path
+
+
 def test_the_api_docs_are_off_by_default(client):
     for path in ("/docs", "/redoc", "/openapi.json"):
         assert client.get(path).status_code == 404, path

@@ -13,7 +13,7 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import HTMLResponse
 from sqlalchemy import text
 
-from . import authz, db
+from . import authz, db, headers
 from .probe import probe_camera
 
 # uvicorn only configures its own loggers, so without this the monitor's own log lines are silently dropped (the root
@@ -82,32 +82,24 @@ _DOCS_ON = os.environ.get("API_DOCS") == "1"
 app = FastAPI(title="camera fleet lab", lifespan=lifespan,
               docs_url="/docs" if _DOCS_ON else None, redoc_url="/redoc" if _DOCS_ON else None, openapi_url="/openapi.json" if _DOCS_ON else None)
 
-# The dashboard is one page with an inline script and style, so the policy allows 'self' and inline but nothing from another origin.
-SECURITY_HEADERS = {
-    "X-Content-Type-Options": "nosniff",
-    "X-Frame-Options": "DENY",
-    "Referrer-Policy": "no-referrer",
-    "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
-    "Cross-Origin-Opener-Policy": "same-origin",
-    "Cross-Origin-Resource-Policy": "same-origin",
-    "Cross-Origin-Embedder-Policy": "require-corp",
-    "X-Permitted-Cross-Domain-Policies": "none",
-    "Content-Security-Policy": ("default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; "
-                                "connect-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"),
-}
+# The dashboard page is read once. Its Content-Security-Policy is built from the hash of each inline block in this same text, so the
+# policy needs no 'unsafe-inline' and cannot go stale when the page is edited (headers.py).
+DASHBOARD_HTML = (Path(__file__).parent / "dashboard.html").read_text(encoding="utf-8")
+DASHBOARD_CSP = headers.dashboard_csp(DASHBOARD_HTML)
 
 
 @app.middleware("http")
 async def add_security_headers(request: Request, call_next):
     response = await call_next(request)
-    for name, value in SECURITY_HEADERS.items():
+    for name, value in headers.BASE_HEADERS.items():
         response.headers.setdefault(name, value)
+    response.headers.setdefault("Content-Security-Policy", headers.csp_for(response.headers.get("content-type"), DASHBOARD_CSP))
     return response
 
 
 @app.get("/", response_class=HTMLResponse)
 async def dashboard():
-    return (Path(__file__).parent / "dashboard.html").read_text(encoding="utf-8")
+    return DASHBOARD_HTML
 
 
 @app.get("/health")

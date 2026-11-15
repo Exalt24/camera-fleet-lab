@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Mutation controls for the pieces of security code that have tests: junos_review.py, respond.py, vuln/cve_triage.py and the Keycloak realm file.
+"""Mutation controls for the pieces of security code that have tests: junos_review.py, respond.py, vuln/cve_triage.py, the Keycloak realm file and the hub's headers.py.
 
 For each mutant this copies the module to a temp folder, changes it in one known way, points the module's own test file at the
 copy (JUNOS_REVIEW_PATH or RESPOND_PATH) and runs pytest. A mutant is CAUGHT when pytest fails. A mutant that leaves every test
@@ -9,6 +9,7 @@ green means a test is missing, and this script exits 1.
   respond.py       13 mutants: remove the idempotency check, remove the retry, make a dry run act, drop the audit write, and so on
   cve_triage.py    16 mutants: break the ranking order, drop the KEV boost, treat a failed lookup as clean, drop the exposure rule, and so on
   realm JSON       12 mutants: remove each setting (OTP required action, brute force detection, short token lifespan, no committed secret, ...) from a copy
+  hub headers.py   13 mutants: bring back 'unsafe-inline', hash only the first inline block, use the wrong digest, drop no-store, give JSON the page policy, and so on
 
     python security/tests/run_mutations.py [--save docs/security-mutation-run.txt]
 """
@@ -25,6 +26,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 SECURITY = HERE.parent
+HUB_APP = SECURITY.parent / "hub" / "app"
 
 RESPOND_MUTANTS = [
     ("remove the idempotency check (a duplicate alert acts again)",
@@ -106,6 +108,26 @@ REALM_MUTANTS = [
     ("the OTP policy is no longer time based", '"otpPolicyType": "totp"', '"otpPolicyType": "hotp"'),
 ]
 
+HEADERS_MUTANTS = [
+    ("the answers are cacheable again", '"Cache-Control": "no-store",', '"Cache-Control": "max-age=3600",'),
+    ("script-src allows unsafe-inline again", "script-src {_sources(scripts)}", "script-src 'unsafe-inline' {_sources(scripts)}"),
+    ("style-src allows unsafe-inline again", "style-src {_sources(styles)}", "style-src 'unsafe-inline' {_sources(styles)}"),
+    ("only the first inline block is hashed",
+     "return [csp_hash(b) for b in _INLINE_SCRIPT.findall(html)], [csp_hash(b) for b in _INLINE_STYLE.findall(html)]",
+     "return [csp_hash(b) for b in _INLINE_SCRIPT.findall(html)][:1], [csp_hash(b) for b in _INLINE_STYLE.findall(html)][:1]"),
+    ("the hash is taken over the stripped text (a browser hashes the exact text)",
+     'hashlib.sha256(body.encode("utf-8"))', 'hashlib.sha256(body.strip().encode("utf-8"))'),
+    ("the digest is SHA-1", "hashlib.sha256(", "hashlib.sha1("),
+    ("a script with a src counts as an inline block", "(?![^>]*\\bsrc\\s*=)", ""),
+    ("a page with no inline script allows unsafe-inline", "if hashes else \"'none'\"", "if hashes else \"'unsafe-inline'\""),
+    ("a JSON answer gets the page policy",
+     'return dashboard_policy if (content_type or "").lower().startswith("text/html") else API_CSP', "return dashboard_policy"),
+    ("an HTML answer is no longer recognised", '.startswith("text/html")', '.startswith("text/plain")'),
+    ("the allow-nothing policy can be framed", "form-action 'none'; frame-ancestors 'none'\"\n\n# an inline", "form-action 'none'\"\n\n# an inline"),
+    ("the nosniff header is dropped", '"X-Content-Type-Options": "nosniff"', '"X-Content-Type-Options": "sniff"'),
+    ("the page can be framed", '"X-Frame-Options": "DENY"', '"X-Frame-Options": "SAMEORIGIN"'),
+]
+
 
 def junos_mutants(source: str):
     for m in re.finditer(r"^def (check_JR\d+)\(cfg: Config\) -> list\[Finding\]:\n", source, re.M):
@@ -163,8 +185,9 @@ def main() -> int:
     c2, t2 = run_group("respond.py", respond, HERE / "test_respond.py", "RESPOND_PATH", RESPOND_MUTANTS, log)
     c3, t3 = run_group("cve_triage.py", SECURITY / "vuln" / "cve_triage.py", HERE / "test_cve_triage.py", "CVE_TRIAGE_PATH", CVE_MUTANTS, log)
     c4, t4 = run_group("realm-camera-fleet.json", SECURITY / "iam" / "realm-camera-fleet.json", HERE / "test_iam_realm.py", "REALM_PATH", REALM_MUTANTS, log)
-    ok = t1 > 0 and t2 > 0 and t3 > 0 and t4 > 0 and c1 == t1 and c2 == t2 and c3 == t3 and c4 == t4
-    log(f"total: {c1 + c2 + c3 + c4}/{max(t1, 0) + max(t2, 0) + max(t3, 0) + max(t4, 0)} mutants caught" + ("" if ok else "  (NOT ALL CAUGHT)"))
+    c5, t5 = run_group("hub/app/headers.py", HUB_APP / "headers.py", HERE / "test_hub_headers.py", "HUB_HEADERS_PATH", HEADERS_MUTANTS, log)
+    ok = min(t1, t2, t3, t4, t5) > 0 and c1 == t1 and c2 == t2 and c3 == t3 and c4 == t4 and c5 == t5
+    log(f"total: {c1 + c2 + c3 + c4 + c5}/{sum(max(t, 0) for t in (t1, t2, t3, t4, t5))} mutants caught" + ("" if ok else "  (NOT ALL CAUGHT)"))
     if args.save:
         Path(args.save).parent.mkdir(parents=True, exist_ok=True)
         Path(args.save).write_text("\n".join(out) + "\n", encoding="utf-8")

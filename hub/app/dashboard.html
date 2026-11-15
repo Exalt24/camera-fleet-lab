@@ -30,6 +30,8 @@
   .cell { flex:0 0 14px; height:34px; border-radius:3px; }
   .legend { display:flex; gap:16px; flex-wrap:wrap; margin-top:10px; color:var(--mute); font-size:13px; }
   .legend span::before { content:""; display:inline-block; width:10px; height:10px; border-radius:2px; margin-right:6px; background:var(--c); }
+  #who { display:none; }
+  .l-up{--c:var(--up)} .l-degraded{--c:var(--degraded)} .l-blocked{--c:var(--blocked)} .l-tunnel_down{--c:var(--down)}
   #caption { position:fixed; left:0; right:0; bottom:0; padding:16px 24px; background:rgba(5,8,20,.92); color:#fff;
              font-size:22px; text-align:center; display:none; border-top:1px solid var(--line); }
   .s-up{color:var(--up)} .s-degraded{color:var(--degraded)} .s-blocked{color:var(--blocked)} .s-tunnel_down{color:var(--down)}
@@ -39,7 +41,7 @@
 <body>
 <main>
   <h1>Camera fleet lab</h1>
-  <p class="sub" id="who" style="display:none"></p>
+  <p class="sub" id="who"></p>
   <p class="sub">One camera behind a site router, reachable only through a WireGuard tunnel. Probed every few seconds, layer by layer.</p>
   <div class="hero">
     <div class="badge"><div class="state" id="state">...</div><div class="why" id="why"></div></div>
@@ -53,8 +55,8 @@
     </div>
   </div>
   <div class="strip"><h2>Last 60 probes, oldest left</h2><div class="cells" id="cells"></div>
-    <div class="legend"><span style="--c:var(--up)">up</span><span style="--c:var(--degraded)">degraded: port answers, no video</span>
-      <span style="--c:var(--blocked)">blocked: VPN fine, port not forwarded</span><span style="--c:var(--down)">tunnel down: no packet crosses the VPN</span></div></div>
+    <div class="legend"><span class="l-up">up</span><span class="l-degraded">degraded: port answers, no video</span>
+      <span class="l-blocked">blocked: VPN fine, port not forwarded</span><span class="l-tunnel_down">tunnel down: no packet crosses the VPN</span></div></div>
 </main>
 <div id="caption"></div>
 <script>
