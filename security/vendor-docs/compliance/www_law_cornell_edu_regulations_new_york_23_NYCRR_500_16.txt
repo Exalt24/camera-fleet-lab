@@ -1,0 +1,56 @@
+URL: https://www.law.cornell.edu/regulations/new-york/23-NYCRR-500.16
+STATUS: 200
+
+This website uses cookies to ensure you get the best experience on our website. Learn more
+Got it!
+Skip to main content
+Cornell Law School
+Search Cornell
+  
+About LII
+Get the law
+Lawyer directory
+Legal encyclopedia
+Help out
+
+
+
+LII State Regulations New York Codes,Rules,and Regulations N.Y. Comp. Codes R. & Regs. tit. 23 - FINANCIAL SERVICES Chapter I - Regulations of the Superintendent of Financial Services Part 500 - CYBERSECURITY REQUIREMENTS FOR FINANCIAL SERVICES COMPANIES N.Y. Comp. Codes R. & Regs. Tit. 23 § 500.16 - Incident Response Plan
+N.Y. Comp. Codes R. & Regs. Tit. 23 § 500.16 - Incident Response Plan
+State Regulations
+Compare
+(a) As part of its cybersecurity program, each covered entity shall establish written plans that contain proactive measures to investigate and mitigate cybersecurity events and to ensure operational resilience, including but not limited to incident response, business continuity and disaster recovery plans.
+(1) Incident response plan. Incident response plans shall be reasonably designed to enable prompt response to, and recovery from, any cybersecurity event materially affecting the confidentiality, integrity or availability of the covered entity's information systems or the continuing functionality of any aspect of the covered entity's business or operations. Such plans shall address the following areas with respect to different types of cybersecurity events, including disruptive events such as ransomware incidents:
+(i) the goals of the incident response plan;
+(ii) the internal processes for responding to a cybersecurity event;
+(iii) the definition of clear roles, responsibilities and levels of decision-making authority;
+(iv) external and internal communications and information sharing;
+(v) identification of requirements for the remediation of any identified weaknesses in information systems and associated controls;
+(vi) documentation and reporting regarding cybersecurity events and related incident response activities;
+(vii) recovery from backups;
+(viii) preparation of root cause analysis that describes how and why the event occurred, what business impact it had, and what will be done to prevent reoccurrence; and
+(ix) updating of incident response plans as necessary.
+(2) Business continuity and disaster recovery (BCDR) plan. BCDR plans shall be reasonably designed to ensure the availability and functionality of the covered entity's information systems and material services and protect the covered entity's personnel, assets and nonpublic information in the event of a cybersecurity-related disruption to its normal business activities. Such plans shall, at minimum:
+(i) identify documents, data, facilities, infrastructure, services, personnel and competencies essential to the continued operations of the covered entity's business;
+(ii) identify the supervisory personnel responsible for implementing each aspect of the BCDR plan;
+(iii) include a plan to communicate with essential persons in the event of a cybersecurity-related disruption to the operations of the covered entity, including employees, counterparties, regulatory authorities, third - party service providers, disaster recovery specialists, the senior governing body and any other persons essential to the recovery of documentation and data and the resumption of operations;
+(iv) include procedures for the timely recovery of critical data and information systems and to resume operations as soon as reasonably possible following a cybersecurity-related disruption to normal business activities;
+(v) include procedures for backing up or copying, with sufficient frequency, information essential to the operations of the covered entity and storing such information offsite; and
+(vi) identify third parties that are necessary to the continued operations of the covered entity's information systems.
+(b) Each covered entity shall ensure that current copies of the plans or relevant portions therein are distributed or are otherwise accessible, including during a cybersecurity event, to all employees necessary to implement such plans.
+(c) Each covered entity shall provide relevant training to all employees responsible for implementing the plans regarding their roles and responsibilities.
+(d) Each covered entity shall periodically, but at a minimum annually, test its:
+(1) incident response and BCDR plans with all staff and management critical to the response, and shall revise the plan as necessary; and
+(2) ability to restore its critical data and information systems from backups.
+(e) Each covered entity shall maintain backups necessary to restore material operations. The backups shall be adequately protected from unauthorized alterations or destruction.
+Notes
+N.Y. Comp. Codes R. & Regs. Tit. 23 § 500.16
+Adopted, New York State Register March 1, 2017/Volume XXXIX, Issue 09, eff. 3/1/2017 Amended New York State Register November 1, 2023/Volume XLV, Issue 44, eff. 11/1/2023
+ State Regulations Toolbox
+Accessibility
+About LII
+Contact us
+Advertise here
+Help
+Terms of use
+Privacy

@@ -1,0 +1,43 @@
+URL: https://www.law.cornell.edu/regulations/new-york/23-NYCRR-500.7
+STATUS: 200
+
+This website uses cookies to ensure you get the best experience on our website. Learn more
+Got it!
+Skip to main content
+Cornell Law School
+Search Cornell
+  
+About LII
+Get the law
+Lawyer directory
+Legal encyclopedia
+Help out
+
+
+
+LII State Regulations New York Codes,Rules,and Regulations N.Y. Comp. Codes R. & Regs. tit. 23 - FINANCIAL SERVICES Chapter I - Regulations of the Superintendent of Financial Services Part 500 - CYBERSECURITY REQUIREMENTS FOR FINANCIAL SERVICES COMPANIES N.Y. Comp. Codes R. & Regs. Tit. 23 § 500.7 - Access privileges and management
+N.Y. Comp. Codes R. & Regs. Tit. 23 § 500.7 - Access privileges and management
+State Regulations
+Compare
+(a) As part of its cybersecurity program, based on the covered entity's risk assessment each covered entity shall :
+(1) limit user access privileges to information systems that provide access to nonpublic information to only those necessary to perform the user's job;
+(2) limit the number of privileged accounts and limit the access functions of privileged accounts to only those necessary to perform the user's job;
+(3) limit the use of privileged accounts to only when performing functions requiring the use of such access;
+(4) periodically, but at a minimum annually, review all user access privileges and remove or disable accounts and access that are no longer necessary;
+(5) disable or securely configure all protocols that permit remote control of devices; and
+(6) promptly terminate access following departures.
+(b) To the extent passwords are employed as a method of authentication, the covered entity shall implement a written password policy that meets industry standards.
+(c) Each class A company shall monitor privileged access activity and shall implement:
+(1) a privileged access management solution; and
+(2) an automated method of blocking commonly used passwords for all accounts on information systems owned or controlled by the class A company and wherever feasible for all other accounts. To the extent the class A company determines that blocking commonly used passwords is infeasible, the covered entity's CISO may instead approve in writing at least annually the infeasibility and the use of reasonably equivalent or more secure compensating controls.
+Notes
+N.Y. Comp. Codes R. & Regs. Tit. 23 § 500.7
+Adopted, New York State Register March 1, 2017/Volume XXXIX, Issue 09, eff. 3/1/2017 Amended New York State Register November 1, 2023/Volume XLV, Issue 44, eff. 11/1/2023
+ State Regulations Toolbox
+Accessibility
+About LII
+Contact us
+Advertise here
+Help
+Terms of use
+Privacy

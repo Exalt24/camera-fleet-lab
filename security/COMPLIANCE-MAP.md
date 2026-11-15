@@ -12,6 +12,7 @@ Each framework's primary source was read in Chromium with `Operations/tools/webr
 | HIPAA Security Rule, 45 CFR 164.312 (technical safeguards) | https://www.ecfr.gov/current/title-45/section-164.312 | [`hipaa-45-cfr-164.312.txt`](vendor-docs/compliance/hipaa-45-cfr-164.312.txt) |
 | HIPAA Security Rule, 45 CFR 164.308 (administrative safeguards) | https://www.ecfr.gov/current/title-45/section-164.308 | [`hipaa-45-cfr-164.308.txt`](vendor-docs/compliance/hipaa-45-cfr-164.308.txt) |
 | SOC 2 Trust Services Criteria (AICPA, 2017 with revised points of focus 2022) | https://www.aicpa-cima.com/resources/download/2017-trust-services-criteria-with-revised-points-of-focus-2022 | [`aicpa-tsc-download-page.txt`](vendor-docs/compliance/aicpa-tsc-download-page.txt) |
+| NYDFS 23 NYCRR Part 500 (sections 500.6, 500.7, 500.14, 500.16) | https://www.law.cornell.edu/regulations/new-york/23-NYCRR-500.14 and the three sibling section pages | [`500.6`](vendor-docs/compliance/www_law_cornell_edu_regulations_new_york_23_NYCRR_500_6.txt), [`500.7`](vendor-docs/compliance/www_law_cornell_edu_regulations_new_york_23_NYCRR_500_7.txt), [`500.14`](vendor-docs/compliance/www_law_cornell_edu_regulations_new_york_23_NYCRR_500_14.txt), [`500.16`](vendor-docs/compliance/www_law_cornell_edu_regulations_new_york_23_NYCRR_500_16.txt) |
 
 One gap in the reading. The AICPA criteria PDF needs a free AICPA account, which was not created. The criterion wording was read from a public copy of the same AICPA document at https://arpio.io/wp-content/uploads/2020/08/trust-services-criteria.pdf (includes the March 2020 updates). Only the seven criterion statements the map cites are saved, in [`aicpa-tsc-criteria-excerpts.txt`](vendor-docs/compliance/aicpa-tsc-criteria-excerpts.txt), and they should be checked against the AICPA download before anyone relies on them.
 
@@ -60,3 +61,18 @@ The playbooks are in [`playbooks/`](playbooks/) and run through [`respond.py`](r
 ## What this map does not say
 
 It does not say the lab meets any HIPAA, SOC 2 or NIST requirement. Those frameworks assess an organisation's policies, people and systems over time, and none of that exists here. The map shows only which of the lab's detections, responses and records line up with a published control, so a reader can see where the evidence for a real programme would come from.
+
+## NYDFS Part 500 (financial services cybersecurity regulation, New York)
+
+Read on 2026-11-15 from the section pages saved above. As with the other frameworks this lines the lab's pieces up with the text; it is not an assessment and not legal advice.
+
+| Piece | NYDFS section | What the text asks | Evidence the repo produces |
+|---|---|---|---|
+| Rules 100300 and 100301 (a login after a brute force, a sweep then a login) | 500.14(a)(1) | risk-based controls to monitor the activity of authorized users and detect unauthorized access or use | The alert with the failed and accepted login lines, joined with the firewall log for 100301. |
+| Rules 100101, 100102, 100103, 100210 and 100220 | 500.14(a)(1) and 500.14(b)(2) | monitoring, and for a class A company a solution that centralizes logging and security event alerting | Alerts from one manager that reads the monitor, the firewall and the ssh log. |
+| Playbook steps enrich, notify and ticket | 500.16(a)(1)(ii), (iv) and (vi) | internal processes for responding, communications, documentation and reporting of incident response activities | The audit trail line per step and the ticket payload in the evidence folder. |
+| Playbook step block (dry run by default) | 500.16(a)(1) | plans to investigate and mitigate a cybersecurity event | The command it would run, recorded, and with `--apply` the read back `iptables` rule. |
+| Audit trail and evidence folder with a sha256 manifest | 500.6(a)(2) | audit trails designed to detect and respond to cybersecurity events | The hash chained audit trail and the manifest that `--verify-audit` and `--verify-bundle` check. |
+| Junos checks for telnet, http, ssh or snmp reachable from any address and a root login without keys | 500.7(a)(2), (a)(3) and (a)(5) | limit privileged accounts and their use, and disable or securely configure protocols that permit remote control of devices | The finding with its line and the fix text, from the sample configurations. |
+
+What this lab does not cover in this section: 500.14(b)(1) asks a class A company for an endpoint detection and response solution, and the lab has no endpoint agent; the sections on multi factor authentication, encryption, third party service providers, training and the annual certification are not mapped.

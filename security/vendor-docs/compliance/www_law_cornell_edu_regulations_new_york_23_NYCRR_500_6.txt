@@ -1,0 +1,36 @@
+URL: https://www.law.cornell.edu/regulations/new-york/23-NYCRR-500.6
+STATUS: 200
+
+This website uses cookies to ensure you get the best experience on our website. Learn more
+Got it!
+Skip to main content
+Cornell Law School
+Search Cornell
+  
+About LII
+Get the law
+Lawyer directory
+Legal encyclopedia
+Help out
+
+
+
+LII State Regulations New York Codes,Rules,and Regulations N.Y. Comp. Codes R. & Regs. tit. 23 - FINANCIAL SERVICES Chapter I - Regulations of the Superintendent of Financial Services Part 500 - CYBERSECURITY REQUIREMENTS FOR FINANCIAL SERVICES COMPANIES N.Y. Comp. Codes R. & Regs. Tit. 23 § 500.6 - Audit Trail
+N.Y. Comp. Codes R. & Regs. Tit. 23 § 500.6 - Audit Trail
+State Regulations
+Compare
+(a) Each Covered Entity shall securely maintain systems that, to the extent applicable and based on its Risk Assessment:
+(1) are designed to reconstruct material financial transactions sufficient to support normal operations and obligations of the Covered Entity; and
+(2) include audit trails designed to detect and respond to Cybersecurity Events that have a reasonable likelihood of materially harming any material part of the normal operations of the Covered Entity.
+(b) Each Covered Entity shall maintain records required by this section for not fewer than five years.
+Notes
+N.Y. Comp. Codes R. & Regs. Tit. 23 § 500.6
+Adopted, New York State Register March 1, 2017/Volume XXXIX, Issue 09, eff. 3/1/2017
+ State Regulations Toolbox
+Accessibility
+About LII
+Contact us
+Advertise here
+Help
+Terms of use
+Privacy

@@ -1,0 +1,39 @@
+URL: https://www.law.cornell.edu/regulations/new-york/23-NYCRR-500.14
+STATUS: 200
+
+This website uses cookies to ensure you get the best experience on our website. Learn more
+Got it!
+Skip to main content
+Cornell Law School
+Search Cornell
+  
+About LII
+Get the law
+Lawyer directory
+Legal encyclopedia
+Help out
+
+
+
+LII State Regulations New York Codes,Rules,and Regulations N.Y. Comp. Codes R. & Regs. tit. 23 - FINANCIAL SERVICES Chapter I - Regulations of the Superintendent of Financial Services Part 500 - CYBERSECURITY REQUIREMENTS FOR FINANCIAL SERVICES COMPANIES N.Y. Comp. Codes R. & Regs. Tit. 23 § 500.14 - Monitoring and training
+N.Y. Comp. Codes R. & Regs. Tit. 23 § 500.14 - Monitoring and training
+State Regulations
+Compare
+(a) As part of its cybersecurity program, each covered entity shall:
+(1) implement risk-based policies, procedures and controls designed to monitor the activity of authorized users and detect unauthorized access or use of, or tampering with, nonpublic information by such authorized users;
+(2) implement risk-based controls designed to protect against malicious code, including those that monitor and filter web traffic and electronic mail to block malicious content; and
+(3) provide periodic, but at a minimum annual, cybersecurity awareness training that includes social engineering for all personnel that is updated to reflect risks identified by the covered entity in its risk assessment.
+(b) Each class A company shall implement, unless the CISO has approved in writing the use of reasonably equivalent or more secure compensating controls:
+(1) an endpoint detection and response solution to monitor anomalous activity, including but not limited to lateral movement; and
+(2) a solution that centralizes logging and security event alerting.
+Notes
+N.Y. Comp. Codes R. & Regs. Tit. 23 § 500.14
+Adopted, New York State Register March 1, 2017/Volume XXXIX, Issue 09, eff. 3/1/2017 Amended New York State Register November 1, 2023/Volume XLV, Issue 44, eff. 11/1/2023
+ State Regulations Toolbox
+Accessibility
+About LII
+Contact us
+Advertise here
+Help
+Terms of use
+Privacy
