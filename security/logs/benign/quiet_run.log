@@ -1,8 +1,0 @@
-Nov 15 09:00:12 edge sshd[1801]: Accepted publickey for ops from 198.51.100.7 port 40212 ssh2: ED25519 SHA256:abcd
-Nov 15 09:14:40 edge sshd[1822]: Failed password for ops from 198.51.100.7 port 40290 ssh2
-Nov 15 09:14:44 edge sshd[1822]: Accepted password for ops from 198.51.100.7 port 40290 ssh2
-Nov 15 14:02:50 edge fw-sensor: action=DROP chain=INPUT in=wg0 src=198.51.100.200 dst=10.8.0.2 proto=TCP sport=41018 dport=5353 flags=S
-Nov 15 14:02:52 edge fw-sensor: action=DROP chain=INPUT in=wg0 src=198.51.100.200 dst=10.8.0.2 proto=TCP sport=41029 dport=8080 flags=S
-{"ts": "2026-11-15T09:20:11Z", "source": "fleet-monitor", "event": "state_transition", "camera": "cam1", "prev_state": "up", "state": "degraded", "tunnel_ok": true, "tcp_ok": true, "rtsp_ok": false, "handshake_age_s": 41.2, "error": "ffprobe timed out (no video within the deadline)"}
-{"ts": "2026-11-15T09:20:16Z", "source": "fleet-monitor", "event": "state_transition", "camera": "cam1", "prev_state": "degraded", "state": "up", "tunnel_ok": true, "tcp_ok": true, "rtsp_ok": true, "handshake_age_s": 41.2, "error": null}
-Nov 15 09:30:02 edge sshd[1900]: Accepted publickey for ops from 198.51.100.7 port 40300 ssh2: ED25519 SHA256:abcd

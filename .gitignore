@@ -7,3 +7,5 @@ keys/
 .env
 demo/work/
 security/state/
+# runtime state, never source (class_sweep tracked-runtime)
+*.log
