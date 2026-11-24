@@ -364,11 +364,13 @@ def test_the_nvd_query_asks_for_exactly_the_installed_version():
 def test_the_inventory_comes_from_the_compose_file_and_the_pinned_requirements():
     resolved = {"python:python:3.13-slim": "3.13.9", "image:mariadb:11": "11.8.3", "image:bluenviron/mediamtx:latest-ffmpeg": "1.15.0"}
     comps = {c.name: c for c in ct.build_inventory(ROOT, resolved)}
+    # read from the file so a routine fastapi bump does not break this test
+    fastapi_pin = next(l.split("==")[1].split()[0] for l in (ROOT / "hub" / "requirements.txt").read_text(encoding="utf-8").splitlines() if l.startswith("fastapi=="))
     assert comps["Wazuh manager"].version == "4.14.10" and comps["Keycloak"].version == "26.8.2" and comps["oauth2-proxy"].version == "7.15.6"
-    assert comps["FastAPI"].version == "0.162.0" and comps["Uvicorn"].version == "0.54.0" and comps["aiomysql"].version == "0.3.2"
+    assert comps["FastAPI"].version == fastapi_pin and comps["Uvicorn"].version == "0.54.0" and comps["aiomysql"].version == "0.3.2"
     assert comps["MariaDB"].version == "11.8.3" and comps["Python"].version == "3.13.9"
     assert comps["oauth2-proxy"].cpe == "cpe:2.3:a:oauth2_proxy_project:oauth2_proxy:7.15.6:*:*:*:*:*:*:*"
-    assert comps["FastAPI"].cpe == "cpe:2.3:a:tiangolo:fastapi:0.162.0:*:*:*:*:*:*:*"
+    assert comps["FastAPI"].cpe == f"cpe:2.3:a:tiangolo:fastapi:{fastapi_pin}:*:*:*:*:*:*:*"
 
 
 def test_requirements_pins_are_read_and_ranges_are_not_treated_as_pins(tmp_path):
