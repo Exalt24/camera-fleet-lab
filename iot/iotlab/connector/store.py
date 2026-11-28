@@ -119,7 +119,11 @@ class Store:
     def get_lock(self, lock_id: str) -> dict | None:
         return self._one("SELECT * FROM locks WHERE id = ?", (lock_id,))
 
-    def list_locks(self) -> list[dict]:
+    def list_locks(self, managed_only: bool = False) -> list[dict]:
+        """A managed lock is one the vendor has told us about (a listing, an event or a code). The broker carries every lock on it, so a row
+        that exists only because its MQTT message was seen is not the connector's to call the vendor about."""
+        if managed_only:
+            return self._all("SELECT * FROM locks WHERE synced_at IS NOT NULL ORDER BY id")
         return self._all("SELECT * FROM locks ORDER BY id")
 
     def ensure_lock(self, lock_id: str) -> None:

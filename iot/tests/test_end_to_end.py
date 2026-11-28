@@ -26,8 +26,8 @@ def test_an_unlock_goes_out_over_mqtt_and_comes_back_two_ways(stack):
     wait_until(lambda: sim.lock_state == "unlocked", what="the lock to unlock")
     wait_until(lambda: stack.store.get_command(cmd["id"])["status"] == "confirmed", what="the command to be confirmed")
     wait_until(lambda: stack.store.get_lock(lid)["state"] == "unlocked", what="the webhook to update the vendor view")
+    wait_until(lambda: stack.store.get_lock(lid)["mqtt_state"] == "unlocked", what="the device's own view over MQTT")
     row = stack.store.get_lock(lid)
-    assert row["mqtt_state"] == "unlocked", "the device's own view arrived over MQTT"
     assert stack.store.get_command(cmd["id"])["confirmed_by"] in ("mqtt", "webhook")
     assert stack.cloud.commands[cmd["id"]]["status"] == "confirmed"
     assert stack.store.count_events("webhook") == 1 and row["lock_seq"] == 1
@@ -39,6 +39,7 @@ def test_a_lock_and_unlock_round_trip_leaves_record_vendor_and_device_in_agreeme
     wait_until(lambda: stack.store.get_lock(lid)["state"] == "unlocked", what="unlocked")
     stack.conn.send_command(lid, "lock")
     wait_until(lambda: stack.store.get_lock(lid)["state"] == "locked" and stack.store.get_lock(lid)["lock_seq"] == 2, what="locked again")
+    wait_until(lambda: stack.store.get_lock(lid)["mqtt_state"] == "locked", what="the device's own view over MQTT")
     row = stack.store.get_lock(lid)
     assert (row["state"], row["mqtt_state"], sim.lock_state, stack.cloud.locks[lid].state) == ("locked",) * 4
     assert not stack.store.pending_commands()

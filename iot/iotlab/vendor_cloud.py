@@ -19,7 +19,7 @@ import secrets
 import threading
 import time
 import uuid
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from email.utils import format_datetime
 from datetime import datetime, timezone
 from urllib.parse import parse_qsl, urlencode

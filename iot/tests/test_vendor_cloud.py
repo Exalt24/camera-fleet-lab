@@ -3,7 +3,6 @@ a fair one: OAuth edge cases, rate limiting, the deliberately inconsistent lock 
 No Docker: the stand-in is driven over HTTP with no MQTT attached."""
 from __future__ import annotations
 
-import base64
 import json
 import threading
 import time

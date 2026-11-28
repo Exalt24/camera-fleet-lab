@@ -210,8 +210,6 @@ def probe_oauth(t: Targets, diag: dict | None) -> Layer:
         return Layer("oauth", "fail", "the connector holds no grant: it was never authorized", {"status": o["status"]})
     if o["status"] != "ok":
         return Layer("oauth", "fail", f"the grant is unusable ({o['status']}: {o['last_error']}): the refresh token was revoked, replayed or has expired", o)
-    if v["locks"].get("error") == "reauth_required":
-        return Layer("oauth", "fail", "the vendor rejects the connector's tokens even after a refresh", {"vendor": v["locks"]})
     codes = v.get("codes") or {}
     if codes.get("status") == 403:
         return Layer("oauth", "fail", f"the grant lacks a scope the access codes need ({o['last_error']})", {"scope": o["scope"], "vendor": codes})

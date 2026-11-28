@@ -232,7 +232,7 @@ class Connector:
         if norm is None or not isinstance(pin, str) or not pin:
             raise VendorError(502, "malformed_code_response", "the answer has no id or no code")
         register_secret(pin)
-        self.store.ensure_lock(lock_id)                    # a lock that has a code is a lock the code sync must visit
+        self.store.update_lock(lock_id, synced_at=self.clock())      # a lock that has a code is a lock the code sync must visit
         self.store.put_code(norm["id"], lock_id, name, self.vault.encrypt(pin), norm["starts_at"] or starts_at, norm["ends_at"] or ends_at,
                             norm["status"] or "scheduled", "connector", self.clock())
         # The plaintext code is returned to the caller once, like the vendor returned it to us. The record keeps ciphertext only.
@@ -257,7 +257,7 @@ class Connector:
 
     def sync_codes(self) -> dict:
         changed = healed = 0
-        for lock in self.store.list_locks():
+        for lock in self.store.list_locks(managed_only=True):
             try:
                 doc = self.client.request("GET", f"/v1/locks/{lock['id']}/codes").json()
             except VendorError as exc:

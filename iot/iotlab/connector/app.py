@@ -8,7 +8,7 @@ from __future__ import annotations
 import os
 import threading
 import time
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
@@ -114,7 +114,7 @@ def build_app(svc: Service) -> FastAPI:
 
     @app.get("/locks")
     def locks():
-        return {"data": conn.store.list_locks()}
+        return {"data": conn.store.list_locks(managed_only=True)}
 
     @app.get("/locks/{lock_id}")
     def lock(lock_id: str):

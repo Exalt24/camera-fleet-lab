@@ -129,7 +129,7 @@ def test_a_vendor_outage_is_named_and_the_local_layers_before_it_are_healthy(sta
     httpx.post(stack.cloud_srv.url + "/_lab/faults", json={"down": True})
     d = run(stack, symptom)
     assert d.broken_layer == "vendor_cloud", dg.format_text(d)
-    assert "503" in d.summary
+    assert "answers 503 on its health route" in d.summary
     if symptom == "unlock_unconfirmed":
         assert statuses(d)["broker"] == "ok" and statuses(d)["device"] == "ok"
 
@@ -151,8 +151,8 @@ def test_a_vendor_that_shows_an_online_lock_as_offline_is_a_vendor_fault(stack):
 # ---- oauth ---------------------------------------------------------------------------------------------------------------------------------
 def test_a_revoked_grant_is_an_oauth_fault_the_first_time_and_after_it_is_recorded(stack):
     httpx.post(stack.cloud_srv.url + "/_lab/action", json={"action": "revoke_tokens"})
-    first = run(stack, "codes_not_syncing")
-    assert first.broken_layer == "oauth" and statuses(first)["vendor_cloud"] == "ok", dg.format_text(first)
+    first = run(stack, "codes_not_syncing")                          # the tool's own live call finds out, and the record is read after it
+    assert first.broken_layer == "oauth" and "needs_reauth" in first.summary and statuses(first)["vendor_cloud"] == "ok", dg.format_text(first)
     second = run(stack, "codes_not_syncing")
     assert second.broken_layer == "oauth" and "needs_reauth" in second.summary, dg.format_text(second)
 

@@ -11,7 +11,6 @@ from __future__ import annotations
 import random
 import socket
 import threading
-import time
 
 
 class FlakyLink:
