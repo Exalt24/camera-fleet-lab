@@ -36,7 +36,6 @@ first one that fails:
 
 ## Topology
 
-The GIF above shows the monitor reacting. This shows what it is monitoring, which a recording of the dashboard cannot.
 The camera sits on a network the hub is not on. The only way to it is the tunnel and one DNAT rule.
 
 ```mermaid
@@ -73,7 +72,7 @@ Short captioned screen recording of both faults: [`docs/demo.mp4`](docs/demo.mp4
 
 ## Measured results
 
-The first five rows are from `docs/last_run.json`. It is one run on one machine, so read them as orders of magnitude, not benchmarks. The last two come from `scripts/measure_recovery.py` and `scripts/soak_summary.py`. Those print to the terminal, and I did not save their output.
+The first five rows are from `docs/last_run.json`, one run on one machine, so read them as orders of magnitude, not benchmarks. The 40 s block and the soak rows come from `scripts/measure_recovery.py` and `scripts/soak_summary.py`, which print to the terminal, and I did not save their output. The lock and doormat rows come from saved run files.
 
 | Check | Result |
 |---|---|
@@ -84,13 +83,14 @@ The first five rows are from `docs/last_run.json`. It is one run on one machine,
 | **Fault B**: DNAT rule removed (tunnel healthy) | detected as `blocked` after **8 s**, recovered **8.1 s** after the rule was restored |
 | A 40 s VPN block, then unblocked | fresh handshake on both ends within **about 5 s** |
 | Smart lock slice (`iot/`, one run, saved in `docs/iot/`) | 456 tests pass; 133 of 133 deliberate breakages turn a test red; the diagnosis tool named the induced layer in 17 of 17 runs |
+| Smart doormat firmware (`esp32/`, one run, saved in `esp32/docs/test-runs/`) | 101 Unity tests and 61 host tests pass; 77 of 77 deliberate breakages turn a test red; the firmware boots in Espressif QEMU and prints the same 36 trace lines as the host build; the Wokwi simulator greeted a simulated step |
 | No-fault soak, about 5.5 minutes (`scripts/soak_summary.py`) | 43 probes, every one `up`; the handshake age climbed to 118 s and reset twice (two WireGuard rekeys). The first version's 30 s threshold would have called most of this "down" |
 
 `verify.py`: **16/16** checks. `pytest`: 22 passed, 1 skipped (the skip is OS-specific, see below).
 
 ## What I got wrong (and how the stack showed me)
 
-These are real. Items 1, 5 and 6 are pinned by a test or a check. Items 2 to 4 were found and fixed but have no regression test.
+These are real. Items 1, 3 and 4 are pinned by a test or a check. Item 2 was found and fixed without a regression test.
 
 1. **I assumed persistent keepalive refreshes the WireGuard handshake. It doesn't.** My first version called the tunnel
    "stale" when the last handshake was older than 30 s. The probe history showed `state=down` with
@@ -99,43 +99,42 @@ These are real. Items 1, 5 and 6 are pinned by a test or a check. Items 2 to 4 w
    tunnel's handshake age cycles from 0 to roughly 3 minutes. The monitor now decides whether the tunnel works by sending
    a packet through it (a ping). It reports the handshake age as information only. Regression test:
    `test_a_healthy_tunnel_with_an_old_handshake_is_still_up`.
-2. **My monitor logged nothing.** uvicorn only configures its own loggers, so the app logger's `INFO` lines were silently
-   dropped. I only noticed because I went to read them. An explicit `logging.basicConfig` fixed it.
-3. **`asyncmy` has no Python 3.13 wheel and its compile fails**, so the image would not build. I switched to the pure-Python
-   `aiomysql`.
-4. **SQLAlchemy's pool pre-ping crashed on startup** with that driver pair (`ping() missing 1 required positional argument`).
-   Moving to a newer SQLAlchemy fixed it (the hub pins 2.1 now).
-5. **The first end-to-end run failed 4 of 15 checks** (an observation from that day, no output saved). Two were my test or image bugs: the hub image had no `ping`, and the
+2. **Three smaller finds**, fixed without a regression test: the monitor's `INFO` logs were silently dropped, `asyncmy` has no Python 3.13 wheel (I switched to `aiomysql`), and SQLAlchemy's pool pre-ping crashed with that driver pair (the hub pins 2.1 now). More in [`DEBUGGING.md`](DEBUGGING.md).
+3. **The first end-to-end run failed 4 of 15 checks** (an observation from that day, no output saved). Two were my test or image bugs: the hub image had no `ping`, and the
    WebRTC page answers `302` before `200`. The other two came from the wrong model in item 1 (the recovery check and the
    "tunnel still fresh" check).
-6. **A closed-port unit test passed on Linux and failed on Windows.** Windows keeps retrying SYNs to a closed local
+4. **A closed-port unit test passed on Linux and failed on Windows.** Windows keeps retrying SYNs to a closed local
    port for about 2 s, so it looks like a timeout. The test is skipped on Windows with the reason written next to it.
 
 ## Security layer
 
 `security/` adds log correlation, a playbook responder and a Junos configuration reviewer to this lab. It was built and tested against this Docker model of a camera site, planted and generated logs, and sample Junos configurations written from Juniper's documentation. The long version is in [`docs/security.md`](docs/security.md) and [`security/README.md`](security/README.md).
 
-- **SIEM.** The Wazuh manager (4.14.10) runs behind `--profile security`, so `docker compose up` and `verify.py` are unchanged. Seven custom rules join the monitor's state changes, the edge router's firewall drops and an ssh log (the ssh log and one of the two sweeps are generated, and every alert names its source file). In `wazuh-logtest` the 5 planted logs fired the expected rules and the 2 benign logs fired none. `scripts/verify_security.py` ran 51 checks against the live lab, all passing, with real `alerts.json` lines for all seven rules. Run files: [`docs/security/`](docs/security).
-- **Responder.** `security/respond.py` runs a YAML playbook per alert: enrich, notify, block, ticket. It defaults to a dry run, never acts twice on one alert id, retries with backoff, keeps a hash-chained audit trail and writes an evidence folder with a sha256 manifest. On the 9 live alerts a dry run changed nothing, and `--apply` blocked the two generated attacker addresses with `iptables` inside the edge container (read back, then removed). 52 tests, and 13 of 13 deliberate breakages turned a test red.
-- **Junos review.** `security/junos_review.py` checks 16 things (filters, management services, BGP sessions, policies, logging) in a configuration file read as text. It found 27 of the 27 planted faults across four sample configs and nothing on the two clean ones, and 16 of 16 rule-removal mutants turned a test red. It was written from Juniper's documentation and never run against a Junos device.
-- [`security/COMPLIANCE-MAP.md`](security/COMPLIANCE-MAP.md) lines each rule and playbook step up with a NIST CSF 2.0 subcategory, a HIPAA Security Rule citation and a SOC 2 criterion. It also lists the NYDFS 23 NYCRR 500 sections each piece supports. It is a reference mapping for this stack and is not legal advice.
+- **SIEM.** The Wazuh manager (4.14.10) runs behind `--profile security`, so `docker compose up` and `verify.py` are unchanged. Seven custom rules join the monitor's state changes, the edge router's firewall drops and an ssh log (the ssh log and one of the two sweeps are generated). In `wazuh-logtest` the 5 planted logs fired the expected rules and the 2 benign logs fired none. `scripts/verify_security.py` ran 51 checks against the live lab, all passing.
+- **Responder.** `security/respond.py` runs a YAML playbook per alert (enrich, notify, block, ticket), defaults to a dry run and keeps a hash-chained audit trail. On the 9 live alerts `--apply` blocked the two generated attacker addresses with `iptables` (read back, then removed). 52 tests, and 13 of 13 deliberate breakages turned a test red.
+- **Junos review.** `security/junos_review.py` checks 16 things in a configuration read as text. It found 27 of the 27 planted faults across four sample configs and nothing on the two clean ones, and 16 of 16 rule-removal mutants turned a test red. It was written from Juniper's documentation and never run against a Junos device.
+- [`security/COMPLIANCE-MAP.md`](security/COMPLIANCE-MAP.md) maps each rule to a NIST CSF 2.0 subcategory, a HIPAA Security Rule citation, a SOC 2 criterion and NYDFS 23 NYCRR 500 sections. It is a reference mapping, not legal advice.
 
 ## Vulnerability assessment and IAM
 
-`security/vuln/` and `security/iam/` add a vulnerability scan with CVE triage, and single sign on with a TOTP code, to this stack. They were built and tested against the Docker model of the camera site, this repo's own services, saved real NVD, CISA KEV and FIRST EPSS answers, and two sample users. The long version is in [`docs/vuln-and-iam.md`](docs/vuln-and-iam.md).
+`security/vuln/` and `security/iam/` add a vulnerability scan with CVE triage, and single sign on with a TOTP code. They were built and tested against the Docker model of the camera site, saved real NVD, CISA KEV and FIRST EPSS answers, and two sample users. The long version is in [`docs/vuln-and-iam.md`](docs/vuln-and-iam.md).
 
-- **Scan.** `security/vuln/scan.sh` runs Nuclei v3.11.1 with its 11,288 community templates on this repo's Docker networks, behind a scope guard that refuses any target outside loopback and this repo's subnets (75 tests, shared with `zap.sh`). It found 20 matches, all severity info. I fixed 12 (the API docs the hub served, and nine missing security headers), accepted 3 with a written reason (no TLS on loopback), and 5 only describe the service. A re-run found exactly the 3 accepted. Nuclei scanned Keycloak and the SSO proxy only up to their first redirect.
-- **ZAP scan.** `security/vuln/zap.sh` runs a passive ZAP 2.17.0 baseline scan against the hub, and against the SSO proxy from its `/ping` page. It found 10 alert types, none High. I fixed the 3 real ones on the hub (a Content-Security-Policy that allowed inline script and style, and cacheable answers); a rerun of the hub found 2 Informational alerts.
-- **CVE triage.** `security/vuln/cve_triage.py` builds a 15 component inventory, asks NVD, the CISA catalogue and EPSS, and ranks by known exploited, then EPSS, then CVSS, then reachable before internal. It works offline from saved answers. 3 components have no CPE entry, so they are reported UNKNOWN, not clean. Of 59 first matches, 42 are findings (41 FFmpeg, 1 Python), none known exploited, and 17 were set aside with a reason.
-- **IAM.** Keycloak 26.8.2 (dev mode, behind `--profile iam`) and oauth2-proxy v7.15.6 put the dashboard behind single sign on with a required TOTP code, two roles, a 60 second access token and brute force detection. `security/iam/check_iam.sh` passed 39 of 39 live checks.
-- **Sample users, for this lab only.** `viewer.sample` has the password `ViewerSample-2026` and `admin.sample` has `AdminSample-2026`. The client and cookie secrets are generated into a gitignored file.
-- **Tests and limits.** 179 new offline tests and 41 new mutants, each of which turns a test red (70 of 70 across the security layer); none needs the network or Docker. Keycloak is in dev mode over plain HTTP, and NVD matches upstream versions, so a patched Debian package can show CVEs that are already fixed.
+- **Scans.** `security/vuln/scan.sh` runs Nuclei v3.11.1 with its 11,288 community templates behind a scope guard that refuses any target outside loopback and this repo's subnets (75 tests). It found 20 matches, all severity info: 12 fixed, 3 accepted with a written reason (no TLS on loopback) and 5 that only describe the service; a re-run found exactly the 3 accepted. It reached Keycloak and the SSO proxy only up to their first redirect. A passive ZAP 2.17.0 baseline scan found 10 alert types, none High; I fixed the 3 real ones on the hub and a rerun found 2 Informational alerts.
+- **CVE triage.** `security/vuln/cve_triage.py` builds a 15 component inventory, asks NVD, the CISA catalogue and EPSS, and ranks by known exploited, EPSS, CVSS, then reachability. It works offline from saved answers. 3 components have no CPE entry, so they are reported UNKNOWN, not clean. Of 59 first matches, 42 are findings (41 FFmpeg, 1 Python), none known exploited.
+- **IAM.** Keycloak 26.8.2 (dev mode, `--profile iam`) and oauth2-proxy v7.15.6 put the dashboard behind single sign on with a required TOTP code, two roles, a 60 second access token and brute force detection; `security/iam/check_iam.sh` passed 39 of 39 live checks. The sample users, for this lab only, are `viewer.sample` (`ViewerSample-2026`) and `admin.sample` (`AdminSample-2026`).
+- **Tests and limits.** 179 new offline tests and 41 new mutants, each of which turns a test red (70 of 70 across the security layer). Keycloak is in dev mode over plain HTTP, and NVD matches upstream versions, so a patched Debian package can show CVEs that are already fixed.
 
 ## Smart lock integration
 
 `iot/` adds an IoT integration slice: a simulated MQTT smart lock on a real mosquitto broker, a stand in for a lock maker's cloud API written from a stated contract, a connector service that keeps a record in sync with both, and a diagnosis tool that names the layer that broke. It is all simulated: no real lock, vendor account or radio, and no Zigbee or Z-Wave. The write up is [`docs/iot.md`](docs/iot.md).
 
 - **Connector and diagnosis.** The connector refreshes OAuth tokens one caller at a time, honours Retry-After, verifies signed webhooks inside a replay window, drops duplicate events, repairs a missed webhook by polling, and keeps tokens and access codes encrypted at rest and out of every log. `iot/iotlab/diagnose.py` probes broker, device, vendor cloud, OAuth, webhook and connector in order. 133 mutants of the guards each turn a test red.
+
+## Smart doormat firmware
+
+`esp32/` adds ESP32 firmware and a phone control page for a smart doormat: a step on a pressure pad triggers a greeting with sound, animated eyes and an LED effect, and the mat takes commands over REST, WebSocket, MQTT and BLE. It was tested in simulation (host tests, Espressif's QEMU, the Wokwi simulator) and **has never been flashed to hardware**. Write up: [`esp32/README.md`](esp32/README.md). Wiring and flashing: [`esp32/docs/setup-guide.md`](esp32/docs/setup-guide.md).
+
+- **Firmware and page.** The device logic is C++ with no Arduino headers, so the same code runs on the board, in the tests and under QEMU. MQTT uses this repo's mosquitto broker with two new users in its access list. 101 Unity test cases and 61 host tests pass, 77 of 77 deliberate breakages of its guards turn a test red, and QEMU prints the same 36 trace lines as the host build. The camera driver, BLE and the I2S audio code compile and were not run.
 
 ## Layout
 
@@ -146,14 +145,11 @@ edge/                     the site router: WireGuard, iptables NAT + firewall
 hub/app/                  FastAPI monitor: probe.py (layers), db.py (pool), main.py (API), dashboard.html
 hub/tests/                offline tests for the probe layer
 scripts/verify.py         end-to-end proof, both faults
-scripts/measure_recovery.py, history_transitions.py, capture_debugging.py
 demo/record.mjs           Playwright recording of the dashboard through both faults
-docs/                     last_run.json, debugging_capture.txt, demo.gif, demo.mp4, security.md, security/ (run files)
+docs/                     last_run.json, demo.gif, demo.mp4, security.md, vuln-and-iam.md, iot.md and the run files of each slice
 security/                 Wazuh rules and decoders, sensors, playbooks, respond.py, junos_review.py, vuln/ (Nuclei, ZAP, CVE triage), iam/ (Keycloak realm, checks), tests
-scripts/verify_security.py  the live proof for the security layer
-docs/vuln-and-iam.md      the scan, CVE triage and IAM write up
 iot/                      the smart lock slice: lock simulator, vendor cloud stand-in, connector, diagnosis tool, tests (iot/README.md)
-docs/iot.md               the smart lock slice write up, docs/iot/ holds its run files
+esp32/                    the smart doormat slice: lib/doormat_core (device logic), firmware/, web/ (control page), host/ (emulation), tests/, qemu/, wokwi/ (esp32/README.md)
 ```
 
 ## Scope and next steps
@@ -162,5 +158,6 @@ docs/iot.md               the smart lock slice write up, docs/iot/ holds its run
 - **The camera is ffmpeg's test pattern served by MediaMTX.** Next steps: ONVIF discovery and vendor cameras (Hikvision, Dahua, Uniview).
 - **One camera and one site.** The monitor models a single device. A fleet adds a camera registry, per-site peers and
   scheduling.
+- **The doormat firmware has never run on a board.** What each simulator did and did not cover is in [`esp32/README.md`](esp32/README.md#limits).
 - The credentials in `docker-compose.yml` are local values. The database is only reachable on an internal
   network.

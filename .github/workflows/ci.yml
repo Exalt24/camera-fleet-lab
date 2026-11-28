@@ -75,3 +75,37 @@ jobs:
         run: python -m pytest -q
       - name: Every mutant still applies
         run: python tests/run_mutations.py --check-anchors --jobs 2
+
+  # The smart doormat slice. Everything runs on the runner: the Unity tests of the device logic, the four firmware builds, the host emulation
+  # tests (a real mosquitto container, and the control page in Chromium at 390 px) and the firmware booted in Espressif's QEMU, whose trace must
+  # equal the host build's. The Wokwi run needs a token, so it is a local check (esp32/wokwi/run_wokwi.py), and the full mutation run takes
+  # longer than a CI job should, so CI only checks that every mutant still applies.
+  esp32-slice:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: "esp32"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: esp32/requirements.txt
+      - name: Install
+        run: |
+          pip install -r requirements.txt
+          python -m playwright install --with-deps chromium
+      - name: Unit tests of the device logic (Unity, native)
+        run: pio test -e native
+      - name: Build the firmware (doormat board, camera board, Wokwi build, QEMU build)
+        run: pio run -e esp32dev -e esp32cam -e esp32wokwi -e esp32qemu
+      - name: Build the host program (this clears the other build folders, so it comes after the firmware)
+        run: pio run -e core_cli
+      - name: Host emulation tests (REST, WebSocket, MQTT on a real broker, the page in Chromium)
+        run: python -m pytest -q
+      - name: The firmware in QEMU prints the same trace as the host build
+        run: python qemu/run_qemu.py --download
+      - name: Every mutant still applies
+        run: python tests/run_mutations.py --check-anchors
