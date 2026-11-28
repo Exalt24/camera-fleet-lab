@@ -18,6 +18,15 @@ updates:
     groups:
       minor-and-patch:
         update-types: [minor, patch]
+  - package-ecosystem: pip
+    directory: "/iot"
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    groups:
+      minor-and-patch:
+        update-types: [minor, patch]
   - package-ecosystem: github-actions
     directory: "/"
     schedule:

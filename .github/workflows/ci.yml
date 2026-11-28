@@ -52,3 +52,26 @@ jobs:
         run: python security/tests/run_mutations.py
       - name: Shell scripts parse
         run: bash -n security/vuln/scan.sh && bash -n security/vuln/zap.sh && bash -n security/vuln/scope_guard.sh && bash -n security/iam/setup.sh && bash -n security/iam/check_iam.sh
+
+  # The smart lock slice. The tests start a real mosquitto container (the runner has Docker) and everything else is Python. The full
+  # mutation run takes longer than a CI job should, so CI only checks that every mutant still applies to the code (a renamed line would
+  # silently turn a mutant into a no-op); the real run is `python iot/tests/run_mutations.py` and its saved output is in docs/iot/.
+  iot-slice:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: "iot"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: iot/requirements.txt
+      - name: Install
+        run: pip install -r requirements.txt
+      - name: Tests (unit, table, property, real broker, end to end, fault injection)
+        run: python -m pytest -q
+      - name: Every mutant still applies
+        run: python tests/run_mutations.py --check-anchors --jobs 2
