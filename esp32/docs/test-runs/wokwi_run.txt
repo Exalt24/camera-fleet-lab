@@ -16,7 +16,7 @@ entry 0x400805dc
 [The mat greets a step and notices it empty again] Expected text matched: "[boot] doormat"
 [The mat greets a step and notices it empty again] delay 1500ms
  mat-000110
-[  1422][E][Preferences.cpp:50] begin(): nvs_open failed: NOT_FOUND
+[  1423][E][Preferences.cpp:50] begin(): nvs_open failed: NOT_FOUND
 [net] access point doormat-setup up at 192.168.4.1
 [presence] STEP_ON
 [The mat greets a step and notices it empty again] Expected text matched: "[presence] STEP_ON"
