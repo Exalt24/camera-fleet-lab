@@ -185,7 +185,8 @@ def test_the_page_falls_back_to_polling_when_the_stream_is_down(browser, sim):
     pg = ctx.new_page()
     pg.goto(f"http://127.0.0.1:{sim.http_port}/?ws=ws://127.0.0.1:9/")
     pg.wait_for_function("document.getElementById('conn').dataset.state === 'poll'", timeout=8000)
-    assert pg.inner_text("#devid").startswith("mat-test")
+    # The state turns to polling when the stream fails, which can be before the first status answer arrives, so wait for the answer too.
+    pg.wait_for_function("document.getElementById('devid').textContent.startsWith('mat-test')", timeout=8000)
     ctx.close()
 
 
