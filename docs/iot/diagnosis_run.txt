@@ -1,0 +1,277 @@
+=== healthy slice, symptom codes_not_syncing
+symptom: codes_not_syncing
+verdict: no layer failed
+  every layer probed is healthy, so the symptom was not reproduced from here
+  next: Reproduce it while watching the connector log, or widen the symptom.
+layers:
+  [     ok] vendor_cloud: the vendor cloud answers and serves this app
+            evidence: {"health": 200}
+  [     ok] oauth: grant valid, access token expires in 99999.7 s
+            evidence: {"expires_in_s": 99999.7, "scope": "codes:read codes:write locks:read locks:write webhooks:write"}
+  [     ok] connector: the connector answers, its loop is running and its last sync succeeded
+            evidence: {"last_sync_age_s": null}
+
+=== healthy slice, symptom lock_offline
+symptom: lock_offline
+verdict: no layer failed
+  every layer probed is healthy, so the symptom was not reproduced from here
+  next: Reproduce it while watching the connector log, or widen the symptom.
+layers:
+  [     ok] broker: connected, message round trip 20.5 ms
+            evidence: {"host": "127.0.0.1", "port": 57808, "roundtrip_ms": 20.5}
+  [     ok] device: online and answered a report in 61.0 ms
+            evidence: {"answered_ms": 61.0, "battery": 80, "battery_low": false, "lock": "locked", "state_age_s": 1.3, "status": "online"}
+  [     ok] vendor_cloud: the vendor cloud answers and serves this app
+            evidence: {"health": 200}
+  [     ok] oauth: grant valid, access token expires in 99999.3 s
+            evidence: {"expires_in_s": 99999.3, "scope": "codes:read codes:write locks:read locks:write webhooks:write"}
+  [     ok] connector: the connector answers, its loop is running and its last sync succeeded
+            evidence: {"last_sync_age_s": null}
+
+=== healthy slice, symptom unlock_unconfirmed
+symptom: unlock_unconfirmed
+verdict: no layer failed
+  every layer probed is healthy, so the symptom was not reproduced from here
+  next: Reproduce it while watching the connector log, or widen the symptom.
+layers:
+  [     ok] broker: connected, message round trip 20.2 ms
+            evidence: {"host": "127.0.0.1", "port": 57808, "roundtrip_ms": 20.2}
+  [     ok] device: online and answered a report in 60.6 ms
+            evidence: {"answered_ms": 60.6, "battery": 80, "battery_low": false, "lock": "locked", "state_age_s": 0.7, "status": "online"}
+  [     ok] vendor_cloud: the vendor cloud answers and serves this app
+            evidence: {"health": 200}
+  [     ok] oauth: grant valid, access token expires in 99998.6 s
+            evidence: {"expires_in_s": 99998.6, "scope": "codes:read codes:write locks:read locks:write webhooks:write"}
+  [     ok] webhook: 0 webhook(s) accepted, none rejected, deliveries healthy
+            evidence: {"deliveries": {"failed": 0, "last_error": null, "last_status": null, "total": 0}, "received": 0}
+  [     ok] connector: the connector answers, its loop is running and its last sync succeeded
+            evidence: {"last_sync_age_s": null}
+
+=== healthy slice, symptom webhook_silence
+symptom: webhook_silence
+verdict: no layer failed
+  every layer probed is healthy, so the symptom was not reproduced from here
+  next: Reproduce it while watching the connector log, or widen the symptom.
+layers:
+  [     ok] vendor_cloud: the vendor cloud answers and serves this app
+            evidence: {"health": 200}
+  [     ok] oauth: grant valid, access token expires in 99997.8 s
+            evidence: {"expires_in_s": 99997.8, "scope": "codes:read codes:write locks:read locks:write webhooks:write"}
+  [     ok] webhook: 0 webhook(s) accepted, none rejected, deliveries healthy
+            evidence: {"deliveries": {"failed": 0, "last_error": null, "last_status": null, "total": 0}, "received": 0}
+  [     ok] connector: the connector answers, its loop is running and its last sync succeeded
+            evidence: {"last_sync_age_s": null}
+
+=== fault: the lock is online but ignores commands
+symptom: unlock_unconfirmed
+verdict: device
+  lock-1-33d1 says online but did not answer a report command within 2 s (firmware hung or not reading commands)
+  next: Look at the lock itself: power and batteries, its link to the broker, firmware. The broker is fine, so the cause is on the device side.
+layers:
+  [     ok] broker: connected, message round trip 20.5 ms
+            evidence: {"host": "127.0.0.1", "port": 57808, "roundtrip_ms": 20.5}
+  [   fail] device: lock-1-33d1 says online but did not answer a report command within 2 s (firmware hung or not reading commands)
+            evidence: {"state_age_s": 1.1, "status": "online"}
+  [     ok] vendor_cloud: the vendor cloud answers and serves this app
+            evidence: {"health": 200}
+  [     ok] oauth: grant valid, access token expires in 99997.4 s
+            evidence: {"expires_in_s": 99997.4, "scope": "codes:read codes:write locks:read locks:write webhooks:write"}
+  [     ok] webhook: 0 webhook(s) accepted, none rejected, deliveries healthy
+            evidence: {"deliveries": {"failed": 0, "last_error": null, "last_status": null, "total": 0}, "received": 0}
+  [     ok] connector: the connector answers, its loop is running and its last sync succeeded
+            evidence: {"last_sync_age_s": null}
+
+=== fault: the lock's link is cut (the broker publishes its last will)
+symptom: lock_offline
+verdict: device
+  the broker holds the last will of lock-1-33d1: offline
+  next: Look at the lock itself: power and batteries, its link to the broker, firmware. The broker is fine, so the cause is on the device side.
+layers:
+  [     ok] broker: connected, message round trip 20.4 ms
+            evidence: {"host": "127.0.0.1", "port": 57808, "roundtrip_ms": 20.4}
+  [   fail] device: the broker holds the last will of lock-1-33d1: offline
+            evidence: {"state_age_s": 3.9, "status": "offline"}
+  [     ok] vendor_cloud: the vendor cloud answers and serves this app
+            evidence: {"health": 200}
+  [     ok] oauth: grant valid, access token expires in 99994.7 s
+            evidence: {"expires_in_s": 99994.7, "scope": "codes:read codes:write locks:read locks:write webhooks:write"}
+  [     ok] connector: the connector answers, its loop is running and its last sync succeeded
+            evidence: {"last_sync_age_s": null}
+
+=== fault: the vendor cloud is down
+symptom: codes_not_syncing
+verdict: vendor_cloud
+  the vendor cloud answers 503 on its health route
+  next: The manufacturer's cloud is the problem or is refusing this app. Check the vendor status page and the rate limit. Nothing local needs fixing.
+layers:
+  [   fail] vendor_cloud: the vendor cloud answers 503 on its health route
+            evidence: {"status": 503}
+  [     ok] oauth: grant valid, access token expires in 99993.4 s
+            evidence: {"expires_in_s": 99993.4, "scope": "codes:read codes:write locks:read locks:write webhooks:write"}
+  [     ok] connector: the connector answers, its loop is running and its last sync succeeded
+            evidence: {"last_sync_age_s": null}
+
+=== fault: the vendor rate limits this app (Retry-After 3600 s)
+symptom: codes_not_syncing
+verdict: vendor_cloud
+  the vendor is rate limiting this app (Retry-After 3600 s)
+  next: The manufacturer's cloud is the problem or is refusing this app. Check the vendor status page and the rate limit. Nothing local needs fixing.
+layers:
+  [   fail] vendor_cloud: the vendor is rate limiting this app (Retry-After 3600 s)
+            evidence: {"error": "rate_limited", "ok": false, "retry_after": 3600.0, "status": 429}
+  [     ok] oauth: grant valid, access token expires in 99992.7 s
+            evidence: {"expires_in_s": 99992.7, "scope": "codes:read codes:write locks:read locks:write webhooks:write"}
+  [     ok] connector: the connector answers, its loop is running and its last sync succeeded
+            evidence: {"last_sync_age_s": null}
+
+=== fault: the vendor shows the lock offline while the broker shows it online
+symptom: lock_offline
+verdict: vendor_cloud
+  the vendor cloud shows the lock offline while the broker shows it online and answering (the vendor lost its own link to the lock)
+  next: The manufacturer's cloud is the problem or is refusing this app. Check the vendor status page and the rate limit. Nothing local needs fixing.
+layers:
+  [     ok] broker: connected, message round trip 20.5 ms
+            evidence: {"host": "127.0.0.1", "port": 57808, "roundtrip_ms": 20.5}
+  [     ok] device: online and answered a report in 60.9 ms
+            evidence: {"answered_ms": 60.9, "battery": 80, "battery_low": false, "lock": "locked", "state_age_s": 2.1, "status": "online"}
+  [   fail] vendor_cloud: the vendor cloud shows the lock offline while the broker shows it online and answering (the vendor lost its own link to the lock)
+            evidence: {"broker_status": "online", "vendor_online": false}
+  [     ok] oauth: grant valid, access token expires in 99992.2 s
+            evidence: {"expires_in_s": 99992.2, "scope": "codes:read codes:write locks:read locks:write webhooks:write"}
+  [     ok] connector: the connector answers, its loop is running and its last sync succeeded
+            evidence: {"last_sync_age_s": null}
+
+=== fault: the grant lost the access code scopes
+symptom: codes_not_syncing
+verdict: oauth
+  the grant lacks a scope the access codes need (insufficient_scope:codes:read)
+  next: The grant is the problem. Re-authorize the connector, or fix the missing scope, then run a reconcile.
+layers:
+  [     ok] vendor_cloud: the vendor cloud answers and serves this app
+            evidence: {"health": 200}
+  [   fail] oauth: the grant lacks a scope the access codes need (insufficient_scope:codes:read)
+            evidence: {"scope": "codes:read codes:write locks:read locks:write webhooks:write", "vendor": {"error": "insufficient_scope", "ok": false, "retry_after": null, "status": 403}}
+  [     ok] connector: the connector answers, its loop is running and its last sync succeeded
+            evidence: {"last_sync_age_s": null}
+
+=== fault: the vendor revoked the grant
+symptom: codes_not_syncing
+verdict: oauth
+  the grant is unusable (needs_reauth: invalid_grant): the refresh token was revoked, replayed or has expired
+  next: The grant is the problem. Re-authorize the connector, or fix the missing scope, then run a reconcile.
+layers:
+  [     ok] vendor_cloud: the vendor cloud answers and serves this app
+            evidence: {"health": 200}
+  [   fail] oauth: the grant is unusable (needs_reauth: invalid_grant): the refresh token was revoked, replayed or has expired
+            evidence: {"connected": true, "expires_in_s": 99999.5, "last_error": "invalid_grant", "scope": "codes:read codes:write locks:read locks:write webhooks:write", "status": "needs_reauth"}
+  [     ok] connector: the connector answers, its loop is running and its last sync succeeded
+            evidence: {"last_sync_age_s": null}
+
+=== fault: the vendor signs with a secret the connector does not hold
+symptom: webhook_silence
+verdict: webhook
+  the vendor delivers but the connector rejects 2 request(s) as bad_signature: the signing secret does not match the vendor's (a rotated or mistyped secret)
+  next: Deliveries are not arriving or are being rejected. Compare the stored webhook secret with the vendor's, check the clock, check the endpoint URL.
+layers:
+  [     ok] vendor_cloud: the vendor cloud answers and serves this app
+            evidence: {"health": 200}
+  [     ok] oauth: grant valid, access token expires in 99999.3 s
+            evidence: {"expires_in_s": 99999.3, "scope": "codes:read codes:write locks:read locks:write webhooks:write"}
+  [   fail] webhook: the vendor delivers but the connector rejects 2 request(s) as bad_signature: the signing secret does not match the vendor's (a rotated or mistyped secret)
+            evidence: {"deliveries": {"failed": 2, "last_error": null, "last_status": 401, "total": 4}, "rejected": {"bad_signature": 2}}
+  [     ok] connector: the connector answers, its loop is running and its last sync succeeded
+            evidence: {"last_sync_age_s": null}
+
+=== fault: the vendor stopped pushing events (the feed still has them)
+symptom: webhook_silence
+verdict: webhook
+  the vendor delivers but the connector rejects 4 request(s) as bad_signature: the signing secret does not match the vendor's (a rotated or mistyped secret)
+  next: Deliveries are not arriving or are being rejected. Compare the stored webhook secret with the vendor's, check the clock, check the endpoint URL.
+layers:
+  [     ok] vendor_cloud: the vendor cloud answers and serves this app
+            evidence: {"health": 200}
+  [     ok] oauth: grant valid, access token expires in 99998.5 s
+            evidence: {"expires_in_s": 99998.5, "scope": "codes:read codes:write locks:read locks:write webhooks:write"}
+  [   fail] webhook: the vendor delivers but the connector rejects 4 request(s) as bad_signature: the signing secret does not match the vendor's (a rotated or mistyped secret)
+            evidence: {"deliveries": {"failed": 4, "last_error": null, "last_status": 401, "total": 6}, "rejected": {"bad_signature": 4}}
+  [     ok] connector: the connector answers, its loop is running and its last sync succeeded
+            evidence: {"last_sync_age_s": null}
+
+=== same fault after a reconcile repaired the lock state by polling
+symptom: webhook_silence
+verdict: webhook
+  the vendor delivers but the connector rejects 4 request(s) as bad_signature: the signing secret does not match the vendor's (a rotated or mistyped secret)
+  next: Deliveries are not arriving or are being rejected. Compare the stored webhook secret with the vendor's, check the clock, check the endpoint URL.
+layers:
+  [     ok] vendor_cloud: the vendor cloud answers and serves this app
+            evidence: {"health": 200}
+  [     ok] oauth: grant valid, access token expires in 99998.1 s
+            evidence: {"expires_in_s": 99998.1, "scope": "codes:read codes:write locks:read locks:write webhooks:write"}
+  [   fail] webhook: the vendor delivers but the connector rejects 4 request(s) as bad_signature: the signing secret does not match the vendor's (a rotated or mistyped secret)
+            evidence: {"deliveries": {"failed": 4, "last_error": null, "last_status": 401, "total": 6}, "rejected": {"bad_signature": 4}}
+  [     ok] connector: the connector answers, its loop is running and its last sync succeeded
+            evidence: {"last_sync_age_s": 0.3}
+
+=== fault: the registered webhook address does not answer
+symptom: webhook_silence
+verdict: webhook
+  the vendor delivers but the connector rejects 4 request(s) as bad_signature: the signing secret does not match the vendor's (a rotated or mistyped secret)
+  next: Deliveries are not arriving or are being rejected. Compare the stored webhook secret with the vendor's, check the clock, check the endpoint URL.
+layers:
+  [     ok] vendor_cloud: the vendor cloud answers and serves this app
+            evidence: {"health": 200}
+  [     ok] oauth: grant valid, access token expires in 99988.4 s
+            evidence: {"expires_in_s": 99988.4, "scope": "codes:read codes:write locks:read locks:write webhooks:write"}
+  [   fail] webhook: the vendor delivers but the connector rejects 4 request(s) as bad_signature: the signing secret does not match the vendor's (a rotated or mistyped secret)
+            evidence: {"deliveries": {"failed": 8, "last_error": "ConnectError", "last_status": null, "total": 10}, "rejected": {"bad_signature": 4}}
+  [     ok] connector: the connector answers, its loop is running and its last sync succeeded
+            evidence: {"last_sync_age_s": 10.0}
+
+=== fault: the connector service is down
+symptom: webhook_silence
+verdict: connector
+  the connector does not answer on http://127.0.0.1:50297 (ConnectTimeout)
+  next: The connector itself is the problem: restart or unstick it, then read its last sync error.
+layers:
+  [     ok] vendor_cloud: the vendor cloud answers and serves this app
+            evidence: {"health": 200}
+  [unknown] oauth: not probed: the connector's token state cannot be read while the connector is unreachable
+  [unknown] webhook: not probed: webhook counters cannot be read while the connector is unreachable
+  [   fail] connector: the connector does not answer on http://127.0.0.1:50297 (ConnectTimeout)
+            evidence: {"error": "ConnectTimeout"}
+
+=== fault: the broker container is stopped (a separate stack on its own broker)
+symptom: lock_offline
+verdict: broker
+  the broker does not answer on 127.0.0.1:60687 (ConnectionRefusedError)
+  next: Check the broker container and its listener first. Every later layer depends on it.
+layers:
+  [   fail] broker: the broker does not answer on 127.0.0.1:60687 (ConnectionRefusedError)
+            evidence: {"error": "ConnectionRefusedError", "host": "127.0.0.1", "port": 60687}
+  [unknown] device: not probed: the broker layer failed, so the lock cannot be reached through it
+  [     ok] vendor_cloud: the vendor cloud answers and serves this app
+            evidence: {"health": 200}
+  [     ok] oauth: grant valid, access token expires in 99999.4 s
+            evidence: {"expires_in_s": 99999.4, "scope": "codes:read codes:write locks:read locks:write webhooks:write"}
+  [   fail] connector: the connector's own MQTT subscription is down
+            evidence: {"connected": false, "last_message_age_s": 0.6}
+
+verdicts (the induced layer, then what the tool said):
+  ok   healthy / codes_not_syncing: None
+  ok   healthy / lock_offline: None
+  ok   healthy / unlock_unconfirmed: None
+  ok   healthy / webhook_silence: None
+  ok   hung lock: device
+  ok   link cut: device
+  ok   vendor down: vendor_cloud
+  ok   rate limited: vendor_cloud
+  ok   vendor view: vendor_cloud
+  ok   scope: oauth
+  ok   revoked: oauth
+  ok   secret drift: webhook
+  ok   paused: webhook
+  ok   paused, repaired by polling: webhook
+  ok   dead endpoint: webhook
+  ok   connector down: connector
+  ok   broker stopped: broker
+17/17 runs named the induced layer
