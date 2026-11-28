@@ -12,3 +12,7 @@ security/state/
 # the planted and benign log files are test inputs (logs/EXPECTED.json names them) and the evidence bundle logs are hashed in their manifests: source, not runtime state
 !security/logs/**/*.log
 !docs/security/**/*.log
+
+# iot runtime state (broker credentials, connector databases and keys), never source
+iot/state/
+*.db
