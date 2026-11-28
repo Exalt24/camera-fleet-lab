@@ -131,8 +131,9 @@ def test_a_late_subscriber_gets_the_retained_status(mat, broker):
     late = Controller(broker)
     try:
         late.sub("doormat/mat-mq/status")
-        doc = late.get("doormat/mat-mq/status", timeout=6)
-        assert doc["id"] == "mat-mq"
+        topic, payload, retained = late.q.get(timeout=2)  # a retained message arrives at once, not at the next publish
+        assert topic == "doormat/mat-mq/status" and retained is True
+        assert json.loads(payload)["id"] == "mat-mq"
     finally:
         late.close()
 

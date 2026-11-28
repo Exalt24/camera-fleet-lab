@@ -1,0 +1,30 @@
+Wokwi CLI v0.29.1 (0aa185144b92)
+Connected to Wokwi Simulation API 1.0.0-20261126-gb061761c
+Starting simulation...
+ets Jul 29 2019 12:21:46
+
+rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1156
+load:0x40078000,len:11456
+ho 0 tail 12 room 4
+load:0x40080400,len:2972
+entry 0x400805dc
+[boot] doormat
+[The mat greets a step and notices it empty again] Expected text matched: "[boot] doormat"
+[The mat greets a step and notices it empty again] delay 1500ms
+ mat-000110
+[  1422][E][Preferences.cpp:50] begin(): nvs_open failed: NOT_FOUND
+[net] access point doormat-setup up at 192.168.4.1
+[presence] STEP_ON
+[The mat greets a step and notices it empty again] Expected text matched: "[presence] STEP_ON"
+ raw=3686 steps=1
+[greeting] message=
+[The mat greets a step and notices it empty again] Expected text matched: "[greeting] message="
+[The mat greets a step and notices it empty again] delay 1500ms
+"Welcome home!" led=greeting
+[presence] STEP_OFF
+[The mat greets a step and notices it empty again] Expected text matched: "[presence] STEP_OFF"
+[The mat greets a step and notices it empty again] Scenario completed successfully

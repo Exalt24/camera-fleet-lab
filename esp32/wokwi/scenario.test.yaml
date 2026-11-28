@@ -1,0 +1,17 @@
+name: The mat greets a step and notices it empty again
+version: 1
+steps:
+  - wait-serial: "[boot] doormat"
+  - delay: 1500ms
+  - set-control:
+      part-id: pot
+      control: position
+      value: 0.9
+  - wait-serial: "[presence] STEP_ON"
+  - wait-serial: "[greeting] message="
+  - delay: 1500ms
+  - set-control:
+      part-id: pot
+      control: position
+      value: 0.02
+  - wait-serial: "[presence] STEP_OFF"

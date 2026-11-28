@@ -8,7 +8,14 @@
 #include <driver/i2s.h>
 
 #include "app.h"
+#ifdef DOORMAT_NO_BLE
+// Wokwi does not simulate the Bluetooth controller (the chip's btController task trips the watchdog there), so the simulator build leaves BLE out.
+static void bleBegin(const char*) {}
+static size_t bleTake(char*, size_t) { return 0; }
+static void bleSetStatus(const char*) {}
+#else
 #include "ble.h"
+#endif
 #include "config.h"
 #include "net.h"
 #include "tones.h"
@@ -148,6 +155,7 @@ static void handleCommand(const char* route, const char* body, size_t len, char*
     return;
   }
   const ApplyResult r = app.apply(c, now);
+  Serial.printf("[cmd] type=%d result=%d\n", (int)c.type, (int)r);
   if (r == ApplyResult::BadIndex) {
     snprintf(reply, cap, "{\"ok\":false,\"err\":\"bad_index\"}");
     *http = 400;
@@ -200,6 +208,8 @@ void loop() {
     for (int i = 0; i < 4; i++) acc += analogRead(PIN_PRESSURE);
     const StepResult r = app.step(now, (uint16_t)(acc / 4), micLevel);
     if (r.event != PresenceEvent::None) {
+      Serial.printf("[presence] %s raw=%u steps=%lu\n", r.event == PresenceEvent::StepOn ? "STEP_ON" : "STEP_OFF", (unsigned)(acc / 4),
+                    (unsigned long)app.steps());
       char msg[128];
       if (formatPresenceEvent(msg, sizeof(msg), app.occupied(), now, app.steps()) > 0) {
         netBroadcast(msg);
@@ -208,6 +218,7 @@ void loop() {
     }
   }
   if (app.takeGreeting()) {
+    Serial.printf("[greeting] message=\"%s\" led=%s\n", app.message(now), modeName(app.effects().activeMode(now)));
     playing = true;
     playCursor = 0;
   }
