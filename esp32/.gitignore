@@ -1,0 +1,5 @@
+.pio/
+.qemu/
+firmware/secrets.h
+__pycache__/
+.pytest_cache/
