@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<title>Doormat control</title>
+<style>
+  :root {
+    --bg: #0f1419; --panel: #182029; --line: #2a3644; --text: #e8eef4; --muted: #8fa0b2;
+    --accent: #3ab0ff; --ok: #3ddc84; --warn: #ffb020; --bad: #ff5d5d;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+         padding: 12px 16px calc(24px + env(safe-area-inset-bottom)); max-width: 560px; margin-inline: auto; }
+  h1 { font-size: 20px; margin: 4px 0 2px; }
+  h2 { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 0 0 10px; font-weight: 600; }
+  header { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 12px; }
+  .conn { font-size: 13px; padding: 4px 10px; border-radius: 99px; border: 1px solid var(--line); color: var(--muted); white-space: nowrap; }
+  .conn[data-state="live"] { color: var(--ok); border-color: var(--ok); }
+  .conn[data-state="poll"] { color: var(--warn); border-color: var(--warn); }
+  .conn[data-state="down"] { color: var(--bad); border-color: var(--bad); }
+  section { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px; margin-bottom: 12px; }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; }
+  button, input, select { font: inherit; color: inherit; }
+  button { min-height: 48px; padding: 0 14px; border-radius: 10px; border: 1px solid var(--line); background: #1f2a36; cursor: pointer; flex: 1 1 auto; }
+  button:active { transform: translateY(1px); }
+  button.primary { background: var(--accent); color: #04121c; border-color: var(--accent); font-weight: 700; }
+  button[aria-pressed="true"] { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); background: #17324a; }
+  input[type=text], input[type=password], input[type=url] { width: 100%; min-height: 48px; padding: 0 12px; border-radius: 10px; border: 1px solid var(--line); background: #0d1218; }
+  input[type=color] { width: 56px; height: 48px; border: 1px solid var(--line); border-radius: 10px; background: #0d1218; padding: 4px; }
+  input[type=range] { width: 100%; height: 36px; accent-color: var(--accent); }
+  .presence { display: flex; align-items: center; gap: 14px; }
+  .dot { width: 56px; height: 56px; border-radius: 50%; background: #2a3644; border: 3px solid var(--line); flex: none; transition: background .15s, box-shadow .15s; }
+  .presence[data-state="occupied"] .dot { background: var(--ok); box-shadow: 0 0 22px var(--ok); border-color: #b8f5d2; }
+  .big { font-size: 22px; font-weight: 700; }
+  .muted { color: var(--muted); font-size: 14px; }
+  .meter { height: 14px; border-radius: 8px; background: #0d1218; border: 1px solid var(--line); overflow: hidden; margin-top: 6px; }
+  .meter > i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--ok), var(--warn) 70%, var(--bad)); transition: width .12s; }
+  .face { background: #000; border-radius: 10px; border: 1px solid var(--line); overflow: hidden; }
+  .face img { display: block; width: 100%; height: auto; image-rendering: pixelated; }
+  .face .msg { min-height: 40px; text-align: center; font: 700 20px/40px ui-monospace, Consolas, monospace; color: #e8f4ff; letter-spacing: .02em; }
+  .strip { display: grid; grid-template-columns: repeat(24, 1fr); gap: 2px; padding: 6px; background: #05080b; border-radius: 10px; border: 1px solid var(--line); margin-bottom: 12px; }
+  .strip i { height: 14px; border-radius: 3px; background: #000; }
+  .label { display: block; margin: 12px 0 6px; color: var(--muted); font-size: 14px; }
+  .cam { width: 100%; background: #000; border-radius: 10px; border: 1px solid var(--line); min-height: 120px; display: none; }
+  .cam.on { display: block; }
+  #log { min-height: 22px; font-size: 14px; }
+  #log.err { color: var(--bad); }
+  #log.ok { color: var(--ok); }
+  details summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; color: var(--muted); }
+  @media (min-width: 700px) { body { max-width: 640px; } }
+</style>
+</head>
+<body>
+<header>
+  <div><h1>Doormat control</h1><div class="muted" id="devid">connecting</div></div>
+  <div class="conn" id="conn" data-state="down">offline</div>
+</header>
+
+<section aria-labelledby="h-now">
+  <h2 id="h-now">On the mat</h2>
+  <div class="presence" id="presence" data-state="empty">
+    <div class="dot" aria-hidden="true"></div>
+    <div><div class="big" id="presence-text">Empty</div><div class="muted"><span id="steps">0</span> steps since start</div></div>
+  </div>
+  <div class="muted" style="margin-top:12px">Microphone level <span id="micval">0</span></div>
+  <div class="meter" role="meter" aria-label="Microphone level" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="meterbox"><i id="mic"></i></div>
+</section>
+
+<section aria-labelledby="h-face">
+  <h2 id="h-face">Display</h2>
+  <div class="face"><img id="eyes" alt="The eyes on the display" width="128" height="48"><div class="msg" id="msg"></div></div>
+  <div class="row" style="margin-top:10px"><button class="primary" id="greet" type="button">Greet now</button></div>
+</section>
+
+<section aria-labelledby="h-led">
+  <h2 id="h-led">LED border</h2>
+  <div class="strip" id="strip" aria-label="LED border preview"></div>
+  <div class="row" id="modes" role="group" aria-label="LED mode">
+    <button type="button" data-mode="off" aria-pressed="false">Off</button>
+    <button type="button" data-mode="solid" aria-pressed="false">Solid</button>
+    <button type="button" data-mode="breathing" aria-pressed="false">Breathing</button>
+    <button type="button" data-mode="chase" aria-pressed="false">Chase</button>
+    <button type="button" data-mode="rainbow" aria-pressed="false">Rainbow</button>
+  </div>
+  <label class="label" for="color">Colour</label>
+  <div class="row" style="align-items:center"><input type="color" id="color" value="#00a0ff"><span class="muted" id="colorhex">#00a0ff</span></div>
+  <label class="label" for="bright">Brightness <span id="brightval">160</span></label>
+  <input type="range" id="bright" min="0" max="255" value="160">
+</section>
+
+<section aria-labelledby="h-msg">
+  <h2 id="h-msg">Message</h2>
+  <label class="label" for="msgtext">Show this text on the display</label>
+  <div class="row"><input type="text" id="msgtext" maxlength="32" placeholder="Mind the step" autocomplete="off"><button type="button" id="sendmsg" style="flex:0 0 auto">Show</button></div>
+  <label class="label">Or one of the built in messages</label>
+  <div class="row" id="presets"></div>
+</section>
+
+<section aria-labelledby="h-cam">
+  <h2 id="h-cam">Camera</h2>
+  <label class="label" for="camurl">Stream address of the camera board</label>
+  <input type="url" id="camurl" placeholder="http://doormat-cam.local/stream" autocomplete="off">
+  <div class="row" style="margin-top:8px"><button type="button" id="camtoggle">Show camera</button></div>
+  <img class="cam" id="cam" alt="Camera view">
+  <div class="muted" id="camnote" style="margin-top:6px"></div>
+</section>
+
+<section>
+  <div id="log" role="status" aria-live="polite"></div>
+  <details>
+    <summary>Wi-Fi setup</summary>
+    <label class="label" for="ssid">Network name</label><input type="text" id="ssid" maxlength="32" autocomplete="off">
+    <label class="label" for="pass">Password</label><input type="password" id="pass" maxlength="64" autocomplete="off">
+    <div class="row" style="margin-top:10px"><button type="button" id="savewifi">Save and restart the board</button></div>
+  </details>
+</section>
+
+<script>
+(function () {
+  'use strict';
+  var $ = function (id) { return document.getElementById(id); };
+  var q = new URLSearchParams(location.search);
+  var API = q.get('api') || '';                       // empty: same origin, which is how the board serves this page
+  var WSPORT = q.get('wsport') || '81';
+  var wsUrl = q.get('ws') || ('ws://' + location.hostname + ':' + WSPORT + '/');
+  var ws = null, wsLive = false, lastWsMsg = 0, state = {};
+
+  function log(text, kind) { var el = $('log'); el.textContent = text; el.className = kind || ''; }
+  function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } }
+
+  function post(route, body) {
+    return fetch(API + '/api/' + route, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body || {}) })
+      .then(function (r) { return r.json().then(function (j) { return { ok: r.ok && j.ok !== false, json: j }; }); })
+      .then(function (res) {
+        if (res.ok) log('Sent: ' + route, 'ok'); else log('The board refused it: ' + (res.json.err || 'error'), 'err');
+        return res;
+      })
+      .catch(function () { log('Could not reach the board', 'err'); return { ok: false, json: {} }; });
+  }
+
+  // ---- drawing from state ----
+  function setConn(kind, text) { var c = $('conn'); c.dataset.state = kind; c.textContent = text; }
+  function setPresence(occupied, steps) {
+    $('presence').dataset.state = occupied ? 'occupied' : 'empty';
+    $('presence-text').textContent = occupied ? 'Someone is on the mat' : 'Empty';
+    if (steps !== undefined) $('steps').textContent = steps;
+  }
+  function setMic(level) {
+    level = Math.max(0, Math.min(100, level | 0));
+    $('mic').style.width = level + '%'; $('micval').textContent = level; $('meterbox').setAttribute('aria-valuenow', level);
+  }
+  function applyStatus(s) {
+    state = s;
+    $('devid').textContent = (s.id || 'doormat') + ' on ' + (s.net === 'ap' ? 'its own network' : s.net === 'sta' ? 'your network' : 'no network');
+    setPresence(!!s.occupied, s.steps);
+    setMic(s.mic);
+    $('msg').textContent = s.message || '';
+    var btns = document.querySelectorAll('#modes button');
+    for (var i = 0; i < btns.length; i++) btns[i].setAttribute('aria-pressed', String(btns[i].dataset.mode === s.mode));
+    if (s.color) { $('color').value = s.color; $('colorhex').textContent = s.color; }
+    if (typeof s.brightness === 'number' && document.activeElement !== $('bright')) { $('bright').value = s.brightness; $('brightval').textContent = s.brightness; }
+  }
+  function drawFrame(px) {
+    var strip = $('strip'), n = px.length / 6;
+    if (strip.children.length !== n) { strip.textContent = ''; for (var i = 0; i < n; i++) strip.appendChild(document.createElement('i')); strip.style.gridTemplateColumns = 'repeat(' + n + ', 1fr)'; }
+    for (var k = 0; k < n; k++) strip.children[k].style.background = '#' + px.substr(k * 6, 6);
+  }
+  function onEvent(m) {
+    if (m.t === 'status') applyStatus(m);
+    else if (m.t === 'presence') { setPresence(m.state === 'occupied', m.steps); }
+    else if (m.t === 'mic') setMic(m.level);
+    else if (m.t === 'frame' && typeof m.px === 'string' && /^[0-9a-f]+$/i.test(m.px)) drawFrame(m.px);
+  }
+
+  // ---- transport: a WebSocket stream, with a poll of /api/status under it as the fallback and the source of truth ----
+  function connectWs() {
+    try { ws = new WebSocket(wsUrl); } catch (e) { return; }
+    ws.onopen = function () { wsLive = true; setConn('live', 'live'); };
+    ws.onmessage = function (ev) { lastWsMsg = Date.now(); try { onEvent(JSON.parse(ev.data)); } catch (e) { /* a frame that is not JSON is ignored */ } };
+    ws.onclose = function () { wsLive = false; setConn('poll', 'polling'); setTimeout(connectWs, 3000); };
+    ws.onerror = function () { try { ws.close(); } catch (e) { /* already closed */ } };
+  }
+  function poll() {
+    fetch(API + '/api/status', { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (s) {
+      applyStatus(s); if (!wsLive) setConn('poll', 'polling');
+    }).catch(function () { setConn('down', 'offline'); });
+  }
+
+  // ---- the display picture, about four times a second while the page is visible ----
+  function refreshEyes() {
+    if (document.hidden) return;
+    var img = $('eyes'); var next = new Image();
+    next.onload = function () { img.src = next.src; };
+    next.src = API + '/api/display?t=' + Date.now();
+  }
+
+  // ---- controls ----
+  $('greet').addEventListener('click', function () { post('greet'); });
+  document.querySelectorAll('#modes button').forEach(function (b) {
+    b.addEventListener('click', function () { post('led', { mode: b.dataset.mode }); });
+  });
+  $('color').addEventListener('input', function () { $('colorhex').textContent = this.value; });
+  $('color').addEventListener('change', function () { post('led', { color: this.value }); });
+  $('bright').addEventListener('input', function () { $('brightval').textContent = this.value; });
+  $('bright').addEventListener('change', function () { post('led', { brightness: parseInt(this.value, 10) }); });
+  $('sendmsg').addEventListener('click', function () { var t = $('msgtext').value; if (t.trim()) post('message', { text: t }); });
+  $('msgtext').addEventListener('keydown', function (e) { if (e.key === 'Enter') $('sendmsg').click(); });
+  for (var i = 0; i < 5; i++) (function (i) {
+    var b = document.createElement('button'); b.type = 'button'; b.textContent = String(i + 1);
+    b.setAttribute('aria-label', 'Built in message ' + (i + 1)); b.style.flex = '1 1 56px';
+    b.addEventListener('click', function () { post('message', { index: i }); });
+    $('presets').appendChild(b);
+  })(i);
+  $('savewifi').addEventListener('click', function () {
+    var ssid = $('ssid').value, pass = $('pass').value;
+    if (!ssid) { log('Type the network name first', 'err'); return; }
+    post('wifi', { ssid: ssid, pass: pass }).then(function (r) { if (r.ok) log('Saved. The board restarts and joins that network.', 'ok'); });
+  });
+
+  // ---- camera: shown only when asked for, so a missing camera board costs nothing ----
+  var camUrl = q.get('cam') || store('doormat.cam') || '';
+  $('camurl').value = camUrl;
+  $('camtoggle').addEventListener('click', function () {
+    var cam = $('cam');
+    if (cam.classList.contains('on')) { cam.classList.remove('on'); cam.removeAttribute('src'); this.textContent = 'Show camera'; $('camnote').textContent = ''; return; }
+    var url = $('camurl').value.trim();
+    if (!/^https?:\/\//i.test(url)) { $('camnote').textContent = 'Type the camera board address, starting with http://'; return; }
+    store('doormat.cam', url);
+    $('camnote').textContent = 'Loading the stream';
+    cam.onload = function () { $('camnote').textContent = ''; };
+    cam.onerror = function () { $('camnote').textContent = 'No picture from that address. Check the camera board is on the same network.'; };
+    cam.src = url; cam.classList.add('on'); this.textContent = 'Hide camera';
+  });
+
+  connectWs(); poll(); refreshEyes();
+  setInterval(poll, 2000);
+  setInterval(refreshEyes, 250);
+})();
+</script>
+</body>
+</html>
