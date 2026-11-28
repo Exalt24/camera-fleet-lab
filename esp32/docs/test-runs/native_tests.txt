@@ -1,0 +1,164 @@
+Verbosity level can be increased via `-v, -vv, or -vvv` option
+Collected 8 tests
+
+Processing test_app in native environment
+--------------------------------------------------------------------------------
+Building...
+Testing...
+test\test_app\test_main.cpp:206: test_a_step_greets_with_a_flash_a_happy_face_a_message_and_one_sound_request	[PASSED]
+test\test_app\test_main.cpp:207: test_the_greeting_ends_and_the_display_goes_back_to_the_eyes	[PASSED]
+test\test_app\test_main.cpp:208: test_a_second_step_inside_the_cooldown_does_not_greet_again	[PASSED]
+test\test_app\test_main.cpp:209: test_a_greet_request_always_greets_even_inside_the_cooldown	[PASSED]
+test\test_app\test_main.cpp:210: test_led_commands_change_what_the_border_shows	[PASSED]
+test\test_app\test_main.cpp:211: test_message_commands	[PASSED]
+test\test_app\test_main.cpp:212: test_status_view_matches_the_state	[PASSED]
+test\test_app\test_main.cpp:213: test_status_and_wifi_commands_are_not_handled_by_the_app	[PASSED]
+test\test_app\test_main.cpp:214: test_random_worlds_keep_the_device_sane	[PASSED]
+test\test_app\test_main.cpp:215: test_the_scenario_has_the_expected_story	[PASSED]
+test\test_app\test_main.cpp:216: test_the_scenario_is_deterministic	[PASSED]
+------------------ native:test_app [PASSED] Took 1.15 seconds ------------------
+
+Processing test_command in native environment
+--------------------------------------------------------------------------------
+Building...
+Testing...
+test\test_command\test_main.cpp:232: test_hex_colours	[PASSED]
+test\test_command\test_main.cpp:233: test_greet_and_status_need_no_fields	[PASSED]
+test\test_command\test_main.cpp:234: test_led_with_all_three_fields	[PASSED]
+test\test_command\test_main.cpp:235: test_led_with_one_field_only_sets_that_field	[PASSED]
+test\test_command\test_main.cpp:236: test_led_rejections	[PASSED]
+test\test_command\test_main.cpp:237: test_a_rejected_command_leaves_nothing_usable	[PASSED]
+test\test_command\test_main.cpp:238: test_message_by_text_and_by_index	[PASSED]
+test\test_command\test_main.cpp:239: test_message_rejections	[PASSED]
+test\test_command\test_main.cpp:240: test_a_long_text_is_cut_not_overflowed	[PASSED]
+test\test_command\test_main.cpp:241: test_wifi_credentials	[PASSED]
+test\test_command\test_main.cpp:242: test_the_route_wins_over_a_cmd_field_in_the_body	[PASSED]
+test\test_command\test_main.cpp:243: test_the_cmd_field_is_needed_without_a_route	[PASSED]
+test\test_command\test_main.cpp:244: test_a_value_that_looks_like_a_command_is_just_a_value	[PASSED]
+test\test_command\test_main.cpp:245: test_json_shape_errors	[PASSED]
+test\test_command\test_main.cpp:246: test_whitespace_is_allowed_and_extra_keys_are_ignored	[PASSED]
+test\test_command\test_main.cpp:247: test_size_limits	[PASSED]
+test\test_command\test_main.cpp:248: test_a_null_output_does_not_crash	[PASSED]
+test\test_command\test_main.cpp:249: test_fuzz_random_bytes_and_mutations	[PASSED]
+test\test_command\test_main.cpp:250: test_error_names_are_distinct_and_non_empty	[PASSED]
+---------------- native:test_command [PASSED] Took 0.80 seconds ----------------
+
+Processing test_effects in native environment
+--------------------------------------------------------------------------------
+Building...
+Testing...
+test\test_effects\test_main.cpp:210: test_off_is_black_and_solid_is_the_colour	[PASSED]
+test\test_effects\test_main.cpp:211: test_breathing_swings_between_a_floor_and_the_full_colour	[PASSED]
+test\test_effects\test_main.cpp:212: test_breathing_repeats_every_three_seconds	[PASSED]
+test\test_effects\test_main.cpp:213: test_chase_lights_a_head_and_three_tail_pixels_that_move	[PASSED]
+test\test_effects\test_main.cpp:214: test_chase_works_on_a_strip_shorter_than_its_tail	[PASSED]
+test\test_effects\test_main.cpp:215: test_rainbow_spreads_the_hues_and_rotates	[PASSED]
+test\test_effects\test_main.cpp:216: test_hsv_primaries	[PASSED]
+test\test_effects\test_main.cpp:217: test_greeting_flashes_between_colour_and_white_then_fades_out	[PASSED]
+test\test_effects\test_main.cpp:218: test_the_five_modes_give_five_different_frames	[PASSED]
+test\test_effects\test_main.cpp:219: test_the_same_time_always_gives_the_same_frame	[PASSED]
+test\test_effects\test_main.cpp:220: test_null_and_empty_buffers_are_safe	[PASSED]
+test\test_effects\test_main.cpp:221: test_mode_names	[PASSED]
+test\test_effects\test_main.cpp:222: test_engine_greeting_overrides_then_returns_to_the_base_mode	[PASSED]
+test\test_effects\test_main.cpp:223: test_engine_refuses_greeting_as_a_base_mode	[PASSED]
+test\test_effects\test_main.cpp:224: test_engine_brightness_scales_every_channel	[PASSED]
+test\test_effects\test_main.cpp:225: test_engine_greeting_survives_a_millis_wrap	[PASSED]
+---------------- native:test_effects [PASSED] Took 0.79 seconds ----------------
+
+Processing test_eyes in native environment
+--------------------------------------------------------------------------------
+Building...
+Testing...
+test\test_eyes\test_main.cpp:133: test_the_eyes_blink_within_five_seconds_and_open_again	[PASSED]
+test\test_eyes\test_main.cpp:134: test_blinks_are_not_back_to_back	[PASSED]
+test\test_eyes\test_main.cpp:135: test_the_same_seed_gives_the_same_eyes_and_another_seed_does_not	[PASSED]
+test\test_eyes\test_main.cpp:136: test_gaze_stays_inside_the_eye	[PASSED]
+test\test_eyes\test_main.cpp:137: test_happy_lasts_until_the_given_time	[PASSED]
+test\test_eyes\test_main.cpp:138: test_open_eyes_are_white_with_a_dark_pupil	[PASSED]
+test\test_eyes\test_main.cpp:139: test_the_pupil_follows_the_gaze	[PASSED]
+test\test_eyes\test_main.cpp:140: test_a_closing_eye_loses_pixels_and_a_closed_one_is_a_thin_line	[PASSED]
+test\test_eyes\test_main.cpp:141: test_happy_eyes_have_no_lower_half_and_a_cut_out_arch	[PASSED]
+test\test_eyes\test_main.cpp:142: test_extreme_frames_stay_inside_the_buffer	[PASSED]
+----------------- native:test_eyes [PASSED] Took 0.78 seconds -----------------
+
+Processing test_messages in native environment
+--------------------------------------------------------------------------------
+Building...
+Testing...
+test\test_messages\test_main.cpp:134: test_there_are_at_least_four_default_messages	[PASSED]
+test\test_messages\test_main.cpp:135: test_nothing_is_shown_before_the_first_greeting	[PASSED]
+test\test_messages\test_main.cpp:136: test_greetings_walk_the_list_in_order_and_wrap	[PASSED]
+test\test_messages\test_main.cpp:137: test_a_message_goes_away_after_the_hold_time	[PASSED]
+test\test_messages\test_main.cpp:138: test_a_message_survives_a_millis_wrap	[PASSED]
+test\test_messages\test_main.cpp:139: test_sanitize_keeps_printable_ascii_only	[PASSED]
+test\test_messages\test_main.cpp:140: test_sanitize_trims_and_collapses_spaces	[PASSED]
+test\test_messages\test_main.cpp:141: test_sanitize_never_writes_past_the_buffer	[PASSED]
+test\test_messages\test_main.cpp:142: test_add_respects_the_limit_and_the_length	[PASSED]
+test\test_messages\test_main.cpp:143: test_select_shows_that_message_and_continues_after_it	[PASSED]
+test\test_messages\test_main.cpp:144: test_custom_text_is_shown_and_does_not_enter_the_list	[PASSED]
+test\test_messages\test_main.cpp:145: test_rotation_happens_only_while_occupied	[PASSED]
+test\test_messages\test_main.cpp:146: test_rotation_does_nothing_before_any_message_was_shown	[PASSED]
+--------------- native:test_messages [PASSED] Took 0.76 seconds ---------------
+
+Processing test_presence in native environment
+--------------------------------------------------------------------------------
+Building...
+Testing...
+test\test_presence\test_main.cpp:187: test_starts_empty	[PASSED]
+test\test_presence\test_main.cpp:188: test_press_shorter_than_debounce_is_not_a_step	[PASSED]
+test\test_presence\test_main.cpp:189: test_press_held_for_the_debounce_is_exactly_one_step	[PASSED]
+test\test_presence\test_main.cpp:190: test_reading_exactly_on_the_threshold_counts	[PASSED]
+test\test_presence\test_main.cpp:191: test_reading_just_under_the_threshold_does_not	[PASSED]
+test\test_presence\test_main.cpp:192: test_hysteresis_band_keeps_the_mat_occupied	[PASSED]
+test\test_presence\test_main.cpp:193: test_release_needs_the_off_debounce	[PASSED]
+test\test_presence\test_main.cpp:194: test_a_dip_that_returns_to_the_band_cancels_the_release	[PASSED]
+test\test_presence\test_main.cpp:195: test_an_upside_down_band_is_repaired	[PASSED]
+test\test_presence\test_main.cpp:196: test_equal_thresholds_are_repaired_too	[PASSED]
+test\test_presence\test_main.cpp:197: test_a_reading_exactly_on_the_off_threshold_releases	[PASSED]
+test\test_presence\test_main.cpp:198: test_the_last_raw_reading_is_kept	[PASSED]
+test\test_presence\test_main.cpp:199: test_millis_wraparound_does_not_fire_early_or_late	[PASSED]
+test\test_presence\test_main.cpp:200: test_random_worlds_keep_the_invariants	[PASSED]
+--------------- native:test_presence [PASSED] Took 0.77 seconds ---------------
+
+Processing test_protocol in native environment
+--------------------------------------------------------------------------------
+Building...
+Testing...
+test\test_protocol\test_main.cpp:177: test_status_has_every_field	[PASSED]
+test\test_protocol\test_main.cpp:178: test_status_never_returns_a_cut_off_string	[PASSED]
+test\test_protocol\test_main.cpp:179: test_status_escapes_quotes_and_backslashes_in_the_message	[PASSED]
+test\test_protocol\test_main.cpp:180: test_status_with_no_message_and_null_strings	[PASSED]
+test\test_protocol\test_main.cpp:181: test_json_escape	[PASSED]
+test\test_protocol\test_main.cpp:182: test_presence_and_mic_events	[PASSED]
+test\test_protocol\test_main.cpp:183: test_frame_event_samples_the_strip_evenly	[PASSED]
+test\test_protocol\test_main.cpp:184: test_mic_level_scale	[PASSED]
+test\test_protocol\test_main.cpp:185: test_mic_level_rises_with_amplitude_and_ignores_dc_free_sign	[PASSED]
+test\test_protocol\test_main.cpp:186: test_mjpeg_part_header	[PASSED]
+test\test_protocol\test_main.cpp:187: test_bmp_of_the_eye_buffer	[PASSED]
+--------------- native:test_protocol [PASSED] Took 0.76 seconds ---------------
+
+Processing test_tones in native environment
+--------------------------------------------------------------------------------
+Building...
+Testing...
+test\test_tones\test_main.cpp:81: test_the_greeting_has_four_rising_notes_and_a_length	[PASSED]
+test\test_tones\test_main.cpp:82: test_samples_stay_inside_the_requested_amplitude	[PASSED]
+test\test_tones\test_main.cpp:83: test_zero_amplitude_and_negative_amplitude_are_silent	[PASSED]
+test\test_tones\test_main.cpp:84: test_the_sound_starts_silent_and_ends_in_silence	[PASSED]
+test\test_tones\test_main.cpp:85: test_the_first_note_has_the_right_pitch	[PASSED]
+test\test_tones\test_main.cpp:86: test_a_chunked_render_equals_one_big_render	[PASSED]
+test\test_tones\test_main.cpp:87: test_null_and_empty_are_safe	[PASSED]
+----------------- native:test_tones [PASSED] Took 0.74 seconds -----------------
+
+=================================== SUMMARY ===================================
+Environment    Test           Status    Duration
+-------------  -------------  --------  ------------
+native         test_app       PASSED    00:00:01.150
+native         test_command   PASSED    00:00:00.797
+native         test_effects   PASSED    00:00:00.791
+native         test_eyes      PASSED    00:00:00.779
+native         test_messages  PASSED    00:00:00.755
+native         test_presence  PASSED    00:00:00.775
+native         test_protocol  PASSED    00:00:00.764
+native         test_tones     PASSED    00:00:00.736
+================ 101 test cases: 101 succeeded in 00:00:06.546 ================

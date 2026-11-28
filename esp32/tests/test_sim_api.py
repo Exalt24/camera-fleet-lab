@@ -137,8 +137,8 @@ def test_the_stream_carries_mic_and_led_frames_and_takes_commands(sim):
         ws.recv(timeout=3)
         ws.send(json.dumps({"cmd": "led", "mode": "solid", "color": "#ff0000", "brightness": 255}))
         kinds, frames, reply = set(), [], None
-        end = time.time() + 5
-        while time.time() < end and not (reply and "frame" in kinds and "mic" in kinds):
+        end = time.time() + 9  # a greeting from an earlier test may still be flashing for up to 2.5 s, and it overrides the mode
+        while time.time() < end and not (reply and "mic" in kinds and any(f["px"] == "ff0000" * 24 for f in frames)):
             m = json.loads(ws.recv(timeout=2))
             kinds.add(m.get("t"))
             if m.get("ok") is not None:

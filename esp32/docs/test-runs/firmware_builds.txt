@@ -1,0 +1,57 @@
+Processing esp32dev (platform: espressif32@6.9.0; board: esp32dev; framework: arduino)
+LDF: Library Dependency Finder -> https://bit.ly/configure-pio-ldf
+Dependency Graph
+|-- Adafruit NeoPixel @ 1.12.3
+|-- Adafruit GFX Library @ 1.11.9
+|-- Adafruit SSD1306 @ 2.5.10
+|-- WebSockets @ 2.6.1
+|-- PubSubClient @ 2.8.0
+|-- NimBLE-Arduino @ 1.4.2
+|-- doormat_core
+|-- Wire @ 2.0.0
+|-- ESPmDNS @ 2.0.0
+|-- Preferences @ 2.0.0
+|-- WebServer @ 2.0.0
+|-- WiFi @ 2.0.0
+RAM:   [==        ]  19.2% (used 62992 bytes from 327680 bytes)
+Flash: [====      ]  37.7% (used 1185833 bytes from 3145728 bytes)
+========================= [SUCCESS] Took 39.89 seconds =========================
+Processing esp32wokwi (platform: espressif32@6.9.0; board: esp32dev; framework: arduino)
+LDF: Library Dependency Finder -> https://bit.ly/configure-pio-ldf
+Dependency Graph
+|-- Adafruit NeoPixel @ 1.12.3
+|-- Adafruit GFX Library @ 1.11.9
+|-- Adafruit SSD1306 @ 2.5.10
+|-- WebSockets @ 2.6.1
+|-- PubSubClient @ 2.8.0
+|-- doormat_core
+|-- Wire @ 2.0.0
+|-- ESPmDNS @ 2.0.0
+|-- Preferences @ 2.0.0
+|-- WebServer @ 2.0.0
+|-- WiFi @ 2.0.0
+RAM:   [==        ]  16.2% (used 53216 bytes from 327680 bytes)
+Flash: [===       ]  29.2% (used 917133 bytes from 3145728 bytes)
+========================= [SUCCESS] Took 3.14 seconds =========================
+Processing esp32cam (platform: espressif32@6.9.0; board: esp32cam; framework: arduino)
+LDF: Library Dependency Finder -> https://bit.ly/configure-pio-ldf
+Dependency Graph
+|-- doormat_core
+|-- ESPmDNS @ 2.0.0
+|-- Preferences @ 2.0.0
+|-- WebServer @ 2.0.0
+|-- WiFi @ 2.0.0
+RAM:   [==        ]  15.8% (used 51660 bytes from 327680 bytes)
+Flash: [===       ]  28.2% (used 887497 bytes from 3145728 bytes)
+========================= [SUCCESS] Took 16.70 seconds =========================
+Processing esp32qemu (platform: espressif32@6.9.0; board: esp32dev; framework: arduino)
+LDF: Library Dependency Finder -> https://bit.ly/configure-pio-ldf
+Dependency Graph
+|-- doormat_core
+RAM:   [=         ]   6.6% (used 21464 bytes from 327680 bytes)
+Flash: [==        ]  21.0% (used 274681 bytes from 1310720 bytes)
+========================= [SUCCESS] Took 9.88 seconds =========================
+esp32dev       SUCCESS   00:00:39.892
+esp32wokwi     SUCCESS   00:00:03.140
+esp32cam       SUCCESS   00:00:16.703
+esp32qemu      SUCCESS   00:00:09.879
