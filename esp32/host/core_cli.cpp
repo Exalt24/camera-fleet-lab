@@ -6,6 +6,9 @@
 //   status <ms> <id> <net>          the status JSON
 //   frame <ms> <samples>            a sampled LED frame event
 //   eyes <ms>                       the display as a hex encoded 1 bit BMP
+//   presence <ms>                   the presence event JSON for the current state
+//   mic <level>                     the microphone event JSON
+//   mjpeghdr <length>               the MJPEG part header for a JPEG of that length, hex encoded
 //   messages                        the message list
 //   wav <path> <rate>               the greeting sound as a mono 16 bit WAV file
 //   scenario                        the scripted evening, then a line "END"
@@ -149,6 +152,21 @@ int main() {
       renderEyes(app.eyes(static_cast<uint32_t>(ms)), fb);
       const size_t n = framebufferToBmp1bpp(fb, kEyeW, kEyeH, bmp, sizeof(bmp));
       for (size_t i = 0; i < n; i++) printf("%02x", bmp[i]);
+      putchar('\n');
+    } else if (strncmp(line, "presence ", 9) == 0) {
+      char out[160];
+      const unsigned long ms = strtoul(line + 9, nullptr, 10);
+      if (formatPresenceEvent(out, sizeof(out), app.occupied(), static_cast<uint32_t>(ms), app.steps()) == 0) puts("{\"ok\":false}");
+      else puts(out);
+    } else if (strncmp(line, "mic ", 4) == 0) {
+      char out[64];
+      const unsigned long lv = strtoul(line + 4, nullptr, 10);
+      if (formatMicEvent(out, sizeof(out), static_cast<uint8_t>(lv > 100 ? 100 : lv)) == 0) puts("{\"ok\":false}");
+      else puts(out);
+    } else if (strncmp(line, "mjpeghdr ", 9) == 0) {
+      char out[160];
+      const size_t n = mjpegPartHeader(out, sizeof(out), strtoul(line + 9, nullptr, 10));
+      for (size_t i = 0; i < n; i++) printf("%02x", static_cast<unsigned char>(out[i]));
       putchar('\n');
     } else if (strcmp(line, "messages") == 0) {
       printf("{\"messages\":[");

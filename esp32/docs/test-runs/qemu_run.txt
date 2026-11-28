@@ -1,0 +1,44 @@
+qemu: QEMU emulator version 9.2.2 (esp_develop_9.2.2_20261109)
+image: esp32qemu firmware.bin merged with bootloader and partition table, 4 MB flash
+booted and finished in 1.4 s
+target trace lines: 36   host trace lines: 36
+RESULT: IDENTICAL, every line of the target trace equals the host trace
+last line: DONE steps=2 greetings=3 commands_ok=6 commands_rejected=1 frame_hash=0x444c6e36
+
+--- target trace as printed over the serial port ---
+[t=00000] mode=breathing px0=00080d px7=00080d eyes=100/0/0/0 msg=""
+[t=01000] mode=breathing px0=00456e px7=00456e eyes=100/0/0/0 msg=""
+[t=01060] presence STEP_ON raw=2378
+[t=01060] greeting started, message="Welcome home!"
+[t=02000] mode=greeting px0=a0a0a0 px7=a0a0a0 eyes=100/0/0/1 msg="Welcome home!"
+[t=03000] command ok: type=2 result=0
+[t=03000] mode=greeting px0=c8c8c8 px7=c8c8c8 eyes=100/0/0/1 msg="Welcome home!"
+[t=04000] mode=chase px0=000000 px7=000000 eyes=100/2/-2/0 msg="Welcome home!"
+[t=05000] mode=chase px0=000000 px7=000000 eyes=100/2/-2/0 msg="Welcome home!"
+[t=06000] mode=chase px0=000000 px7=000000 eyes=100/2/-2/0 msg="Hello, friend!"
+[t=06700] presence STEP_OFF raw=87
+[t=07000] mode=chase px0=000000 px7=000000 eyes=100/2/2/0 msg="Hello, friend!"
+[t=08000] mode=chase px0=000000 px7=000000 eyes=100/2/2/0 msg="Hello, friend!"
+[t=09000] mode=chase px0=000000 px7=000000 eyes=100/2/2/0 msg="Hello, friend!"
+[t=09560] presence STEP_ON raw=2382
+[t=09560] greeting started, message="Great to see you"
+[t=10000] mode=greeting px0=c8c8c8 px7=c8c8c8 eyes=100/0/2/1 msg="Great to see you"
+[t=11000] mode=greeting px0=c8c8c8 px7=c8c8c8 eyes=100/0/2/1 msg="Great to see you"
+[t=12000] mode=greeting px0=181818 px7=181818 eyes=100/0/2/1 msg="Great to see you"
+[t=12400] presence STEP_OFF raw=65
+[t=12500] command ok: type=2 result=0
+[t=13000] command ok: type=3 result=0
+[t=13000] mode=rainbow px0=7dc800 px7=00c82f eyes=100/-3/-2/0 msg="Mind the step"
+[t=14000] command ok: type=3 result=0
+[t=14000] mode=rainbow px0=008bc8 px7=2100c8 eyes=100/-3/-2/0 msg="Great to see you"
+[t=15000] command ok: type=1 result=0
+[t=15000] greeting requested, message="Have a lovely day"
+[t=15000] mode=greeting px0=c86b00 px7=c86b00 eyes=100/5/-3/1 msg="Have a lovely day"
+[t=16000] command rejected: bad_mode
+[t=16000] mode=greeting px0=c86b00 px7=c86b00 eyes=100/5/-3/1 msg="Have a lovely day"
+[t=17000] command ok: type=2 result=0
+[t=17000] mode=greeting px0=1ba050 px7=1ba050 eyes=100/2/2/1 msg="Have a lovely day"
+[t=18000] mode=breathing px0=020d06 px7=020d06 eyes=100/2/2/0 msg="Have a lovely day"
+[t=19000] mode=breathing px0=126f37 px7=126f37 eyes=100/0/1/0 msg="Have a lovely day"
+[t=20000] mode=breathing px0=126f37 px7=126f37 eyes=100/0/1/0 msg="Have a lovely day"
+DONE steps=2 greetings=3 commands_ok=6 commands_rejected=1 frame_hash=0x444c6e36

@@ -27,7 +27,7 @@ IMAGE = "eclipse-mosquitto:2.0.22"
 LABEL = "cfl-iot=1"
 CONF_DIR = Path(__file__).resolve().parent.parent / "mosquitto"
 STATE_DIR = Path(__file__).resolve().parent.parent / "state"
-USERS = ("device", "vendor", "connector", "diag", "observer")
+USERS = ("device", "vendor", "connector", "diag", "observer", "doormat", "doormatctl")
 
 
 def _docker(*args: str, timeout: float = 120) -> subprocess.CompletedProcess:
