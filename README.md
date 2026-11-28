@@ -83,7 +83,7 @@ The first five rows are from `docs/last_run.json`. It is one run on one machine,
 | **Fault A**: WireGuard UDP blocked | detected as `tunnel_down` after **4 s** in the saved run (an earlier, unsaved run took 13 s: it depends where in the 5 s probe cycle the block lands, and whether the first symptom is a stalled stream that reads `degraded` for one cycle), recovered by itself **6.1 s** after unblocking |
 | **Fault B**: DNAT rule removed (tunnel healthy) | detected as `blocked` after **8 s**, recovered **8.1 s** after the rule was restored |
 | A 40 s VPN block, then unblocked | fresh handshake on both ends within **about 5 s** |
-| Smart lock slice (`iot/`, one run, saved in `docs/iot/`) | 455 tests pass; 133 of 133 deliberate breakages turn a test red; the diagnosis tool named the induced layer in 17 of 17 runs |
+| Smart lock slice (`iot/`, one run, saved in `docs/iot/`) | 456 tests pass; 133 of 133 deliberate breakages turn a test red; the diagnosis tool named the induced layer in 17 of 17 runs |
 | No-fault soak, about 5.5 minutes (`scripts/soak_summary.py`) | 43 probes, every one `up`; the handshake age climbed to 118 s and reset twice (two WireGuard rekeys). The first version's 30 s threshold would have called most of this "down" |
 
 `verify.py`: **16/16** checks. `pytest`: 22 passed, 1 skipped (the skip is OS-specific, see below).
