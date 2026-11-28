@@ -38,6 +38,7 @@ void test_the_sound_starts_silent_and_ends_in_silence() {
   int16_t pcm[64];
   renderGreetingPcm(pcm, 64, 0, RATE, 20000);
   TEST_ASSERT_EQUAL_INT16(0, pcm[0]);  // the fade in starts at zero, so there is no click
+  for (int i = 0; i < 12; i++) TEST_ASSERT_TRUE(abs(pcm[i]) < 2000);  // and rises over 10 ms instead of jumping
   const uint32_t end = RATE * greetingTotalMs() / 1000;
   renderGreetingPcm(pcm, 64, end, RATE, 20000);
   for (int i = 0; i < 64; i++) TEST_ASSERT_EQUAL_INT16(0, pcm[i]);

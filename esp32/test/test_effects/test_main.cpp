@@ -78,7 +78,12 @@ void test_rainbow_spreads_the_hues_and_rotates() {
   TEST_ASSERT_TRUE(different >= (int)N - 2);
   renderEffect(Mode::Rainbow, ORANGE, 600, b, N);
   TEST_ASSERT_TRUE(memcmp(a, b, sizeof(a)) != 0);
-  // Full saturation: at least one channel is 255 and one is low on every pixel.
+  // Full saturation: the weakest channel is exactly 0 on every pixel.
+  for (size_t i = 0; i < N; i++) {
+    const uint8_t lowest = a[i].r < a[i].g ? (a[i].r < a[i].b ? a[i].r : a[i].b) : (a[i].g < a[i].b ? a[i].g : a[i].b);
+    TEST_ASSERT_EQUAL_UINT8(0, lowest);
+  }
+  // Full value: the strongest channel is 255.
   for (size_t i = 0; i < N; i++) {
     TEST_ASSERT_EQUAL_UINT8(255, a[i].r > a[i].g ? (a[i].r > a[i].b ? a[i].r : a[i].b) : (a[i].g > a[i].b ? a[i].g : a[i].b));
   }
@@ -101,6 +106,12 @@ void test_greeting_flashes_between_colour_and_white_then_fades_out() {
   TEST_ASSERT_TRUE(f[0] == (Rgb{255, 255, 255}));
   renderEffect(Mode::Greeting, ORANGE, 500, f, N);
   TEST_ASSERT_TRUE(f[0] == ORANGE);
+  renderEffect(Mode::Greeting, ORANGE, 1600, f, N);
+  TEST_ASSERT_TRUE(f[0] == ORANGE);                // 400 ms before the end the fade has not started
+  renderEffect(Mode::Greeting, ORANGE, 1999, f, N);
+  TEST_ASSERT_TRUE(f[0] == (Rgb{255, 255, 255}));  // the fade has not started yet
+  renderEffect(Mode::Greeting, ORANGE, 2250, f, N);
+  TEST_ASSERT_INT_WITHIN(2, 127, f[0].r);          // halfway through the 500 ms fade, white at about half
   renderEffect(Mode::Greeting, ORANGE, EffectEngine::kGreetingMs - 1, f, N);
   TEST_ASSERT_TRUE(f[0].r < 10);
   renderEffect(Mode::Greeting, ORANGE, EffectEngine::kGreetingMs + 100, f, N);

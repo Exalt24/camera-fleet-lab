@@ -175,3 +175,13 @@ def test_one_mat_cannot_command_another(mat, broker):
     finally:
         other.loop_stop()
         other.disconnect()
+
+
+def test_a_topic_that_only_starts_like_a_route_is_not_that_route(mat, ctl):
+    """A topic suffix such as `led x` must not be read as `led`: the device matches the whole suffix."""
+    ctl.sub("doormat/mat-mq/event/ack")
+    before = status(mat)
+    ctl.pub("doormat/mat-mq/cmd/led x", json.dumps({"mode": "solid", "brightness": 11}))
+    assert ctl.get("doormat/mat-mq/event/ack") == {"ok": False, "err": "unknown_cmd"}
+    after = status(mat)
+    assert (after["mode"], after["brightness"]) == (before["mode"], before["brightness"])

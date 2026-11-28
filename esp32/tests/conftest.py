@@ -4,7 +4,7 @@ These run the host emulation (esp32/host/sim_server.py) in front of core_cli, th
 
     cd esp32 && pio run -e core_cli
 
-ESP32_SRC lets run_mutations.py point everything at a mutated copy of esp32/.
+ESP32_SRC lets run_mutations.py point everything at a mutated copy of esp32/, and IOT_SRC at the repo's iot/ folder (the broker helper).
 """
 from __future__ import annotations
 
@@ -15,7 +15,7 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 SRC = Path(os.environ.get("ESP32_SRC") or HERE.parent)
 sys.path.insert(0, str(SRC / "host"))
-sys.path.insert(1, str(HERE.parent.parent / "iot"))  # the repo's mosquitto helper, for the MQTT tests
+sys.path.insert(1, os.environ.get("IOT_SRC") or str(HERE.parent.parent / "iot"))  # the repo's mosquitto helper, for the MQTT tests
 
 import pytest  # noqa: E402
 

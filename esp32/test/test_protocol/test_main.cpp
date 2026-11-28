@@ -121,6 +121,8 @@ void test_mic_level_scale() {
   TEST_ASSERT_EQUAL_UINT8(100, micLevelFromSamples(s, 1600));
   for (int i = 0; i < 1600; i++) s[i] = (i & 1) ? 3277 : -3277;    // 0.1 of full scale = -20 dB
   TEST_ASSERT_UINT8_WITHIN(1, 67, micLevelFromSamples(s, 1600));
+  for (int i = 0; i < 1600; i++) s[i] = (i & 1) ? 58 : -58;        // about -55 dB: just above the floor
+  TEST_ASSERT_UINT8_WITHIN(1, 8, micLevelFromSamples(s, 1600));
   for (int i = 0; i < 1600; i++) s[i] = (i & 1) ? 20 : -20;        // -64 dB: below the floor
   TEST_ASSERT_EQUAL_UINT8(0, micLevelFromSamples(s, 1600));
 }

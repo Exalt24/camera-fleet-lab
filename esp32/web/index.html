@@ -63,7 +63,7 @@
   <h2 id="h-now">On the mat</h2>
   <div class="presence" id="presence" data-state="empty">
     <div class="dot" aria-hidden="true"></div>
-    <div><div class="big" id="presence-text">Empty</div><div class="muted"><span id="steps">0</span> steps since start</div></div>
+    <div><div class="big" id="presence-text">Empty</div><div class="muted"><span id="steps">0</span> <span id="stepsword">steps</span> since start</div></div>
   </div>
   <div class="muted" style="margin-top:12px">Microphone level <span id="micval">0</span></div>
   <div class="meter" role="meter" aria-label="Microphone level" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="meterbox"><i id="mic"></i></div>
@@ -146,7 +146,7 @@
   function setPresence(occupied, steps) {
     $('presence').dataset.state = occupied ? 'occupied' : 'empty';
     $('presence-text').textContent = occupied ? 'Someone is on the mat' : 'Empty';
-    if (steps !== undefined) $('steps').textContent = steps;
+    if (steps !== undefined) { $('steps').textContent = steps; $('stepsword').textContent = steps === 1 ? 'step' : 'steps'; }
   }
   function setMic(level) {
     level = Math.max(0, Math.min(100, level | 0));

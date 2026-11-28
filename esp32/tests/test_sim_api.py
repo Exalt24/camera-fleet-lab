@@ -77,8 +77,9 @@ def test_bad_commands_are_refused_with_a_reason(base, route, body, err):
 
 
 def test_a_body_over_the_limit_is_refused(base):
-    r = post(base, "message", json.dumps({"text": "x" * 400}))
+    r = post(base, "message", json.dumps({"text": "x" * 3000}))
     assert r.status_code == 400 and r.json()["err"] == "too_long"
+    assert post(base, "greet", "").status_code == 200, "the line protocol to the device logic is still in step after an oversize body"
 
 
 def test_an_unknown_route_is_404(base):
@@ -228,3 +229,10 @@ def test_the_greeting_sound_is_four_rising_notes_in_a_wav(tmp_path):
     for got, want in zip(pitches, (523, 659, 784, 1047)):
         assert math.isclose(got, want, rel_tol=0.08), (got, want)
     assert max(abs(x) for x in data) <= 12000
+
+
+def test_a_pretty_printed_body_with_newlines_is_one_command(base):
+    r = post(base, "led", '{\r\n  "mode": "chase",\r\n  "brightness": 90\r\n}\r\n')
+    assert r.status_code == 200 and r.json() == {"ok": True, "type": "led"}
+    s = status(base)
+    assert s["mode"] == "chase" and s["brightness"] == 90

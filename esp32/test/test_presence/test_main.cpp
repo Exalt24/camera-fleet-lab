@@ -102,6 +102,29 @@ void test_an_upside_down_band_is_repaired() {
   TEST_ASSERT_TRUE(d2.config().offThreshold < d2.config().onThreshold);
 }
 
+void test_equal_thresholds_are_repaired_too() {
+  PresenceConfig c = cfg();
+  c.onThreshold = 1000;
+  c.offThreshold = 1000;
+  PresenceDetector d(c);
+  TEST_ASSERT_TRUE(d.config().offThreshold < d.config().onThreshold);
+}
+
+void test_a_reading_exactly_on_the_off_threshold_releases() {
+  PresenceDetector d(cfg());
+  for (uint32_t t = 0; t <= 100; t += 10) d.update(3000, t);
+  TEST_ASSERT_TRUE(d.occupied());
+  PresenceEvent e = PresenceEvent::None;
+  for (uint32_t t = 110; t <= 600 && e == PresenceEvent::None; t += 10) e = d.update(900, t);
+  TEST_ASSERT_EQUAL_INT((int)PresenceEvent::StepOff, (int)e);
+}
+
+void test_the_last_raw_reading_is_kept() {
+  PresenceDetector d(cfg());
+  d.update(1234, 5);
+  TEST_ASSERT_EQUAL_UINT16(1234, d.lastRaw());
+}
+
 void test_millis_wraparound_does_not_fire_early_or_late() {
   PresenceDetector d(cfg());
   const uint32_t start = 0xFFFFFFF0u;
@@ -170,6 +193,9 @@ int main(int, char**) {
   RUN_TEST(test_release_needs_the_off_debounce);
   RUN_TEST(test_a_dip_that_returns_to_the_band_cancels_the_release);
   RUN_TEST(test_an_upside_down_band_is_repaired);
+  RUN_TEST(test_equal_thresholds_are_repaired_too);
+  RUN_TEST(test_a_reading_exactly_on_the_off_threshold_releases);
+  RUN_TEST(test_the_last_raw_reading_is_kept);
   RUN_TEST(test_millis_wraparound_does_not_fire_early_or_late);
   RUN_TEST(test_random_worlds_keep_the_invariants);
   return UNITY_END();

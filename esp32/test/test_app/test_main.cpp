@@ -186,6 +186,10 @@ void test_the_scenario_has_the_expected_story() {
   TEST_ASSERT_EQUAL_INT(2, stepOns);
   TEST_ASSERT_EQUAL_INT(2, stepOffs);
   TEST_ASSERT_TRUE(sawReject);
+  bool rotated = false;  // standing on the mat for 5 s moves on to the next message after 4 s
+  for (size_t i = 0; i < lines.size(); i++)
+    if (lines[i].find("[t=06000]") == 0 && lines[i].find("Hello, friend!") != std::string::npos) rotated = true;
+  TEST_ASSERT_TRUE(rotated);
   TEST_ASSERT_TRUE(lines.back().find("DONE steps=2 greetings=3") == 0);
 }
 
