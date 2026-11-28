@@ -50,7 +50,7 @@ def main() -> int:
     if code == 0 and a.pictures:
         from PIL import Image
 
-        dest = Path(a.pictures)
+        dest = Path(a.pictures).resolve()
         dest.mkdir(parents=True, exist_ok=True)
         for part, ms, name in (("oled", 4200, "wokwi_oled.png"), ("ring", 3500, "wokwi_ring.png")):
             raw = dest / ("_raw_" + name)
