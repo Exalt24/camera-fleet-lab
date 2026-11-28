@@ -15,7 +15,7 @@ import pytest
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
-from harness import FakeClock, REDIRECT
+from harness import FakeClock, REDIRECT, wait_until
 from iotlab.connector import webhook
 from iotlab.util import ServerThread
 from iotlab.vendor_cloud import VendorCloud, VendorConfig, build_app, sign
@@ -386,6 +386,8 @@ def test_a_failed_delivery_is_retried_with_a_fresh_timestamp_until_it_is_accepte
     register(env, rx.url)
     env.cloud._on_mqtt(None, None, _M("locks/lock-a/state", json.dumps({"lock": "unlocked", "battery": 60, "last_cmd": None})))
     assert rx.wait(3)
+    # The receiver has seen the third request before the cloud has logged its answer, so wait for the log instead of reading it at once.
+    wait_until(lambda: len(env.cloud.deliveries) == 3, what="the third delivery to be logged")
     assert [d["status"] for d in env.cloud.deliveries] == [500, 503, 200] and [d["attempt"] for d in env.cloud.deliveries] == [1, 2, 3]
     rx.srv.stop()
 

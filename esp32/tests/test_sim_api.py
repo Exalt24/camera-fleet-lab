@@ -10,6 +10,7 @@ import wave
 
 import httpx
 import pytest
+import sim_server
 from conftest import SRC, wait_until
 from websockets.sync.client import connect
 
@@ -112,7 +113,18 @@ def test_the_display_is_a_valid_bmp_that_changes_with_the_expression(base):
     assert lit(happy.content) != lit(idle) and lit(idle) > 500
 
 
-def test_a_step_on_the_mat_is_seen_over_websocket_and_greets(sim, base):
+def test_a_step_on_the_mat_is_seen_over_websocket_and_greets():
+    # A device of its own: a step is greeted at most once in three seconds, and the shared one may have greeted a moment ago.
+    fresh = sim_server.Sim("mat-step")
+    fresh.start(0, 0)
+    try:
+        _step_on_the_mat(fresh)
+    finally:
+        fresh.stop()
+
+
+def _step_on_the_mat(sim):
+    base = f"http://127.0.0.1:{sim.http_port}"
     with connect(f"ws://127.0.0.1:{sim.ws_port}/") as ws:
         first = json.loads(ws.recv(timeout=3))
         assert first["t"] == "status"
