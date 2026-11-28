@@ -106,6 +106,9 @@ jobs:
       - name: Host emulation tests (REST, WebSocket, MQTT on a real broker, the page in Chromium)
         run: python -m pytest -q
       - name: The firmware in QEMU prints the same trace as the host build
-        run: python qemu/run_qemu.py --download
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgcrypt20 libpixman-1-0 libsdl2-2.0-0 libslirp0
+          python qemu/run_qemu.py --download
       - name: Every mutant still applies
         run: python tests/run_mutations.py --check-anchors

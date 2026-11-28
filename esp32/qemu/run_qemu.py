@@ -137,6 +137,14 @@ def main() -> int:
     if qemu is None or not qemu.exists():
         print("NOT RUN: Espressif's qemu-system-xtensa was not found (use --qemu, QEMU_XTENSA, PATH or --download)")
         return 2
+    started = subprocess.run([str(qemu), "--version"], capture_output=True, text=True, encoding="utf-8", errors="replace")
+    if started.returncode != 0 or not started.stdout.strip():
+        why = (started.stderr or started.stdout).strip()[:300]
+        if os.name != "nt" and shutil.which("ldd"):
+            missing = subprocess.run(["ldd", str(qemu)], capture_output=True, text=True).stdout
+            why += " | missing libraries: " + ", ".join(ln.split()[0] for ln in missing.splitlines() if "not found" in ln)
+        print(f"NOT RUN: {qemu} did not start ({why})")
+        return 2
     cli = ROOT / ".pio" / "build" / "core_cli" / ("program.exe" if os.name == "nt" else "program")
     if not cli.exists():
         print(f"NOT RUN: {cli} is missing, run `pio run -e core_cli`")
@@ -150,7 +158,7 @@ def main() -> int:
         text = uart.read_text(errors="replace") if uart.exists() else ""
         target = trace_from_uart(text)
         host = host_trace(cli)
-        version = subprocess.run([str(qemu), "--version"], capture_output=True, text=True).stdout.splitlines()[0]
+        version = started.stdout.splitlines()[0]
         report = [f"qemu: {version}", f"image: esp32qemu firmware.bin merged with bootloader and partition table, 4 MB flash",
                   f"booted and finished in {seconds:.1f} s", f"target trace lines: {len(target)}   host trace lines: {len(host)}"]
         if not target:
