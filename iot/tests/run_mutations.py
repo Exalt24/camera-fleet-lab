@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# LIFESPAN: permanent
 """Mutation controls for the IoT slice: every guard is broken, one at a time, and a test must go red.
 
 For each mutant this copies the iot/ tree (code, tests, broker config) to a temp folder, changes ONE thing in ONE file of the copy, points the
