@@ -100,7 +100,7 @@ class VendorCloud:
         self.deliveries: list[dict] = []
         self.sent_log: dict[str, dict] = {}              # event id -> the exact first delivery (timestamp, body, signature)
         self.faults: dict = {"down": False, "retry_after_format": "seconds", "drop_webhooks": False, "webhook_secret_drift": False,
-                             "duplicate_deliveries": False, "fail_after_commit": 0, "rate_limit_hard": 0}
+                             "duplicate_deliveries": False, "fail_after_commit": 0, "rate_limit_hard": 0, "api_down": False, "token_down": False}
         self.mqtt: mqtt.Client | None = None
         self._queue: "queue.Queue[dict | None]" = queue.Queue()
         self._stop = threading.Event()
@@ -274,6 +274,8 @@ class VendorCloud:
                 raise ApiError(401, "invalid_token", "unknown or revoked token", {"WWW-Authenticate": 'Bearer error="invalid_token"'})
             if rec["exp"] <= now:
                 raise ApiError(401, "invalid_token", "the access token expired", {"WWW-Authenticate": 'Bearer error="invalid_token", error_description="expired"'})
+            if self.faults["api_down"]:                    # the health route stays green while the API fails for everyone
+                raise ApiError(503, "service_unavailable", "the API is failing")
             if scope not in self.families[rec["family"]]["scope"]:
                 raise ApiError(403, "insufficient_scope", f"this token lacks {scope}", extra={"required_scope": scope})
             self._rate_limit(token, now)
@@ -400,6 +402,8 @@ def build_app(cloud: VendorCloud) -> FastAPI:
     @app.post("/oauth/token")
     async def token(request: Request):
         cloud._fault_down()
+        if cloud.faults["token_down"]:
+            raise ApiError(503, "service_unavailable", "the token endpoint is failing")
         form = dict(parse_qsl((await request.body()).decode(), keep_blank_values=True))   # no python-multipart needed
         cid = _client_auth(cloud, request, form)
         grant = form.get("grant_type")
